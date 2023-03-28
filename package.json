@@ -1,0 +1,33 @@
+{
+  "name": "dashboardviewer",
+  "version": "1.0.0",
+  "description": "Visor de Modelos con Dashboard personalizado",
+  "main": "index.js",
+  "scripts": {
+    "start": "node start.js"
+  },
+  "author": "Ing. Felix Enzo Garofalo",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-mysql-session": "^2.1.5",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.10.0",
+    "forge-apis": "^0.7.3",
+    "frappe-gantt": "^0.5.0",
+    "jquery": "^3.6.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "server": "^1.0.31",
+    "sweetalert": "^2.1.2",
+    "timeago.js": "^4.0.2",
+    "utm-latlng": "^1.0.6",
+    "xml2js": "^0.4.23"
+  }
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<meta charset="UTF-8">
+	<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
+	<meta name="Author" content="Spruko Technologies Private Limited">
+	<meta name="Keywords"
+		content="admin,admin dashboard,admin dashboard template,admin panel template,admin template,admin theme,bootstrap 4 admin template,bootstrap 4 dashboard,bootstrap admin,bootstrap admin dashboard,bootstrap admin panel,bootstrap admin template,bootstrap admin theme,bootstrap dashboard,bootstrap form template,bootstrap panel,bootstrap ui kit,dashboard bootstrap 4,dashboard design,dashboard html,dashboard template,dashboard ui kit,envato templates,flat ui,html,html and css templates,html dashboard template,html5,jquery html,premium,premium quality,sidebar bootstrap 4,template admin bootstrap 4" />
+
+	<!-- Title -->
+	<title> ARBIM CONSTRUCCIÓN </title>
+
+	<!-- Favicon -->
+	<link rel="icon" href="assets/img/brand/logo.png" type="image/x-icon" />
+
+	<!-- Icons css -->
+	<link href="assets/css/icons.css" rel="stylesheet">
+
+	<!--  Right-sidemenu css -->
+	<link href="assets/plugins/sidebar/sidebar.css" rel="stylesheet">
+
+	<!-- P-scroll bar css-->
+	<link href="assets/plugins/perfect-scrollbar/p-scrollbar.css" rel="stylesheet" />
+
+
+
+	<!--- Style css --->
+	<link href="assets/css/style.css" rel="stylesheet">
+
+
+	<!--- Dark-mode css --->
+	<link href="assets/css/style-dark.css" rel="stylesheet">
+
+	<!---Skinmodes css-->
+	<link href="assets/css/skin-modes.css" rel="stylesheet" />
+
+	<!--- Animations css-->
+	<link href="assets/css/animate.css" rel="stylesheet">
+
+</head>
+
+<body class="error-page1  bg-light">
+	
+
+	<!-- Page -->
+	<div class="page">
+
+		<div class="container-fluid">
+			<div class="row no-gutter">
+				<!-- The image half -->
+				
+
+				<!-- The content half -->
+				<div class="col-xl-4 col-md-4  bg-white">
+
+				</div>
+
+				<div class="col-xl-4  col-md-4 bg-white">
+					
+					<div class="login d-flex align-items-center py-2">
+						<!-- Demo content-->
+						<div class="container p-0">
+							<div class="row">
+								<div class="col-md-10 col-lg-10 col-xl-9 mx-auto">
+									<% if(message.length>0){ %>
+										<div class="alert alert-danger alert-dismissible fade show" role="alert">
+											<%= message %>
+										</div>
+										<% } %>
+									<div class="card-sigin">
+										<div class="mb-5 d-flex"> <a href="index"><img src="assets/img/brand/logo.png"
+													class="sign-favicon ht-40" alt="logo"></a>
+
+										</div>
+										<div class="card-sigin">
+											<div class="main-signup-header">
+												<h2>¡Bienvenido!</h2>
+												<h5 class="font-weight-semibold mb-4">Ingrese sus datos para continuar.
+												</h5>
+												<form action="/signin" method="POST">
+													<div class="form-group">
+														<label>Email</label> <input class="form-control" name="username"
+															placeholder="Ingrese su email" type="email" required>
+													</div>
+													<div class="form-group">
+														<label>Contraseña</label> <input class="form-control"
+															name="password" placeholder="Ingrese su contraseña"
+															type="password" required>
+													</div><button
+														class="btn btn-main-primary btn-block">Ingresar</button>
+
+												</form>
+												<div class="main-signin-footer mt-5">
+													<p><a href="">¿Olvidó su contraseña?</a></p>
+
+												</div>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+
+							</div>
+						</div><!-- End -->
+
+					</div><!-- End -->
+				</div>
+				<div class="col-xl-4 col-md-4  bg-white">
+					
+				</div>
+
+			</div>
+			
+		</div>
+
+	</div>
+	<!-- End Page -->
+
+	<!-- JQuery min js -->
+	<script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Plugin Sweet alert -->
+
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+	<!-- Bootstrap Bundle js -->
+	<script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Ionicons js -->
+	<script src="assets/plugins/ionicons/ionicons.js"></script>
+
+	<!-- Moment js -->
+	<script src="assets/plugins/moment/moment.js"></script>
+
+	<!-- eva-icons js -->
+	<script src="assets/js/eva-icons.min.js"></script>
+
+	<!-- Rating js-->
+	<script src="assets/plugins/rating/jquery.rating-stars.js"></script>
+	<script src="assets/plugins/rating/jquery.barrating.js"></script>
+
+	<!-- custom js -->
+	<script src="assets/js/custom.js"></script>
+	<% if(typeof alert !="undefined" ){ %>
+		<script>
+			swal({
+				title: "<%= alertTitle %>",
+				text: "<%= alertMessage %>",
+				icon: "<%= alertIcon %>",
+				showConfirmButton: "<%= showConfirmButton %>"
+			}).then(() => {
+				window.location = "/signin"
+			});
+
+		</script>
+<% } %>
+
+</body>
+
+</html>
