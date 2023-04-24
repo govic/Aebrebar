@@ -19,20 +19,20 @@ artifacts:
   files:
     - package.json
     - package-lock.json
-    - node_modules/*
+    - node_modules/**/*
     - Camino_80097.kml
     - arbimkey.cer
     - buildspec.yml
     - config.js
-    - data/*
+    - data/**/*
     - mynewfile3.txt
     - package.json
     - poligonos_20117_101 - copia.txt
     - poligonos_20117_101.txt
-    - public/*
+    - public/**/*
     - resultado.txt
-    - routes/*
+    - routes/**/*
     - start.js
-    - uploads/*
+    - uploads/**/*
     - usos.txt
-    - views/*
+    - views/**/*
