@@ -35,3 +35,6 @@ msbuild.wrn
 
 .alpackages
 *.app
+
+node_modules/
+package-lock.json
