@@ -12,22 +12,26 @@
 
 		<!-- Title -->
 		<title> ARBIM CONSTRUCCIÓN </title>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		 <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"></script>
+	<!--	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+	
+	<script language="JavaScript" src="js2/jquery.min.js"></script>
+	<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"></script>-->	
+		
+		<script language="JavaScript" src="/js2/jquery.storageapi.min.js"></script>
+	<script src="/js2/jstree.js"></script>
+	<!--	 <link rel="stylesheet" href="/css/jstree.style.min.css"/>-->
 		 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css" />
-
+	
  		<link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
   		<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
-  	    <link rel="stylesheet" href="css/frappe-gantt.css">
-
+  	  
+	<!-- <script src="scripts.js"></script>-->
   	    <script src="js/Dashboard/Dashboard.js"></script>
 		<script src="js/Dashboard/DashboardPanel.js"></script>
-	    <script src="js/Dashboard/PanelBarChart.js"></script>
-	    <script src="js/Dashboard/PanelPieChart.js"></script>
-	    <script src="js/Dashboard/PanelGanttChart.js"></script>
+	 
 
 
-
+		
 
 		<!-- Favicon -->
 		<link rel="icon" href="assets/img/brand/logo.png" type="image/x-icon"/>
@@ -87,6 +91,9 @@
 						<li class="slide">
 							<a class="side-menu__item"  href="index"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3"/><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z"/></svg><span class="side-menu__label">Visualizador</span></a>
 						</li>
+						
+						
+						
 						<li class="side-item side-item-category">Administración</li>
 						<li class="slide">
 							<a class="side-menu__item" data-toggle="slide" href="proyectos"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6.26 9L12 13.47 17.74 9 12 4.53z" opacity=".3"/><path d="M19.37 12.8l-7.38 5.74-7.37-5.73L3 14.07l9 7 9-7zM12 2L3 9l1.63 1.27L12 16l7.36-5.73L21 9l-9-7zm0 11.47L6.26 9 12 4.53 17.74 9 12 13.47z"/></svg><span class="side-menu__label">Proyectos</span></a>
@@ -99,7 +106,7 @@
 							<ul class="slide-menu">
 								<li><a class="slide-item" href="chart-morris">Morris Charts</a></li>
 								<li><a class="slide-item" href="chart-flot">Flot Charts</a></li>
-								<li><a class="slide-item" href="estadisticasModelo">ChartJS</a></li>
+								<li><a class="slide-item" href="chart-chartjs">ChartJS</a></li>
 								<li><a class="slide-item" href="chart-echart">Echart</a></li>
 								<li><a class="slide-item" href="chart-sparkline">Sparkline</a></li>
 								<li><a class="slide-item" href="chart-peity">Chart-peity</a></li>
@@ -272,66 +279,109 @@
 		
 
 					<!-- row opened -->
-				
- 				<div class="row row-sm">
- 					<div class="col-md-12 col-lg-12 col-lg-12">
- 						<div class="card card-dashboard-map-one">
-								<label class="main-content-label">Carpetas de Proyecto</label>
-								<span class="d-block mg-b-20 text-muted tx-12">Seleccione el proyecto a Visualizar</span>
-								<div class="">
-									  	   <div >
-										            <div class="container-fluid fill">
-										              <div class="row fill">
-										                <div class="col-sm-12 fill">
-										                  <div class="panel panel-default fill">
-										                    <div class="panel-heading" data-toggle="tooltip">
-										                      Proyectos
-										                      <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
-										                      
-										                    </div>
-										                    <div id="appBuckets">
-										                      Tree here
-										                    </div>
-										                  </div>
-										                </div>
-										                <div class="col-sm-7">
-										                  
-										                  <div class="row">
-										                   
-										                  </div>
-										                </div>                
-										              </div>
-										            </div>
-										            <form id="uploadFile" method='post' enctype="multipart/form-data">
-										              <input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden" />
-										            </form>
-										        
-										            <div class="modal fade" id="createBucketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-										              <div class="modal-dialog" role="document">
-										                <div class="modal-content">
-										                  <div class="modal-header">
-										                    <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
-										                      <span aria-hidden="true">&times;</span>
-										                    </button>
-										                    <h4 class="modal-title" id="myModalLabel">Create new bucket</h4>
-										                  </div>
-										                  <div class="modal-body">
-										                    <input type="text" id="newBucketKey" class="form-control"> For demonstration purposes, objects (files) are 
-										                    NOT automatically translated. After you upload, right click on
-										                    the object and select "Translate". Bucket keys must be of the form [-_.a-z0-9]{3,128}
-										                  </div>
-										                  <div class="modal-footer">
-										                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-										                    <button type="button" class="btn btn-primary" id="createNewBucket">Crear Carpeta</button>
-										                  </div>
-										                </div>
-										              </div>
-										            </div>
-										          </div>
-								</div>
-							</div>
- 					</div>
- 				</div>
+			
+					<div class="row row-sm">
+						<div class="col-md-12 col-lg-12 col-lg-12">
+							<div class="card card-dashboard-map-one">
+								   <label class="main-content-label">Proyectos</label>
+								   <span class="d-block mg-b-20 text-muted tx-12">Directorio de Proyectos disponibles</span>
+								   
+								   <div class="">
+												<div >
+													   <div class="container-fluid fill">
+														 <div class="row fill">
+														   <div class="col-sm-4 fill">
+															 <div class="panel panel-default fill">
+															   <div class="panel-heading" data-toggle="tooltip">
+																 Proyectos
+																 <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
+																
+																<!--
+																 <button class="btn btn-xs btn-theme02" style="float: right" id="showFormCreateBucket" data-toggle="modal" data-target="#createBucketModal">
+																   Nueva Carpeta
+																 </button>
+																 -->
+																 <!--<button type="button" class="btn btn-danger btn-sm" onclick="obtenerId($('#appBuckets').jstree(true).get_selected(true)[0]);"><i class="glyphicon glyphicon-remove"></i> Obtener id</button>
+																	<button type="button" class="btn btn-danger btn-sm" onclick="datos($('#appBuckets').jstree(true).get_selected(true)[0]);"><i class="glyphicon glyphicon-remove"></i> Lista</button> -->
+
+
+																
+															   </div>
+															   <div id="appBuckets" >
+																Arbol de Carpetas
+															   </div>
+															 </div>
+														   </div>
+														   <div class="col-sm-7 fill">
+															<div id="notificaciones"></div><br>
+															   <div id="forgeViewer"></div>
+														   </div>
+														   <div class="col-sm-7">
+															 
+															 <div class="row">
+															   
+															 </div>
+														   </div>                
+														 </div>
+													   </div>
+													   <form id="uploadFile" method='post' enctype="multipart/form-data">
+														 <input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden" />
+													   </form>
+							   
+												   <div class="row">
+													   <div class="col-sm-4">
+														   
+													   </div>
+													   
+													   <div class="col-sm-4">
+														   
+					
+													   </div>
+												   </div>
+												   <div class="row">
+													   <div class="col-sm-4">
+														   
+															   </div>
+													   <div class="col-sm-4">
+														   </div>
+													   <div class="col-sm-4">
+														   
+					
+													   </div>
+												   </div>
+												
+												   <br><br><br><br><br>
+												   <div class="row">
+												   
+													   <div class="col-sm-4">
+														   
+													   </div>
+													   
+												   </div>
+													   <div class="modal fade" id="createBucketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+														 <div class="modal-dialog" role="document">
+														   <div class="modal-content">
+															 <div class="modal-header">
+															   
+															   <br>
+															   <div id="RESULTADO"></div>
+															   <h4 class="modal-title" id="myModalLabel">Crear Nueva Carpeta</h4>
+															 </div>
+															 <div class="modal-body">
+															   <input type="text" id="newBucketKey" class="form-control"> Crea Una nueva Carpeta para almacenamiento de proyectos
+															 </div>
+															 <div class="modal-footer">
+															   <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+															   <button type="button" class="btn btn-primary" id="createNewBucket">Crear Carpeta</button>
+															 </div>
+														   </div>
+														 </div>
+													   </div>
+													 </div>
+								   </div>
+							   </div>
+						</div>
+					</div>
 					<!-- row opened -->
 		
 					<!-- /row -->
@@ -339,7 +389,21 @@
 				<!-- /Container -->
 			</div>
 			<!-- /main-content -->
-
+			<div class="modal" id="modaldemo10">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content tx-size-sm">
+						<div class="modal-body tx-center pd-y-20 pd-x-20">
+							<button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span
+									aria-hidden="true">&times;</span></button> <i
+								class="icon ion-ios-checkmark-circle-outline tx-100 tx-success lh-1 mg-t-20 d-inline-block"></i>
+							<h4 class="tx-success tx-semibold mg-b-20">Asignación Exitosa</h4>
+							<p class="mg-b-20 mg-x-20">Se ha seleccionado el proyecto exitosamente.</p><button aria-label="Close"
+								class="btn ripple btn-success pd-x-25" data-bs-dismiss="modal" onclick="closeAsignacion();"
+								type="button" onclick="closeAsignacion();"  cl>Continuar</button>
+						</div>
+					</div>
+				</div>
+			</div>
 			<!-- Sidebar-right-->
 			<div class="sidebar sidebar-right sidebar-animate">
 				<div class="panel panel-primary card mb-0 box-shadow">
@@ -538,6 +602,7 @@
 						</div>
 					</div>
 				</div>
+				<div id="proyectos_disponibles"></div>
 			</div>
 			<!--/Sidebar-right-->
 
@@ -630,10 +695,20 @@
 
 	
 		<script src="js/ForgeTreeProyectos.js"></script>
-	    <script src="js/ForgeViewer.js"></script>
+	    <script src="js/ForgeViewerEstadisticas.js"></script>
 	    <script src="/js/handleselectionextension.js"></script>
-	    <script src="js/frappe-gantt.min.js"></script>
+	    <!--<script src="js/frappe-gantt.min.js"></script>-->
 	    <script src="js/atbim.js"></script>
+		
+		<!--<script src="js/camino.json"></script>
+		-->
+		
+		<script>
+		/*	console.log("DATA JSON");
+			var mydata = JSON.parse(camino);
+			console.log("DATA JSON");
+			console.log(mydata);*/
+		</script>
 	  <!--  <script src="js/atbimDocking.js"></script>-->
 
 	</body>

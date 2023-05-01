@@ -176,8 +176,8 @@ $(document).ready(function () {
          'icon': 'glyphicon glyphicon-file'
        }
      },
-     "plugins": ["types", "state", "sort", "contextmenu"],
-     contextmenu: { items: autodeskCustomMenu }
+     "plugins": ["types", "state", "sort"],
+     //contextmenu: { items: autodeskCustomMenu }
    }).on('loaded.jstree', function () {
      $('#appBuckets').jstree('open_all');
    }).bind("activate_node.jstree", function (evt, data) {

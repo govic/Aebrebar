@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv='cache-control' content='no-cache'>
+		<meta http-equiv='expires' content='0'>
+		<meta http-equiv='pragma' content='no-cache'>
+		<meta charset="UTF-8">
+		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="X-UA-Compatible" content="IE=9" />
+		<meta name="Author" content="AEC Shift LTDA">
+		
+		<!-- Title -->
+		<title> ARBIM CONSTRUCCIÓN </title>
+	<!--	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+	
+	<script language="JavaScript" src="js2/jquery.min.js"></script>
+	<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"></script>-->	
+		
+		<script language="JavaScript" src="/js2/jquery.storageapi.min.js"></script>
+	<script src="/js2/jstree.js"></script>
+	<!--	 <link rel="stylesheet" href="/css/jstree.style.min.css"/>-->
+		 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css" />
+	
+ 		<link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
+  		<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+  	  
+	<!-- <script src="scripts.js"></script>-->
+  	    <script src="js/Dashboard/Dashboard.js"></script>
+		<script src="js/Dashboard/DashboardPanel.js"></script>
+	 
+
+
+		
+
+		<!-- Favicon -->
+		<link rel="icon" href="assets/img/brand/logo.png" type="image/x-icon"/>
+
+		<!-- Icons css -->
+		<link href="assets/css/icons.css" rel="stylesheet">
+
+		<!--  Owl-carousel css-->
+		<link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet" />
+
+		<!-- P-scroll bar css-->
+		<link href="assets/plugins/perfect-scrollbar/p-scrollbar.css" rel="stylesheet" />
+
+		<!--  Right-sidemenu css -->
+		<link href="assets/plugins/sidebar/sidebar.css" rel="stylesheet">
+
+		<!-- Sidemenu css -->
+		<link rel="stylesheet" href="assets/css/sidemenu.css">
+
+		<!-- Maps css -->
+		<link href="assets/plugins/jqvmap/jqvmap.min.css" rel="stylesheet">
+
+		<!-- style css -->
+		<link href="assets/css/style.css" rel="stylesheet">
+		<link href="assets/css/style-dark.css" rel="stylesheet">
+
+		<!---Skinmodes css-->
+		<link href="assets/css/skin-modes.css" rel="stylesheet" />
+
+	</head>
+
+	<body class="main-body app sidebar-mini">
+
+		<!-- Loader -->
+		<div id="global-loader">
+			<img src="assets/img/loader.svg" class="loader-img" alt="Loader">
+		</div>
+		<!-- /Loader -->
+
+		<!-- Page -->
+		<div class="page">
+
+			<!-- main-sidebar -->
+			<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+			<aside class="app-sidebar sidebar-scroll">
+				<div class="main-sidebar-header active">
+					<a class="desktop-logo logo-light active" href="index"><img src="assets/img/brand/logo.png" class="main-logo" alt="logo"></a>
+					<a class="desktop-logo logo-dark active" href="index"><img src="assets/img/brand/logo.png" class="main-logo dark-theme" alt="logo"></a>
+					<a class="logo-icon mobile-logo icon-light active" href="index"><img src="assets/img/brand/logo.png" class="logo-icon" alt="logo"></a>
+					<a class="logo-icon mobile-logo icon-dark active" href="index"><img src="assets/img/brand/logo.png" class="logo-icon dark-theme" alt="logo"></a>
+				</div>
+				<div class="main-sidemenu">
+					
+					
+					<ul class="side-menu">
+						<li class="side-item side-item-category">Principal</li>
+						
+						<li class="slide">
+							<a class="side-menu__item"  href="index"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3"/><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z"/></svg><span class="side-menu__label">Visualizador</span></a>
+						</li>
+						<li class="slide">
+							<a class="side-menu__item"   href="estadisticasModelo"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3"/><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z"/></svg><span class="side-menu__label">Estadísticas</span></a>
+						</li>
+						<li class="slide">
+							<a class="side-menu__item" href="config"><svg xmlns="http://www.w3.org/2000/svg"
+									class="side-menu__icon" viewBox="0 0 24 24">
+									<path d="M0 0h24v24H0V0z" fill="none" />
+									<path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3" />
+									<path
+										d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z" />
+								</svg><span class="side-menu__label">Configuración Visualizador</span></a>
+						</li>
+						
+						<li class="side-item side-item-category">Administración</li>
+						<li class="slide">
+							<a class="side-menu__item" data-toggle="slide" href="proyectos"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6.26 9L12 13.47 17.74 9 12 4.53z" opacity=".3"/><path d="M19.37 12.8l-7.38 5.74-7.37-5.73L3 14.07l9 7 9-7zM12 2L3 9l1.63 1.27L12 16l7.36-5.73L21 9l-9-7zm0 11.47L6.26 9 12 4.53 17.74 9 12 13.47z"/></svg><span class="side-menu__label">Proyectos</span></a>
+						</li>
+						<li class="slide">
+							<a class="side-menu__item" data-toggle="slide" href="profile"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10.9 19.91c.36.05.72.09 1.1.09 2.18 0 4.16-.88 5.61-2.3L14.89 13l-3.99 6.91zm-1.04-.21l2.71-4.7H4.59c.93 2.28 2.87 4.03 5.27 4.7zM8.54 12L5.7 7.09C4.64 8.45 4 10.15 4 12c0 .69.1 1.36.26 2h5.43l-1.15-2zm9.76 4.91C19.36 15.55 20 13.85 20 12c0-.69-.1-1.36-.26-2h-5.43l3.99 6.91zM13.73 9h5.68c-.93-2.28-2.88-4.04-5.28-4.7L11.42 9h2.31zm-3.46 0l2.83-4.92C12.74 4.03 12.37 4 12 4c-2.18 0-4.16.88-5.6 2.3L9.12 11l1.15-2z" opacity=".3"/><path d="M12 22c5.52 0 10-4.48 10-10 0-4.75-3.31-8.72-7.75-9.74l-.08-.04-.01.02C13.46 2.09 12.74 2 12 2 6.48 2 2 6.48 2 12s4.48 10 10 10zm0-2c-.38 0-.74-.04-1.1-.09L14.89 13l2.72 4.7C16.16 19.12 14.18 20 12 20zm8-8c0 1.85-.64 3.55-1.7 4.91l-4-6.91h5.43c.17.64.27 1.31.27 2zm-.59-3h-7.99l2.71-4.7c2.4.66 4.35 2.42 5.28 4.7zM12 4c.37 0 .74.03 1.1.08L10.27 9l-1.15 2L6.4 6.3C7.84 4.88 9.82 4 12 4zm-8 8c0-1.85.64-3.55 1.7-4.91L8.54 12l1.15 2H4.26C4.1 13.36 4 12.69 4 12zm6.27 3h2.3l-2.71 4.7c-2.4-.67-4.35-2.42-5.28-4.7h5.69z"/></svg><span class="side-menu__label">Mi Cuenta</span></a>
+						</li>
+						<li class="slide">
+							<a class="side-menu__item" data-toggle="slide" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg><span class="side-menu__label">Graficos/(Temporal)</span><i class="angle fe fe-chevron-down"></i></a>
+							<ul class="slide-menu">
+								<li><a class="slide-item" href="chart-morris">Morris Charts</a></li>
+								<li><a class="slide-item" href="chart-flot">Flot Charts</a></li>
+								<li><a class="slide-item" href="chart-chartjs">ChartJS</a></li>
+								<li><a class="slide-item" href="chart-echart">Echart</a></li>
+								<li><a class="slide-item" href="chart-sparkline">Sparkline</a></li>
+								<li><a class="slide-item" href="chart-peity">Chart-peity</a></li>
+							</ul>
+						</li>
+						
+					</ul>
+				</div>
+			</aside>
+			<!-- main-sidebar -->
+
+			<!-- main-content -->
+			<div class="main-content app-content">
+
+				<!-- main-header -->
+				<div class="main-header sticky side-header nav nav-item">
+					<div class="container-fluid">
+						<div class="main-header-left ">
+							<div class="responsive-logo">
+								<a href="index.html"><img src="assets/img/brand/logo.png" class="logo-1" alt="logo"></a>
+								<a href="index.html"><img src="assets/img/brand/logo-white.png" class="dark-logo-1" alt="logo"></a>
+								<a href="index.html"><img src="assets/img/brand/favicon.png" class="logo-2" alt="logo"></a>
+								<a href="index.html"><img src="assets/img/brand/favicon.png" class="dark-logo-2" alt="logo"></a>
+							</div>
+							<div class="app-sidebar__toggle" data-toggle="sidebar">
+								<a class="open-toggle" href="#"><i class="header-icon fe fe-align-left" ></i></a>
+								<a class="close-toggle" href="#"><i class="header-icons fe fe-x"></i></a>
+							</div>
+						
+						</div>
+						<div class="main-header-right">
+							
+							<div class="nav nav-item  navbar-nav-right ml-auto">
+								<div class="nav-link" id="bs-example-navbar-collapse-1">
+									<form class="navbar-form" role="search">
+										<div class="input-group">
+											<input type="text" class="form-control" placeholder="Search">
+											<span class="input-group-btn">
+												<button type="reset" class="btn btn-default">
+													<i class="fas fa-times"></i>
+												</button>
+												<button type="submit" class="btn btn-default nav-link resp-btn">
+													<svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+												</button>
+											</span>
+										</div>
+									</form>
+								</div>
+								
+								<div class="dropdown nav-item main-header-notification">
+									<a class="new nav-link" href="#">
+									<svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class=" pulse"></span></a>
+									<div class="dropdown-menu">
+										<div class="menu-header-content bg-primary text-left">
+											<div class="d-flex">
+												<h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">Notificiaciones</h6>
+												
+											</div>
+											
+										</div>
+										<div class="main-notification-list Notification-scroll">
+											<a class="d-flex p-3 border-bottom" href="#">
+												<div class="notifyimg bg-pink">
+													<i class="la la-file-alt text-white"></i>
+												</div>
+												<div class="ml-3">
+													<h5 class="notification-label mb-1">Notificación</h5>
+													<div class="notification-subtext">tiempo transcurrido</div>
+												</div>
+												<div class="ml-auto" >
+													<i class="las la-angle-right text-right text-muted"></i>
+												</div>
+											</a>
+											<a class="d-flex p-3" href="#">
+												<div class="notifyimg bg-purple">
+												<i class="la la-file-alt text-white"></i>
+												</div>
+												<div class="ml-3">
+													<h5 class="notification-label mb-1">Notificación</h5>
+													<div class="notification-subtext">tiempo transcurrido</div>
+												</div>
+												<div class="ml-auto" >
+													<i class="las la-angle-right text-right text-muted"></i>
+												</div>
+											</a>
+											<a class="d-flex p-3 border-bottom" href="#">
+												<div class="notifyimg bg-success">
+												<i class="la la-file-alt text-white"></i>
+												</div>
+												<div class="ml-3">
+													<h5 class="notification-label mb-1">Notificación</h5>
+													<div class="notification-subtext">tiempo transcurrido</div>
+												</div>
+												<div class="ml-auto" >
+													<i class="las la-angle-right text-right text-muted"></i>
+												</div>
+											</a>
+											
+										</div>
+										<div class="dropdown-footer">
+											<a href="">Ver Todo</a>
+										</div>
+									</div>
+								</div>
+								<div class="nav-item full-screen fullscreen-button">
+									<a class="new nav-link full-screen-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a>
+								</div>
+								<div class="dropdown main-profile-menu nav nav-item nav-link">
+									<a class="profile-user d-flex" href="">
+										<div class="avatar avatar-md bg-warning rounded-circle" >
+											<script>
+												var cadena = "<%=nom%>",
+													separador = " ", // un espacio en blanco
+													arregloDeSubCadenas = cadena.split(separador); // SEPARA EL NOMBRE EN CADENAS INDIVIDUALES
+												Iniciales = "";
+	
+												// IMPRIME LA PRIMERA LETRA DE CADA CADENA 
+												for (i = 0; i < arregloDeSubCadenas.length; i++) {
+													subCadena = arregloDeSubCadenas[i].substring(0, 1);
+													document.write(subCadena + "");
+												}
+											</script>
+												</div>
+									</a>
+									<div class="dropdown-menu">
+										<div class="main-header-profile bg-primary p-3">
+											<div class="d-flex wd-100p">
+												<div class="avatar avatar-md bg-warning rounded-circle" >
+													<script>
+														var cadena = "<%=nom%>",
+															separador = " ", // un espacio en blanco
+															arregloDeSubCadenas = cadena.split(separador); // SEPARA EL NOMBRE EN CADENAS INDIVIDUALES
+														Iniciales = "";
+			
+														// IMPRIME LA PRIMERA LETRA DE CADA CADENA 
+														for (i = 0; i < arregloDeSubCadenas.length; i++) {
+															subCadena = arregloDeSubCadenas[i].substring(0, 1);
+															document.write(subCadena + "");
+														}
+													</script>
+												</div>
+												<div class="ml-3 my-auto">
+													<h6><%=nom%></h6><span>Empresa</span>
+												</div>
+											</div>
+										</div>
+										
+										<a class="dropdown-item" href="profile"><i class="bx bx-slider-alt"></i> Cuenta</a>
+										<a class="dropdown-item" href="/logout"><i class="bx bx-log-out"></i> Salir</a>
+									</div>
+								</div>
+								<div class="dropdown main-header-message right-toggle">
+									<a class="nav-link pr-0" data-toggle="sidebar-right" data-target=".sidebar-right">
+										<svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /main-header -->
+
+				<!-- container -->
+				<div class="container-fluid">
+
+					<!-- breadcrumb -->
+					
+					<!-- /breadcrumb -->
+
+		
+
+					<!-- row opened -->
+			
+					<div class="row row-sm">
+						<div class="col-md-12 col-lg-12 col-lg-12">
+							<div class="card card-dashboard-map-one">
+								   <label class="main-content-label">Proyectos</label>
+								   <span class="d-block mg-b-20 text-muted tx-12">Directorio de Proyectos disponibles</span>
+								   
+								   <div class="">
+												<div >
+													   <div class="container-fluid fill">
+														 <div class="row fill">
+														   <div class="col-sm-4 fill">
+															 <div class="panel panel-default fill">
+															   <div class="panel-heading" data-toggle="tooltip">
+																 Proyectos
+																 <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
+																
+																<!--
+																 <button class="btn btn-xs btn-theme02" style="float: right" id="showFormCreateBucket" data-toggle="modal" data-target="#createBucketModal">
+																   Nueva Carpeta
+																 </button>
+					
+																 -->
+															   </div>
+															   <div id="appBuckets">
+																Arbol de Carpetas
+															   </div>
+															   <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+															 </div>
+														   </div>
+														   <div class="col-sm-7 fill">
+															<div id="notificaciones"></div><br>
+															   <div id="forgeViewer">
+																
+															   </div>
+															   
+														   </div>
+														   <div class="col-sm-7">
+															 
+															 <div class="row">
+															   
+															 </div>
+														   </div>  
+														                
+														 </div>
+													   </div>
+													   <form id="uploadFile" method='post' enctype="multipart/form-data">
+														 <input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden" />
+													   </form>
+							   
+												   <div class="row">
+													   <div class="col-sm-4">
+														   
+													   </div>
+													   <div class="col-sm-4">
+														 
+													   </div>
+													   <div class="col-sm-4">
+														   
+					
+													   </div>
+												   </div>
+												   <div class="row">
+													   <div class="col-sm-4">
+														   
+															   </div>
+													   <div class="col-sm-4">
+														   </div>
+													   <div class="col-sm-4">
+														   
+					
+													   </div>
+												   </div>
+												
+												   <br><br><br><br><br>
+												   <div class="row">
+												   
+													   <div class="col-sm-4">
+														  
+													   </div>
+													   <div class="col-sm-4">
+														
+													   </div>
+												   </div>
+													   <div class="modal fade" id="createBucketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+														 <div class="modal-dialog" role="document">
+														   <div class="modal-content">
+															 <div class="modal-header">
+															   
+															   <br>
+															   <div id="RESULTADO"></div>
+															   <h4 class="modal-title" id="myModalLabel">Crear Nueva Carpeta</h4>
+															 </div>
+															 <div class="modal-body">
+															   <input type="text" id="newBucketKey" class="form-control"> Crea Una nueva Carpeta para almacenamiento de proyectos
+															 </div>
+															 <div class="modal-footer">
+															   <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+															   <button type="button" class="btn btn-primary" id="createNewBucket">Crear Carpeta</button>
+															 </div>
+														   </div>
+														 </div>
+													   </div>
+													 </div>
+								   </div>
+							   </div>
+						</div>
+					</div>
+					<div class="row row-sm">
+						<div class="col-md-12">
+							<div class="card overflow-hidden">
+								<div class="card-body">
+									<div class="row row-sm">
+										<div class="col-sm-12 col-md-12 col-xl-12">
+											<div class="main-content-label tx-12 mg-b-15">
+												Peso Total / Piso
+											</div>
+											<div class="ht-200 ht-lg-250">
+												<canvas id="chartBar1"></canvas>
+											</div>
+										</div><!-- col-6 -->
+									
+									</div>
+								</div><!-- col-12 -->
+							</div><!-- col-12 -->
+						</div><!-- col-12 -->
+					</div>
+
+					<div class="row row-sm">
+						<div class="col-sm-12 col-md-12">
+							<div class="card overflow-hidden">
+								<div class="card-body">
+									<div class="main-content-label mg-b-5">
+										Partición HA / Peso
+									</div>
+									<p class="mg-b-20">Distribución de Pesos por Partición HA</p>
+									<div class="chartjs-wrapper-demo">
+										<!--<canvas id="chartBar4"></canvas>-->
+										<canvas id="chartBar25"></canvas>
+									</div>
+								</div>
+							</div>
+						</div><!-- col-6 -->
+					
+					</div>
+					<div class="row row-sm">
+						<div class="col-sm-12 col-md-12">
+							<div class="card overflow-hidden">
+								<div class="card-body">
+									<div class="main-content-label mg-b-5">
+										Pedidos / Peso
+									</div>
+									<p class="mg-b-20">Distribución de Pesos por Pisos</p>
+									<div class="chartjs-wrapper-demo">
+										<canvas id="chartBar56"></canvas>
+									</div>
+								</div>
+							</div>
+						</div><!-- col-6 -->
+					
+					</div>
+					
+					<!-- row opened -->
+		
+					<!-- /row 
+					<div id='peso'></div>
+					<div id='largo'></div>
+					<div id='acum'></div>
+						
+				-->
+				</div>
+				<!-- /Container -->
+			</div>
+			<!-- /main-content <DIV id ="proyectos_disponibles"></DIV>-->
+			<div class="modal" id="modaldemo10">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content tx-size-sm">
+						<div class="modal-body tx-center pd-y-20 pd-x-20">
+							<button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span
+									aria-hidden="true">&times;</span></button> <i
+								class="icon ion-ios-checkmark-circle-outline tx-100 tx-success lh-1 mg-t-20 d-inline-block"></i>
+							<h4 class="tx-success tx-semibold mg-b-20">Asignación Exitosa</h4>
+							<p class="mg-b-20 mg-x-20">Se ha seleccionado el proyecto exitosamente.</p><button aria-label="Close"
+								class="btn ripple btn-success pd-x-25" data-bs-dismiss="modal" onclick="closeAsignacion();"
+								type="button" onclick="closeAsignacion();"  cl>Continuar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Sidebar-right-->
+			<div class="sidebar sidebar-right sidebar-animate">
+				<div class="panel panel-primary card mb-0 box-shadow">
+					<div class="tab-menu-heading border-0 p-3">
+						<div class="card-title mb-0">Menu Visualizador</div>
+						<div class="card-options ml-auto">
+							<a href="#" class="sidebar-remove"><i class="fe fe-x"></i></a>
+						</div>
+					</div>
+					<div class="panel-body tabs-menu-body latest-tasks p-0 border-0">
+						<div class="tabs-menu ">
+							<!-- Tabs -->
+							<ul class="nav panel-tabs">
+								<li class=""><a href="#side1" class="active" data-toggle="tab"><i class="fa fa-align-right"></i> Filtros</a></li>
+								<li><a href="#side2" data-toggle="tab"><i class="fa fa-th"></i>Cubicación</a></li>
+								<li><a href="#side3" data-toggle="tab"><i class="fas fa-chart-line"></i> Herramientas & Estadísticas</a></li>
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="tab-pane active " id="side1">
+								<div class="list d-flex align-items-center border-bottom p-3">
+									<div class="">
+										<span class="avatar bg-primary brround avatar-md">AEC</span>
+									</div>
+									<a class="wrapper w-100 ml-3" href="#" >
+										<p class="mb-0 d-flex ">
+											<b>AEC PARTICION HA</b>
+										</p>
+										<div class="d-flex justify-content-between align-items-center">
+											<div class="d-flex align-items-center">
+												<i class="fa fa-cube"></i>
+												<small class="text-muted ml-auto">Descripción del Filtro</small>
+												<p class="mb-0"></p>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="list d-flex align-items-center border-bottom p-3">
+									<div class="">
+										<span class="avatar bg-primary brround avatar-md">AEC</span>
+									</div>
+									<a class="wrapper w-100 ml-3" href="#" >
+										<p class="mb-0 d-flex ">
+											<b>AEC PARTICION HA</b>
+										</p>
+										<div class="d-flex justify-content-between align-items-center">
+											<div class="d-flex align-items-center">
+												<i class="fa fa-cube"></i>
+												<small class="text-muted ml-auto">Descripción del Filtro</small>
+												<p class="mb-0"></p>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="list d-flex align-items-center border-bottom p-3">
+									<div class="">
+										<span class="avatar bg-primary brround avatar-md">AEC</span>
+									</div>
+									<a class="wrapper w-100 ml-3" href="#" >
+										<p class="mb-0 d-flex ">
+											<b>AEC PARTICION HA</b>
+										</p>
+										<div class="d-flex justify-content-between align-items-center">
+											<div class="d-flex align-items-center">
+												<i class="fa fa-cube"></i>
+												<small class="text-muted ml-auto">Descripción del Filtro</small>
+												<p class="mb-0"></p>
+											</div>
+										</div>
+									</a>
+								</div>
+								<div class="list d-flex align-items-center border-bottom p-3">
+									<div class="">
+										<span class="avatar bg-primary brround avatar-md">AEC</span>
+									</div>
+									<a class="wrapper w-100 ml-3" href="#" >
+										<p class="mb-0 d-flex ">
+											<b>AEC PARTICION HA</b>
+										</p>
+										<div class="d-flex justify-content-between align-items-center">
+											<div class="d-flex align-items-center">
+												<i class="fa fa-cube"></i>
+												<small class="text-muted ml-auto">Descripción del Filtro</small>
+												<p class="mb-0"></p>
+											</div>
+										</div>
+									</a>
+								</div>
+							</div>
+							<div class="tab-pane  " id="side2">
+								<div class="list-group list-group-flush ">
+									<div class="list-group-item d-flex  align-items-center">
+										<div class="mr-3">
+											<div class="">
+										<span class="avatar bg-primary brround avatar-md">CAT</span>
+									</div>
+										</div>
+										<div>
+											<strong>Cubicar Categoria</strong> 
+											<div class="small text-muted">
+											Descripción Herramienta
+											</div>
+										</div>
+									</div>
+								
+								</div>
+								<div class="list-group list-group-flush ">
+									<div class="list-group-item d-flex  align-items-center">
+										<div class="mr-3">
+											<div class="">
+										<span class="avatar bg-primary brround avatar-md">CAT</span>
+									</div>
+										</div>
+										<div>
+											<strong>Cubicar Categoria</strong> 
+											<div class="small text-muted">
+											Descripción Herramienta
+											</div>
+										</div>
+									</div>
+								
+								</div>
+								<div class="list-group list-group-flush ">
+									<div class="list-group-item d-flex  align-items-center">
+										<div class="mr-3">
+											<div class="">
+										<span class="avatar bg-primary brround avatar-md">CAT</span>
+									</div>
+										</div>
+										<div>
+											<strong>Cubicar Categoria</strong> <P>
+											<div class="small text-muted">
+											Descripción Herramienta
+											</div>
+										</div>
+									</div>
+								
+								</div>
+								<div class="list-group list-group-flush ">
+									<div class="list-group-item d-flex  align-items-center">
+										<div class="mr-3">
+											<div class="">
+										<span class="avatar bg-primary brround avatar-md">CAT</span>
+									</div>
+										</div>
+										<div>
+											<strong>Cubicar Categoria</strong> 
+											<div class="small text-muted">
+											Descripción Herramienta
+											</div>
+										</div>
+									</div>
+								
+								</div>
+							</div>
+							<div class="tab-pane  " id="side3">
+								<div class="list-group list-group-flush ">
+									<div class="list-group-item d-flex  align-items-center">
+										<div class="mr-2">
+											<span class="avatar bg-primary brround avatar-md">A</span></span>
+										</div>
+										<div class="">
+											<div class="font-weight-semibold" >Estadística 01</div>
+										</div>
+										
+									</div>
+									<div class="list-group-item d-flex  align-items-center">
+										<div class="mr-2">
+											<span class="avatar bg-primary brround avatar-md">A</span></span>
+										</div>
+										<div class="">
+											<div class="font-weight-semibold" >Estadística 01</div>
+										</div>
+										
+									</div>
+									<div class="list-group-item d-flex  align-items-center">
+										<div class="mr-2">
+											<span class="avatar bg-primary brround avatar-md">A</span></span>
+										</div>
+										<div class="">
+											<div class="font-weight-semibold" >Estadística 01</div>
+										</div>
+										
+									</div>
+									<div class="list-group-item d-flex  align-items-center">
+										<div class="mr-2">
+											<span class="avatar bg-primary brround avatar-md">A</span></span>
+										</div>
+										<div class="">
+											<div class="font-weight-semibold" >Estadística 01</div>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--/Sidebar-right-->
+
+			<!-- Message Modal -->
+		
+
+			<!--Video Modal -->
+		
+			<!-- Audio Modal -->
+		
+
+			<!-- Footer opened -->
+			<div class="main-footer ht-40">
+				<div class="container-fluid pd-t-0-f ht-100p">
+					<span>Copyright © 2021 <a href="#">ARBIM CONSTRUCCIÓN</a>.</span>
+				</div>
+			</div>
+			<!-- Footer closed -->
+
+		</div>
+		<!-- End Page -->
+
+		<!-- Back-to-top -->
+		<a href="#top" id="back-to-top"><i class="las la-angle-double-up"></i></a>
+
+		<!-- JQuery min js -->
+		<!--<script src="assets/plugins/jquery/jquery.min.js"></script> -->
+
+		
+		<script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+		<!--Internal  Chart.bundle js -->
+		<script src="assets/plugins/chart.js/Chart.bundle.min.js"></script>
+
+		<!-- Ionicons js -->
+		<script src="assets/plugins/ionicons/ionicons.js"></script>
+
+		<!-- Moment js -->
+		<script src="assets/plugins/moment/moment.js"></script>
+
+		<!--Internal Sparkline js -->
+		<script src="assets/plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+		<!-- Moment js -->
+		<script src="assets/plugins/raphael/raphael.min.js"></script>
+
+		<!--<script src="assets/js/chart.chartjs.js"></script>-->
+		<!--Internal  Flot js-->
+		<script src="assets/plugins/jquery.flot/jquery.flot.js"></script>
+		<script src="assets/plugins/jquery.flot/jquery.flot.pie.js"></script>
+		<script src="assets/plugins/jquery.flot/jquery.flot.resize.js"></script>
+		<script src="assets/plugins/jquery.flot/jquery.flot.categories.js"></script>
+		<script src="assets/js/dashboard.sampledata.js"></script>
+		<script src="assets/js/chart.flot.sampledata.js"></script>
+
+		<!--Internal Apexchart js-->
+		<div id="proyectos_disponibles"></div>
+
+		<!-- Rating js-->
+		<script src="assets/plugins/rating/jquery.rating-stars.js"></script>
+		<script src="assets/plugins/rating/jquery.barrating.js"></script>
+
+		<!--Internal  Perfect-scrollbar js -->
+		<script src="assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+		<script src="assets/plugins/perfect-scrollbar/p-scroll.js"></script>
+
+		<!-- Eva-icons js -->
+		<script src="assets/js/eva-icons.min.js"></script>
+
+		<!-- right-sidebar js -->
+		<script src="assets/plugins/sidebar/sidebar.js"></script>
+		<script src="assets/plugins/sidebar/sidebar-custom.js"></script>
+
+		<!-- Sticky js -->
+		<script src="assets/js/sticky.js"></script>
+		<script src="assets/js/modal-popup.js"></script>
+
+		<!-- Left-menu js-->
+		<script src="assets/plugins/side-menu/sidemenu.js"></script>
+
+		<!-- Internal Map -->
+		<script src="assets/plugins/jqvmap/jquery.vmap.min.js"></script>
+		<script src="assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+
+		<!--Internal  index js -->
+		<script src="assets/js/index.js"></script>
+
+		<!-- custom js -->
+		<script src="assets/js/custom.js"></script>
+		<script src="assets/js/jquery.vmap.sampledata.js"></script>
+
+	
+		<script src="js/ForgeTreeProyectos.js"></script>
+	    <script src="js/ForgeViewerEstadisticas.js"></script>
+	    <script src="js/handleselectionextension.js"></script>
+	    <!--<script src="js/frappe-gantt.min.js"></script>-->
+	    <script src="js/atbim.js"></script>
+		
+		<!--<script src="js/camino.json"></script>
+		-->
+		
+		<script>
+			var referencia = Array();
+			var resultado_ids;
+		/*	console.log("DATA JSON");
+			var mydata = JSON.parse(camino);
+			console.log("DATA JSON");
+			console.log(mydata);*/
+				var aec_peso_1 = 0;
+				var aec_peso_2 = 0;
+				var aec_peso_3 = 0;
+				var aec_peso_4 = 0;
+				var aec_peso_5 = 0;
+				var aec_peso_6 = 0;
+				var aec_peso_7 = 0;
+				var aec_peso_8 = 0;
+				
+			//	launchViewer("dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6YmVsbG90by8xMSUyMEJlbGxvdG8lMjBQcnVlYmElMjBBUkJJTS5ydnQ=");
+				filtro_1 = '';
+				filtro_2 = Object.values(["00.- Radier EDA"]);
+				parametro_nivel = '';
+				filtros_selec_ha =[];
+				
+			
+		 	function buscar_pesos_1(){
+				console.log("ENTRO A BUSCAR PESOS");
+				console.log(filtro_2);
+				consulta_filtro2(filtro_2).then((data) => {
+							console.log("RESULTADO INICIAL");
+							console.log(data);
+							let keys = Object.keys(data);
+							console.log("BUSQUEDA 01");
+							console.log(keys);
+							let elementos = buscaKeys('00.- Radier EDA',keys)
+							var identificadores =0;
+							let dbIds =0;
+							
+							if(elementos.length == 0 || elementos.length  || elementos){
+							console.log("No hay resultados");
+							}else{
+								console.log("FILTRADOS PINTAR "+elementos.length);
+								for(var a = 0; a<elementos.length;a++){
+									if(a==0){
+									dbIds = data[keys[elementos[a]]].dbIds;              
+									referencia.push(dbIds);
+									referencia2.push(dbIds);
+									identificadores = dbIds;
+									}
+									else{
+									referencia.push((data[keys[elementos[a]]].dbIds));
+									referencia2.push((data[keys[elementos[a]]].dbIds));
+									identificadores = dbIds.concat(data[keys[elementos[a]]].dbIds);
+
+									dbIds = identificadores;
+									}
+								}
+
+								resultado_ids = referencia;
+
+							}
+
+							viewer.isolate(identificadores);
+							console.log("IDENTIFICADORES");
+							console.log(identificadores);
+							viewer.fitToView(identificadores, viewer.model);
+							idsSeleccionados =[];
+							idsSeleccionados = identificadores;
+						
+							let c =1;
+							var hoy = 10 + '-' +05 + '-' +2021;
+							var cat_count=1;
+							var esta =0;
+							var categorias = Array();
+							var categoria_actual;
+							var indice_actual = 0;
+							var pesoTotal = 0;
+							var largoTotal = 0;
+							var xTotal = 0;
+							
+						//	var tableTotales = document.getElementById('tabla_total');
+						//	var tableRef = document.getElementById('tabla_fierro');
+
+						//	var tablaPedido = document.getElementById('tabla_fierro_pedido');
+							
+
+						////	document.getElementById('peso').innerHTML = '';
+						//	document.getElementById('largo').innerHTML = '' ;
+						//	document.getElementById('acum').innerHTML = '' ;
+					//		var rowCount = tableRef.rows.length;
+				//			var rowCountTotales = tableTotales.rows.length;
+			//				var tableHeaderRowCount = 1;
+						
+							console.log("RESULTADOS DE IDS FILTRO");
+							console.log(resultado_ids);
+							console.log(resultado_ids[0]);
+							for(var a=0; a< identificadores.length;a++){
+								let actual =  identificadores;
+								
+								viewer.getProperties( identificadores[a], (result) => { 
+								console.log("RESPUESTA");
+								console.log(result);
+								for(i=0 ;i< 60;i++){
+									let nombre_actual = ""+result.properties[i].displayName;
+									if(nombre_actual ==="Category"){
+									categoria_actual_obj = result.properties[i].displayValue;
+									
+									console.log("valor categoria actual: "+categoria_actual_obj);
+									
+									if(categoria_actual_obj=="Revit Structural Rebar"){
+										let peso = parseFloat(result.properties[82].displayValue);
+										
+										peso = peso.toFixed(2);
+										peso = parseFloat(peso);
+									
+										console.log("PESO BUSCADO");
+										console.log(peso);
+										//	let actuales = $("#id_seleccionados3").val();
+										//actual =   actual+","+actuales;
+										
+										pesoTotal = pesoTotal+peso;
+									//    pesoTotal  = parseFloat(pesoTotal).toFixed(2);
+										console.log( "SUMATORIA PESO");
+										console.log( pesoTotal);
+										//document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(2);
+										let largo = parseFloat(result.properties[46].displayValue);
+										largo = largo.toFixed(2);
+										largo = parseFloat(largo,0);
+										console.log( "Largo");
+										console.log( largo);
+										
+										listado_pesos = listado_pesos +","+peso;
+										listado_largos = listado_largos +","+largo;
+									//	$("#id_seleccionados3").val(actual);
+										console.log("EDITO SELECCIONADOS ");
+									//	$("#id_seleccionados4").val(actual);
+									//	$("#listado_largo").val(listado_largos);
+								//		$("#listado_pesos").val(listado_pesos);
+
+										console.log( typeof largo);
+										largoTotal = largoTotal+ largo;
+										console.log( "SUMATORIA LARGO");
+										console.log( largoTotal);
+									
+								//		document.getElementById('largo').innerHTML = '';
+								//		document.getElementById('largo').innerHTML = '' +largoTotal;
+									
+										let name = result.name;
+										peso = parseFloat(peso,0);
+										largo = parseFloat(largo,0);
+										let resultado_mul = peso*largo;
+										//console.log( "Resultado Multiplicación");
+									// console.log( resultado_mul);
+									
+										resultado_mul =resultado_mul.toFixed(2);
+										xTotal = xTotal + parseFloat(resultado_mul);
+									console.log( "Total Multiplicación");
+									console.log( xTotal);
+								//		document.getElementById('acum').innerHTML = '' +xTotal.toFixed(2);
+
+								//		document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
+										let g = name.split(' ');
+										let y = g[2];
+							
+								
+										
+										// Inserta una fila en la tabla, en el índice 0
+								//		var newRow   = tableRef.insertRow(1);
+									
+										// Inserta una celda en la fila, en el índice 0
+								////		var newCell  = newRow.insertCell(0);
+									//	var newCell2  = newRow.insertCell(1);
+									//	var newCell3  = newRow.insertCell(2);
+									//	var newCell4  = newRow.insertCell(3);
+
+										//////////MODAL PEDIDOS//////
+									
+										// Añade un nodo de texto a la celda
+									//	var newText  = document.createTextNode(y);
+									//	newCell.appendChild(newText);
+										
+									//	var newText2  = document.createTextNode(largo);
+									//	newCell2.appendChild(newText2);
+									
+									//	var newText3  = document.createTextNode(peso);
+									//	newCell3.appendChild(newText3);
+										
+									//	var newText4  = document.createTextNode(resultado_mul);
+									//	newCell4.appendChild(newText4);
+									
+									}
+									if(cat_count == 1){ // no hay ningun elemento
+										indice_actual = 0;
+										categorias.push(result.properties[i].displayValue);
+										categoria_actual = result.properties[i].displayValue;
+										cat_count =cat_count +1;
+								
+									}else{
+										for(var t =0 ; t< cat_count; t++){
+											if( result.properties[i].displayValue === categorias[t]){
+												esta = 1; 
+												indice_actual = t;
+												break
+											}
+										}
+										if(esta ==0){ // no se encontró  se procede a agregar la nueva categoria
+											categorias.push(result.properties[i].displayValue);
+											cat_count =cat_count +1;
+											indice_actual = cat_count -1;               
+										}
+										else{
+											esta = 0;
+										}
+										}
+									}
+									
+								}
+								
+								}) 
+								
+							}
+				 });
+
+			}
+			
+				$(function() {
+				
+					var ctx4 = document.getElementById('chartBar4').getContext('2d');
+					new Chart(ctx4, {
+						type: 'horizontalBar',
+						data: {
+							labels: ['1A', 'BA', '2A', '3A', 'AA', '4A','5A','6A'],
+							datasets: [{
+								label: '# Diametros',
+								data: [300, 7000, 8500, 13500, 12000, 8000, 7000, 8500],
+								backgroundColor: ['#285cf7', '#f10075', '#f7557a', '#673ab7', '#ffc107', '#7987a1', '#f7557a', '#673ab7']
+							}]
+						},
+						options: {
+							maintainAspectRatio: false,
+							legend: {
+								display: false,
+								labels: {
+									display: false
+								}
+							},
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true,
+										fontSize: 10,
+										fontColor: "rgba(171, 167, 167,0.9)",
+									},
+									gridLines: {
+										display: true,
+										color: 'rgba(171, 167, 167,0.2)',
+										drawBorder: false
+									},
+								}],
+								xAxes: [{
+									ticks: {
+										beginAtZero: true,
+										fontSize: 11,
+										max: 20000,
+										fontColor: "rgba(171, 167, 167,0.9)",
+									},
+									gridLines: {
+										display: true,
+										color: 'rgba(171, 167, 167,0.2)',
+										drawBorder: false
+									},
+								}]
+							}
+						}
+					});
+					var ctx10 = document.getElementById('chartBar10').getContext('2d');
+					new Chart(ctx10, {
+						type: 'horizontalBar',
+						data: {
+							labels: ['00 Base', '01 Piso ', '02 Piso ', ' 03 Piso', '04 Piso', '05 Piso','06 Piso','Base'],
+							datasets: [{
+								label: '# Diametros',
+								data: [1500, 5000, 6500, 8500, 8200, 6500, 5856, 4580],
+								backgroundColor: ['#285cf7', '#f10075', '#f7557a', '#673ab7', '#ffc107', '#7987a1', '#f7557a', '#673ab7']
+							}]
+						},
+						options: {
+							maintainAspectRatio: false,
+							legend: {
+								display: false,
+								labels: {
+									display: false
+								}
+							},
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true,
+										fontSize: 10,
+										fontColor: "rgba(171, 167, 167,0.9)",
+									},
+									gridLines: {
+										display: true,
+										color: 'rgba(171, 167, 167,0.2)',
+										drawBorder: false
+									},
+								}],
+								xAxes: [{
+									ticks: {
+										beginAtZero: true,
+										fontSize: 11,
+										max: 20000,
+										fontColor: "rgba(171, 167, 167,0.9)",
+									},
+									gridLines: {
+										display: true,
+										color: 'rgba(171, 167, 167,0.2)',
+										drawBorder: false
+									},
+								}]
+							}
+						}
+					});
+
+					var ctx11 = document.getElementById('chartBar11').getContext('2d');
+					new Chart(ctx11, {
+						type: 'horizontalBar',
+						data: {
+							labels: ['6m', '6<L<7 ', '7<L<8 ', ' >=12m'],
+							datasets: [{
+								label: '# Diametros',
+								data: [989, 1560, 5457, 2587],
+								backgroundColor: ['#285cf7', '#f10075', '#f7557a', '#673ab7']
+							}]
+						},
+						options: {
+							maintainAspectRatio: false,
+							legend: {
+								display: false,
+								labels: {
+									display: false
+								}
+							},
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true,
+										fontSize: 10,
+										fontColor: "rgba(171, 167, 167,0.9)",
+									},
+									gridLines: {
+										display: true,
+										color: 'rgba(171, 167, 167,0.2)',
+										drawBorder: false
+									},
+								}],
+								xAxes: [{
+									ticks: {
+										beginAtZero: true,
+										fontSize: 11,
+										max: 20000,
+										fontColor: "rgba(171, 167, 167,0.9)",
+									},
+									gridLines: {
+										display: true,
+										color: 'rgba(171, 167, 167,0.2)',
+										drawBorder: false
+									},
+								}]
+							}
+						}
+					});
+
+					var ctx12 = document.getElementById('chartBar12').getContext('2d');
+					new Chart(ctx12, {
+						type: 'horizontalBar',
+						data: {
+							labels: ['Enero', 'Febrero ', 'marzo ', ' Abril', ' Mayo', ' Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+							datasets: [{
+								label: '# Peso Pedidos',
+								data: [8560, 11560, 8879, 7895,9876,10256,13256,7845,6589,13254,14689,4569],
+								backgroundColor: ['#285cf7', '#f10075', '#f7557a', '#673ab7','#ffc107', '#7987a1', '#f7557a', '#673ab7','#285cf7', '#f10075', '#f7557a', '#673ab7']
+							}]
+						},
+						options: {
+							maintainAspectRatio: false,
+							legend: {
+								display: false,
+								labels: {
+									display: false
+								}
+							},
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true,
+										fontSize: 10,
+										fontColor: "rgba(171, 167, 167,0.9)",
+									},
+									gridLines: {
+										display: true,
+										color: 'rgba(171, 167, 167,0.2)',
+										drawBorder: false
+									},
+								}],
+								xAxes: [{
+									ticks: {
+										beginAtZero: true,
+										fontSize: 11,
+										max: 20000,
+										fontColor: "rgba(171, 167, 167,0.9)",
+									},
+									gridLines: {
+										display: true,
+										color: 'rgba(171, 167, 167,0.2)',
+										drawBorder: false
+									},
+								}]
+							}
+						}
+					});
+
+				
+					/* LINE CHART */
+
+					/** AREA CHART **/
+
+					/** PIE CHART **/
+					var datapie = {
+						labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+						datasets: [{
+							data: [20, 20, 30, 5, 25],
+							backgroundColor: ['#285cf7', '#f10075', '#8500ff', '#7987a1', '#74de00']
+						}]
+					};
+					var optionpie = {
+						maintainAspectRatio: false,
+						responsive: true,
+						legend: {
+							display: false,
+						},
+						animation: {
+							animateScale: true,
+							animateRotate: true
+						}
+					};
+					// For a doughnut chart
+					var ctx6 = document.getElementById('chartPie');
+					var myPieChart6 = new Chart(ctx6, {
+						type: 'doughnut',
+						data: datapie,
+						options: optionpie
+					});
+					// For a pie chart
+					var ctx7 = document.getElementById('chartDonut');
+					var myPieChart7 = new Chart(ctx7, {
+						type: 'pie',
+						data: datapie,
+						options: optionpie
+					});
+				});
+		</script>
+	  <!--  <script src="js/atbimDocking.js"></script>-->
+<script>	</script>
+	</body>
+</html>
