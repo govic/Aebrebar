@@ -3,9 +3,9 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 18
+      nodejs: 16
     commands:
-      - npm install
+      - npm install --production
   pre_build:
     commands:
       - echo Pre-Build started on `date`, Installing NPM Dependencies
@@ -17,22 +17,4 @@ phases:
       - echo Build completed on `date`
 artifacts:
   files:
-    - package.json
-    - package-lock.json
-    - node_modules/**/*
-    - Camino_80097.kml
-    - arbimkey.cer
-    - buildspec.yml
-    - config.js
-    - data/**/*
-    - mynewfile3.txt
-    - package.json
-    - poligonos_20117_101 - copia.txt
-    - poligonos_20117_101.txt
-    - public/**/*
-    - resultado.txt
-    - routes/**/*
-    - start.js
-    - uploads/**/*
-    - usos.txt
-    - views/**/*
+    - '**/*'
