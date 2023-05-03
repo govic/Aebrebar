@@ -50,8 +50,7 @@ passport.use(new GoogleStrategy({
   if (rows.length > 0) {
 
     const user = rows[0];
-    done(null, user, req.session.tipoUsuario = rows[0].tipoUsuario, req.session.fullname = rows[0].fullname,
-      req.session.username = rows[0].username, req.session.idUsu = rows[0].idUsu);
+    done(null, user);
   } else {
     return done(null, false, console.log("usuario no existe"), req.flash('message', 'Usuario no existe.'));
   }
@@ -78,16 +77,16 @@ router.post(
     failureRedirect: '/signin',
     failureFlash: true
   }), async (req, res) => {
-    if (req.session.tipoUsuario == "Administrador") {
-      var nom = req.session.fullname;
+    if (req.session.passport.user.tipoUsuario == "Administrador") {
+      var nom = req.session.passport.user.fullname;
       res.render('proyectos', { nom });
     }
-    if (req.session.tipoUsuario == "Editor") {
-      var nom = req.session.fullname;
+    if (req.session.passport.user.tipoUsuario == "Editor") {
+      var nom = req.session.passport.user.fullname;
       res.render('proyectosV3', { nom });
     }
-    if (req.session.tipoUsuario == "Visualizador") {
-      var nom = req.session.fullname;
+    if (req.session.passport.user.tipoUsuario == "Visualizador") {
+      var nom = req.session.passport.user.fullname;
       res.render('proyectosV2', { nom });
     }
   });
@@ -102,9 +101,8 @@ passport.use('local.signin', new LocalStrategy({
   if (rows.length > 0) {
     const user = rows[0];
     const validPassword = await helpers.matchPassword(password, user.password)
-
     if (validPassword) {
-      done(null, user, req.session.tipoUsuario = rows[0].tipoUsuario, req.session.fullname = rows[0].fullname, req.session.username = rows[0].username, req.session.idUsu = rows[0].idUsu);
+      done(null, user);
     } else {
       done(null, false, console.log("Contraseña inválida"), req.flash('message', 'Contraseña incorrecta.'));
     }
@@ -115,24 +113,28 @@ passport.use('local.signin', new LocalStrategy({
 
 //serialize user
 passport.serializeUser((user, done) => {
-  done(null, user.idUsu);
-
+  done(null, {
+    tipoUsuario: user.tipoUsuario,
+    fullname: user.fullname,
+    username: user.username,
+    idUsu: user.idUsu
+  });
 });
 
-passport.deserializeUser(async (id, done) => {
-  const rows = await pool.query('SELECT * FROM users WHERE idUsu = ?', [id]);
+passport.deserializeUser(async (user, done) => {
+  const rows = await pool.query('SELECT * FROM users WHERE idUsu = ?', [user.idUsu]);
   done(null, rows[0]);
 
 });
 
 //botón editar del formulario editar2
 router.post('/editar2/:idUsu', isLoggedIn, async (req, res) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const { idUsu } = req.params;
     const data = await pool.query('SELECT * FROM users WHERE idUsu= ?', [idUsu]);
     const { fullname, username, password, tipoUsuario } = req.body;
@@ -252,48 +254,48 @@ router.post('/editar2/:idUsu', isLoggedIn, async (req, res) => {
       }
     }
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.redirect('index');
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.redirect('index');
   }
 });
 //editar2
 router.get('/edit/:idUsu', isLoggedIn, async (req, res) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const { idUsu } = req.params;
     const data = await pool.query('SELECT * FROM users WHERE idUsu= ?', [idUsu]);
     res.render('editar2', { data: data[0], nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.redirect('index');
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.redirect('index');
   }
 });
 //edit
 router.get('/edit', isLoggedIn, async (req, res) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const data = await pool.query('SELECT * FROM users');
     res.render('edit', { data, nom });
 
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.redirect('index');
 
-  } if (req.session.tipoUsuario == "Visualizador") {
+  } if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.redirect('index');
   }
 })
@@ -301,72 +303,72 @@ router.get('/edit', isLoggedIn, async (req, res) => {
 
 //delete
 router.get('/delete', isLoggedIn, async (req, res) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const data = await pool.query('SELECT * FROM users');
 
     res.render('delete', { data, nom });
 
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.redirect('index');
 
-  } if (req.session.tipoUsuario == "Visualizador") {
+  } if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.redirect('index');
   }
 })
 
 router.get('/delete2/:idUsu', isLoggedIn, async (req, res) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const { idUsu } = req.params;
     await pool.query('DELETE FROM users WHERE idUsu = ?', [idUsu]);
     res.redirect('/delete');
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.redirect('index');
-  } if (req.session.tipoUsuario == "Visualizador") {
+  } if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.redirect('index');
   }
 });
 
 router.get('/deleteVista/:idVS', isLoggedIn, async (req, res) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const { idVS } = req.params;
     await pool.query('DELETE FROM vistas_save WHERE idVS = ?', [idVS]);
     res.redirect('/index');
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     const { idVS } = req.params;
     await pool.query('DELETE FROM vistas_save WHERE idVS = ?', [idVS]);
     res.redirect('/indexV3');
   }
   //rev 
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.redirect('index');
   }
 });
 
 router.get('/delete/:idUsu', isLoggedIn, async (req, res) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const { idUsu } = req.params;
     const data = await pool.query('SELECT * FROM users');
     console.log("En proceso de eliminar1");
@@ -388,42 +390,42 @@ router.get('/delete/:idUsu', isLoggedIn, async (req, res) => {
     });
 
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.redirect('index');
 
-  } if (req.session.tipoUsuario == "Visualizador") {
+  } if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.redirect('index');
   }
 });
 
 // SIGNUP
 router.get('/signup', isLoggedIn, async (req, res) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     console.log("pasó por la authen")
     const data = await pool.query('SELECT * FROM users');
     res.render('signup', { data, nom });
 
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.redirect('index');
 
-  } if (req.session.tipoUsuario == "Visualizador") {
+  } if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.redirect('index');
   }
 });
 
 router.post('/signup', isLoggedIn, async (req, res) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const { fullname, username, password, tipoUsuario } = req.body;
     const newUser = {
       fullname,
@@ -471,30 +473,30 @@ router.post('/signup', isLoggedIn, async (req, res) => {
 
     // res.redirect('signup');
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.redirect('index');
-  } if (req.session.tipoUsuario == "Visualizador") {
+  } if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.redirect('index');
   }
 });
 router.get('/prueba', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
   //guardo los datos de la tabla en datavista
   const datavista = await pool.query('SELECT * FROM vistas_save');
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.send(datavista);
     console.log(datavista);
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.send(datavista);
     console.log(datavista);
   }
   //rev
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.send(datavista);
     console.log(datavista);
   }
@@ -711,23 +713,23 @@ router.post('/cambio_de_pass', isNotLoggedIn, async (req, res, done) => {
 });
 
 router.get('/listaProyecto', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
   //guardo los datos de la tabla en datavista
   const datavista = await pool.query('SELECT * FROM modelo');
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.send(datavista);
     console.log(datavista);
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.send(datavista);
     console.log(datavista);
   }
   //rev
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.send(datavista);
     console.log(datavista);
   }
@@ -735,26 +737,26 @@ router.get('/listaProyecto', isLoggedIn, async (req, res, next) => {
 });
 
 router.get('/listaDBIDS', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   // console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
   //guardo los datos de la tabla en datavista
   const { nombre, ids } = req.body;
   const datavista = await pool.query('SELECT * FROM plan');
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.send(datavista);
     // console.log( "GET IDS PLAN" );
     // console.log( datavista );
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.send(datavista);
     // console.log( "GET IDS PLAN" );
     // console.log( datavista );
   }
   //rev
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.send(datavista);
     // console.log( "GET IDS PLAN" );
     // console.log( datavista );
@@ -764,26 +766,26 @@ router.get('/listaDBIDS', isLoggedIn, async (req, res, next) => {
 
 
 router.get('/listaDBIDSPlan', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   // console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
   //guardo los datos de la tabla en datavista
   const { nombre, ids } = req.body;
   const datavista = await pool.query('SELECT * FROM plan WHERE fecha_plan != "" ');
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.send(datavista);
     // console.log( "GET IDS PLAN" );
     // console.log( datavista );
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.send(datavista);
     // console.log( "GET IDS PLAN" );
     // console.log( datavista );
   }
   //rev
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.send(datavista);
     // console.log( "GET IDS PLAN" );
     // console.log( datavista );
@@ -813,7 +815,7 @@ router.post('/insertDBIDS', isLoggedIn, async (req, res, next) => {
 
 
 router.post('/updateDBIDS', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
 
 
@@ -826,7 +828,7 @@ router.post('/updateDBIDS', isLoggedIn, async (req, res, next) => {
   const updatePlan = { fecha_plan, fecha_base };
   console.log('ENVIO UPDATE');
   console.log(req.body);
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     await pool.query('UPDATE plan set ? WHERE dbId = ?', [updatePlan, i], async (error, results) => {
       if (error) {
         console.log(error);
@@ -839,7 +841,7 @@ router.post('/updateDBIDS', isLoggedIn, async (req, res, next) => {
 
     console.log(datavista);
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     await pool.query('UPDATE plan set ? WHERE dbId = ?', [updatePlan, i], async (error, results) => {
       if (error) {
         console.log(error);
@@ -853,7 +855,7 @@ router.post('/updateDBIDS', isLoggedIn, async (req, res, next) => {
     console.log(datavista);
   }
   //rev
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     await pool.query('UPDATE plan set ? WHERE dbId = ?', [updatePlan, i], async (error, results) => {
       if (error) {
         console.log(error);
@@ -877,20 +879,20 @@ router.post('/prueba', isLoggedIn, async (req, res) => {
   console.log(req.body);
   //aquí traigo el id de la sesión activa
   console.log("REQ")
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   //aquí traigo al usuario el cual tiene la id que traje
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   //asigno
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
   req.session.username = rows2[0].username;
-  var nom = req.session.fullname;
+  var nom = req.session.passport.user.fullname;
   var nom2 = req.session.username;
   //id de la sesión
-  const idUsu = req.session.idUsu;
+  const idUsu = req.session.passport.user.idUsu;
 
   //ahora empieza la función
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const datavista = await pool.query('SELECT * FROM vistas_save');
 
     //aquí le paso los datos de los inputs (Los capto a través del "name")
@@ -931,7 +933,7 @@ router.post('/prueba', isLoggedIn, async (req, res) => {
 
 
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     const datavista = await pool.query('SELECT * FROM vistas_save');
 
     //aquí le paso los datos de los inputs (Los capto a través del "name")
@@ -973,7 +975,7 @@ router.post('/prueba', isLoggedIn, async (req, res) => {
 
   }
   //rev
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     const datavista = await pool.query('SELECT * FROM vistas_save');
 
     //aquí le paso los datos de los inputs (Los capto a través del "name")
@@ -1023,20 +1025,20 @@ router.post('/vista', isLoggedIn, async (req, res) => {
   console.log(req.body);
   //aquí traigo el id de la sesión activa
   console.log("REQ")
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   //aquí traigo al usuario el cual tiene la id que traje
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   //asigno
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
   req.session.username = rows2[0].username;
-  var nom = req.session.fullname;
+  var nom = req.session.passport.user.fullname;
   var nom2 = req.session.username;
   //id de la sesión
-  const idUsu = req.session.idUsu;
+  const idUsu = req.session.passport.user.idUsu;
 
   //ahora empieza la función
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const datavista = await pool.query('SELECT * FROM modelo');
 
     //aquí le paso los datos de los inputs (Los capto a través del "name")
@@ -1076,7 +1078,7 @@ router.post('/vista', isLoggedIn, async (req, res) => {
 
 
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     const datavista = await pool.query('SELECT * FROM modelo');
 
     //aquí le paso los datos de los inputs (Los capto a través del "name")
@@ -1117,7 +1119,7 @@ router.post('/vista', isLoggedIn, async (req, res) => {
 
   }
   //rev
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     const datavista = await pool.query('SELECT * FROM modelo');
 
     //aquí le paso los datos de los inputs (Los capto a través del "name")
@@ -1166,21 +1168,21 @@ router.post('/vista', isLoggedIn, async (req, res) => {
 
 //modals
 /*router.get('/modals', (req, res, next) => {
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
   res.render('modals');
 }
-if (req.session.tipoUsuario == "Visualizador") {
+if (req.session.passport.user.tipoUsuario == "Visualizador") {
  res.render('modalsV2');
 }})*/
 
 //--
 //index
 /*router.get('/index2', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
   var nom2 = req.session.username;
 
   var rows3 = await pool.query('SELECT * FROM filtros WHERE id = ?', [1]);
@@ -1194,7 +1196,7 @@ if (req.session.tipoUsuario == "Visualizador") {
   const categoria_04 = rows4[0].categoria_04;
   const parametro_nivel = rows4[0].parametro_nivel;
   const parametro_fecha = rows4[0].parametro_fecha;
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
 
     res.render('index2', {
       alert: true,
@@ -1208,7 +1210,7 @@ if (req.session.tipoUsuario == "Visualizador") {
       idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
     });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
 
     res.render('index2V3', {
       alert: true,
@@ -1222,7 +1224,7 @@ if (req.session.tipoUsuario == "Visualizador") {
       idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
     });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     
     res.render('index2', { nom, filtro_1 });
   }
@@ -1231,11 +1233,11 @@ if (req.session.tipoUsuario == "Visualizador") {
 
 //index
 router.get('/index', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
   var nom2 = req.session.username;
 
   var rows3 = await pool.query('SELECT * FROM filtros WHERE id = ?', [1]);
@@ -1249,7 +1251,7 @@ router.get('/index', isLoggedIn, async (req, res, next) => {
   const categoria_04 = rows4[0].categoria_04;
   const parametro_nivel = rows4[0].parametro_nivel;
   const parametro_fecha = rows4[0].parametro_fecha;
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
 
     res.render('index', {
       alert: true,
@@ -1263,7 +1265,7 @@ router.get('/index', isLoggedIn, async (req, res, next) => {
       idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
     });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
 
     res.render('indexV3', {
       alert: true,
@@ -1277,7 +1279,7 @@ router.get('/index', isLoggedIn, async (req, res, next) => {
       idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
     });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     //res.render('indexV2', { nom, filtro_1 });
     res.render('indexV2', {
       alert: true,
@@ -1296,25 +1298,25 @@ router.get('/index', isLoggedIn, async (req, res, next) => {
 
 //indexV2
 router.get('/indexV2', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('index', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('indexV3', { nom });
   }
   //rev
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('indexV2', { nom });
   }
 })
 
 router.get('/config', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   const rows2 = await pool.query('SELECT * FROM gantt', [idUsua]);
   console.log(rows2[0].categoria_01);
 
@@ -1326,20 +1328,20 @@ router.get('/config', isLoggedIn, async (req, res, next) => {
   const parametro_fecha = rows2[0].parametro_fecha;
 
 
-  var nom = req.session.fullname;
+  var nom = req.session.passport.user.fullname;
 
   var rows3 = await pool.query('SELECT * FROM filtros', [idUsua]);
   const filtro_1 = rows3[0].filtro_1;
   const filtro_2 = rows3[0].filtro_2;
 
-  const idUsu = req.session.idUsu;
-  if (req.session.tipoUsuario == "Administrador") {
+  const idUsu = req.session.passport.user.idUsu;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('config', { nom, idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('configV3', { nom, idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('config', { nom, idUsu, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_1, filtro_2 });
     console.log(idUsu);
   }
@@ -1353,7 +1355,7 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      idUsua = req.session.idUsu;
+      idUsua = req.session.passport.user.idUsu;
       const rows2 = await pool.query('SELECT * FROM gantt', [idUsua]);
       console.log(rows2[0].categoria_01);
       const filtro_v1 = "";
@@ -1368,7 +1370,7 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
       const parametro_fecha = rows2[0].parametro_fecha;
 
 
-      var nom = req.session.fullname;
+      var nom = req.session.passport.user.fullname;
       var nom2 = req.session.username;
 
       var rows3 = await pool.query('SELECT * FROM filtros', [idUsua]);
@@ -1376,8 +1378,8 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
       const filtro_2 = rows3[0].filtro_2;
 
 
-      const idUsu = req.session.idUsu;
-      if (req.session.tipoUsuario == "Administrador") {
+      const idUsu = req.session.passport.user.idUsu;
+      if (req.session.passport.user.tipoUsuario == "Administrador") {
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1390,7 +1392,7 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
           idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
         })
       }
-      if (req.session.tipoUsuario == "Editor") {
+      if (req.session.passport.user.tipoUsuario == "Editor") {
         res.render('configV3', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1403,7 +1405,7 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
           idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
         })
       }
-      if (req.session.tipoUsuario == "Visualizador") {
+      if (req.session.passport.user.tipoUsuario == "Visualizador") {
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1428,7 +1430,7 @@ router.post('/parametro_fecha', isLoggedIn, async (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      idUsua = req.session.idUsu;
+      idUsua = req.session.passport.user.idUsu;
       const rows2 = await pool.query('SELECT * FROM gantt', [idUsua]);
       console.log(rows2[0].categoria_01);
       const filtro_1 = rows2[0].filtro_1;
@@ -1443,11 +1445,11 @@ router.post('/parametro_fecha', isLoggedIn, async (req, res) => {
       const parametro_fecha = rows2[0].parametro_fecha;
 
 
-      var nom = req.session.fullname;
+      var nom = req.session.passport.user.fullname;
       var nom2 = req.session.username;
 
-      const idUsu = req.session.idUsu;
-      if (req.session.tipoUsuario == "Administrador") {
+      const idUsu = req.session.passport.user.idUsu;
+      if (req.session.passport.user.tipoUsuario == "Administrador") {
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1460,7 +1462,7 @@ router.post('/parametro_fecha', isLoggedIn, async (req, res) => {
           idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
         })
       }
-      if (req.session.tipoUsuario == "Editor") {
+      if (req.session.passport.user.tipoUsuario == "Editor") {
         res.render('configV3', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1473,7 +1475,7 @@ router.post('/parametro_fecha', isLoggedIn, async (req, res) => {
           idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
         })
       }
-      if (req.session.tipoUsuario == "Visualizador") {
+      if (req.session.passport.user.tipoUsuario == "Visualizador") {
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1498,7 +1500,7 @@ router.post('/parametro_niveles', isLoggedIn, async (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      idUsua = req.session.idUsu;
+      idUsua = req.session.passport.user.idUsu;
       const rows2 = await pool.query('SELECT * FROM gantt', [idUsua]);
       console.log(rows2[0].categoria_01);
       const filtro_1 = rows2[0].filtro_1;
@@ -1513,11 +1515,11 @@ router.post('/parametro_niveles', isLoggedIn, async (req, res) => {
       const parametro_fecha = rows2[0].parametro_fecha;
 
 
-      var nom = req.session.fullname;
+      var nom = req.session.passport.user.fullname;
       var nom2 = req.session.username;
 
-      const idUsu = req.session.idUsu;
-      if (req.session.tipoUsuario == "Administrador") {
+      const idUsu = req.session.passport.user.idUsu;
+      if (req.session.passport.user.tipoUsuario == "Administrador") {
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1530,7 +1532,7 @@ router.post('/parametro_niveles', isLoggedIn, async (req, res) => {
           idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
         })
       }
-      if (req.session.tipoUsuario == "Editor") {
+      if (req.session.passport.user.tipoUsuario == "Editor") {
         res.render('configV3', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1543,7 +1545,7 @@ router.post('/parametro_niveles', isLoggedIn, async (req, res) => {
           idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
         })
       }
-      if (req.session.tipoUsuario == "Visualizador") {
+      if (req.session.passport.user.tipoUsuario == "Visualizador") {
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1569,7 +1571,7 @@ router.post('/categorias', isLoggedIn, async (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      idUsua = req.session.idUsu;
+      idUsua = req.session.passport.user.idUsu;
       const rows2 = await pool.query('SELECT * FROM gantt', [idUsua]);
       console.log(rows2[0].categoria_01);
       const filtro_1 = rows2[0].filtro_1;
@@ -1583,11 +1585,11 @@ router.post('/categorias', isLoggedIn, async (req, res) => {
       const parametro_fecha = rows2[0].parametro_fecha;
 
 
-      var nom = req.session.fullname;
+      var nom = req.session.passport.user.fullname;
       var nom2 = req.session.username;
 
-      const idUsu = req.session.idUsu;
-      if (req.session.tipoUsuario == "Administrador") {
+      const idUsu = req.session.passport.user.idUsu;
+      if (req.session.passport.user.tipoUsuario == "Administrador") {
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1600,7 +1602,7 @@ router.post('/categorias', isLoggedIn, async (req, res) => {
           idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
         })
       }
-      if (req.session.tipoUsuario == "Editor") {
+      if (req.session.passport.user.tipoUsuario == "Editor") {
         res.render('configV3', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1613,7 +1615,7 @@ router.post('/categorias', isLoggedIn, async (req, res) => {
           idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
         })
       }
-      if (req.session.tipoUsuario == "Visualizador") {
+      if (req.session.passport.user.tipoUsuario == "Visualizador") {
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1731,11 +1733,11 @@ router.post('/saveAddOrdenes', isLoggedIn, async (req, res) => {
 //*******GUet IDS ORDENES *///
 router.get('/getOrdenes', isLoggedIn, async (req, res, next) => {
   console.log("entro");
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
   //guardo los datos de la tabla en datavista
   const { nombre, ids } = req.body;
   const datavista = await pool.query('SELECT * FROM pedido');
@@ -1750,11 +1752,11 @@ router.get('/getOrdenes', isLoggedIn, async (req, res, next) => {
 /////////////////////// GET ORDENES ADICIONALES/////////
 router.post('/getAdicionalesOrdenes', isLoggedIn, async (req, res, next) => {
   console.log("entro");
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
   //guardo los datos de la tabla en datavista
   const newSelect = req.body.nombre_actual;
   console.log(newSelect);
@@ -1825,37 +1827,37 @@ router.post('/saveView', isLoggedIn, async (req, res) => {
 })*/
 //profile
 router.get('/profile', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
   req.session.username = rows2[0].username;
-  var nom = req.session.fullname;
+  var nom = req.session.passport.user.fullname;
   var nom2 = req.session.username;
-  const idUsu = req.session.idUsu;
-  if (req.session.tipoUsuario == "Administrador") {
+  const idUsu = req.session.passport.user.idUsu;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('profile', { nom, nom2 });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('profileV3', { nom, nom2 });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('profileV2', { nom, nom2, idUsu });
     console.log(idUsu);
   }
 })
 
 router.post('/profile', isLoggedIn, async (req, res) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
   req.session.username = rows2[0].username;
-  var nom = req.session.fullname;
+  var nom = req.session.passport.user.fullname;
   var nom2 = req.session.username;
 
-  const idUsu = req.session.idUsu;
-  if (req.session.tipoUsuario == "Administrador") {
+  const idUsu = req.session.passport.user.idUsu;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     const { fullname, username, password, password2 } = req.body;
 
     if (password == password2) {
@@ -1949,7 +1951,7 @@ router.post('/profile', isLoggedIn, async (req, res) => {
 
   }
 
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     const { fullname, username, password, password2 } = req.body;
 
     if (password == password2) {
@@ -2042,7 +2044,7 @@ router.post('/profile', isLoggedIn, async (req, res) => {
     }
 
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     const { fullname, username, password, password2 } = req.body;
 
     if (password == password2) {
@@ -2147,11 +2149,11 @@ router.post('/profile', isLoggedIn, async (req, res) => {
 
 //proyectos/* 
 router.get('/proyectos', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
   var consulta_vals = "";
   var data_uso = "";
 
@@ -2239,117 +2241,117 @@ router.get('/proyectos', isLoggedIn, async (req, res, next) => {
         //Camino_80097
   */
 
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('proyectos', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('proyectosV3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('proyectosV2', { nom });
   }
 })
 
 router.get('/proyecto2', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('proyecto2', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('proyecto2V3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('proyecto2', { nom });
   }
 })
 //Morris Charts
 router.get('/chart-morris', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('chart-morris', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('chart-morrisV3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('chart-morrisV2', { nom });
   }
 })
 
 //GANTT
 router.get('/gantt', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('gantt', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('ganttV3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('gantt', { nom });
   }
 })
 
 router.get('/prueba_gantt2', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('prueba_gantt2', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('prueba_gantt2V3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('prueba_gantt2', { nom });
   }
 })
 
 //Flot Charts
 router.get('/chart-flot', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('chart-flot', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('chart-flotV3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('chart-flotV2', { nom });
   }
 })
 //ChartJS
 router.get('/chart-chartjs', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('chart-chartjs', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('chart-chartjsV3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('chart-chartjsV2', { nom });
   }
 })
@@ -2357,80 +2359,80 @@ router.get('/chart-chartjs', isLoggedIn, async (req, res, next) => {
 /// Estadisticas Modelo
 
 router.get('/estadisticasModelo', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('estadisticasModelo', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('estadisticasModeloV3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('estadisticasModelo', { nom });
   }
 })
 //Echart
 router.get('/chart-echart', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('chart-echart', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('chart-echartV3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('chart-echartV2', { nom });
   }
 })
 //Sparkline
 router.get('/chart-sparkline', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('chart-sparkline', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('chart-sparklineV3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('chart-sparklineV2', { nom });
   }
 })
 //Chart-peity
 router.get('/chart-peity', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  if (req.session.tipoUsuario == "Administrador") {
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('chart-peity', { nom });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('chart-peityV3', { nom });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.render('chart-peityV2', { nom });
   }
 })
 
 //prueba
 /*router.get('/prueba',isLoggedIn, async (req, res, next) =>{
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
   res.render('prueba', {nom});
 })*/
 /*router.get('/prueba',controlador.list,(req, res, next) =>{
