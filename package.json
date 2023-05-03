@@ -18,14 +18,14 @@
     "express-mysql-session": "^2.1.5",
     "express-session": "^1.17.1",
     "express-validator": "^6.10.0",
-    "forge-apis": "^0.7.3",
+    "forge-apis": "^0.9.6",
     "frappe-gantt": "^0.5.0",
     "jquery": "^3.6.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "nodemailer": "^6.9.1",
-    "passport": "^0.4.1",
+    "passport": "^0.6.0",
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-local": "^1.0.0",
@@ -34,6 +34,6 @@
     "sweetalert": "^2.1.2",
     "timeago.js": "^4.0.2",
     "utm-latlng": "^1.0.6",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.5.0"
   }
 }
