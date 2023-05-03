@@ -6,6 +6,7 @@ phases:
       nodejs: 18
     commands:
       - npm install --production
+      - npm i --save nodemailer
   pre_build:
     commands:
       - echo Pre-Build started on `date`, Installing NPM Dependencies
