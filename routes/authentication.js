@@ -2439,9 +2439,11 @@ router.get('/chart-peity', isLoggedIn, async (req, res, next) => {
   res.render('prueba');
 })*/
 router.get('/logout', (req, res) => {
-  req.logOut();
-  res.redirect('/signin');
-  console.log("cerró sesión")
+  req.logout(err => {
+    if (err) { return next(err); }
+    res.redirect('/signin');
+    console.log("cerró sesión")
+  });
 });
 
 
