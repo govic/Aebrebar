@@ -6,7 +6,8 @@ var nombre_add_actual;
 //var datos;
 var filtro1 = false;
 var filtro2 = false;
-var filtro3 = false;
+
+
 var referencia2 = Array();
 var valor_fil1;
 var valor_fil2;
@@ -238,7 +239,9 @@ function existeId(idBuscado){
     //  console.log(b +' comp '+ ids_bd[a][0]);
     //  console.log(typeof b +' comp '+ typeof ids_bd[a][0]);
       if(b == ids_bd[a][0]){
-   //     console.log('ENCONTRE ID BUSCADO OBSJET')
+        console.log('ENCONTRE ID BUSCADO OBSJET');
+        console.log("IDS PLANES ENCONTRADOS");
+        console.log(ids_bd[a]);
         return ids_bd[a];
       }
     }
@@ -391,7 +394,7 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
               if(nombre_actual ==="Category"){
                 categoria_actual_obj = result.properties[i].displayValue;
                 console.log("valor categoria actual: "+categoria_actual_obj); 
-                if(categoria_actual_obj=="Revit Structural Rebar"){
+                if(categoria_actual_obj==""+parametro_fierro+""){
                   console.log("CONTANDO PESOS VALOR DE LG "+contador_lg+ "VALOR LGB "+a);
                   let peso = parseFloat(result.properties[82].displayValue);
                   peso = peso.toFixed(0);
@@ -654,7 +657,7 @@ if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
               if(nombre_actual ==="Category"){
                 categoria_actual_obj = result.properties[i].displayValue;
                 console.log("valor categoria actual: "+categoria_actual_obj); 
-                if(categoria_actual_obj=="Revit Structural Rebar"){
+                if(categoria_actual_obj==""+parametro_fierro+""){
                   console.log("CONTANDO PESOS VALOR DE LG "+contador_lg+ "VALOR LGB "+a);
                   let peso = parseFloat(result.properties[82].displayValue);
                   peso = peso.toFixed(0);
@@ -903,7 +906,7 @@ function filtro_visual(){
               
                 console.log("valor categoria actual: "+categoria_actual_obj);
                 
-                if(categoria_actual_obj=="Revit Structural Rebar"){
+                if(categoria_actual_obj==""+parametro_fierro+""){
                   console.log("ENTRAR REBAR");
                   for(t=0;t<result.properties.length;t++){
                     let val_actual = result.properties[t].displayName;
@@ -1222,7 +1225,7 @@ function filtro_visual(){
               console.log("CATEGORIA BUSCADA");
               console.log(categoria_actual_obj);
               //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
-                if(categoria_actual_obj=="Revit Structural Rebar"){
+                if(categoria_actual_obj==""+parametro_fierro+""){
                   console.log("ENTRAR REBAR");
                   for(t=0;t<result.properties.length;t++){
                     let val_actual = result.properties[t].displayName;
@@ -1525,7 +1528,7 @@ function filtro_visual(){
               console.log("CATEGORIA BUSCADA");
               console.log(categoria_actual_obj);
               //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
-                if(categoria_actual_obj=="Revit Structural Rebar"){
+                if(categoria_actual_obj==""+parametro_fierro+""){
                 console.log("ENTRAR REBAR");
                 for(t=0;t<result.properties.length;t++){
                   let val_actual = result.properties[t].displayName;
@@ -1816,11 +1819,9 @@ function getFiltros() {
                filtros_pintura=[keys[0]];
               filtros_pintura=[keys[0],keys[1]];
               filtros_general = [keys[0]];
-              // filtro_gantt_inicio( [keys[0]]);
+       
                
 
-             //   console.log("keys iniciales");
-             //   console.log(keys);
                 var i;
                 var botones= "";
                 let filtros_sel = Object.values(keys[0]);
@@ -1828,71 +1829,7 @@ function getFiltros() {
                 var botones =botones+ "<option value=\"'sin valor' \" >Sin Valor</option>";
                 for (i = 0; i < datos.length; i++) {
                   
-                
-                 ///// CREA ESTRUCTURA INICIAL////////////////////////////
-                  //////////////////////////////////MUROS -////////////////////////////
-              /*
-                  var taskId = gantt.addTask({
-                    id:cont_id_task,
-                    text:datos[i],
-                    start_date:hoy,
-                    type: gantt.config.types.project,
-                    duration:1
-                  },13,1);
-                  ids_task.push(cont_id_task);
-                  cont_id_task++;
-               
-                */             
-                  
-                  ////////////////////////////////VIGAS/////////////////////////
-                  
-            /*    
-                  var taskId = gantt.addTask({
-                    id:cont_id_task,
-                    text:datos[i],
-                    start_date:hoy,
-                    type: gantt.config.types.project,
-                    duration:1
-                  },14,1);
-                  ids_task.push(cont_id_task);
-                  cont_id_task++;
-               */
-                   ////////////////////////////////LOSAS/////////////////////////
-               /*   
-                  var taskId = gantt.addTask({
-                    id:cont_id_task,
-                    text:datos[i],
-                    start_date:hoy,
-                    type: gantt.config.types.project,
-                    duration:1
-                  },15,1);  
-                  ids_task.push(cont_id_task);
-                  cont_id_task++;
-               */
-                   ////////////////////////////////LOSAS/////////////////////////
-                 /* 
-                  var taskId = gantt.addTask({
-                          id:cont_id_task,
-                          text:datos[i],
-                          start_date:hoy,
-                          type: gantt.config.types.project,
-                          duration:1
-                        },20,1);  
-                        ids_task.push(cont_id_task);
-                        cont_id_task++;
-                                           
-                        var taskId = gantt.addTask({
-                          id:cont_id_task,
-                          text:datos[i],
-                          start_date:hoy,
-                          type: gantt.config.types.project,
-                          duration:1
-                        },24,1);  
-                        ids_task.push(cont_id_task);
-                        cont_id_task++;
-                                                 
-                   // var botones =botones+ "<a class=\"dropdown-item\" onclick=\"selecciona2("+"\'"+filtro_boton+"\'"+ ","+filtro_boton+" );\">"+datos[i]+"</a>";
-               */   
+              
                     botones =botones+ "<option value=\""+datos[i]+"\" >"+datos[i]+"</option>";
                 }
 
@@ -1939,19 +1876,8 @@ function getFiltros_2() { // BUSCA NIVELES Y LUEGO PARTIDAD DENTRO DE CADA NIVEL
                 document.getElementById("ha_option").innerHTML = botones;
            });
          
-/**************************************************************
- * INICIO CREACIÓN DE GANTT
- * 
- * 
- * AEC PISO
- * 
- * 
- */
-
-// BUSCA FILTROS PARA AEC PISO Y CONSTRUYE ESTRUCTURA GANTT APROVECHA QUE ESTE FILTRO SEPARA POR PISOS
-     // filtrado = ['AEC Piso'];
      filtrado = [filtro_2]; 
-   //  filtro_boton = "['AEC Piso']";
+ 
      filtro_boton = "['"+filtro_2+"']";
       var resultado_ids;
       var elementos;
@@ -1972,86 +1898,20 @@ function getFiltros_2() { // BUSCA NIVELES Y LUEGO PARTIDAD DENTRO DE CADA NIVEL
                 for (i = 0; i < datos.length; i++) {
                   
                 
-                 ///// CREA ESTRUCTURA INICIAL////////////////////////////
-                  //////////////////////////////////MUROS -////////////////////////////
-                  var taskId = gantt.addTask({
-                    id:cont_id_task,
-                    text:datos[i],
-                    start_date:hoy,
-                    type: gantt.config.types.project,
-                    duration:1
-                  },13,1);
-                  ids_task.push(cont_id_task);
-                  cont_id_task++;
-               
+             
                              
                   
-                  ////////////////////////////////VIGAS/////////////////////////
-                  
                 
-                  var taskId = gantt.addTask({
-                    id:cont_id_task,
-                    text:datos[i],
-                    start_date:hoy,
-                    type: gantt.config.types.project,
-                    duration:1
-                  },14,1);
-                  ids_task.push(cont_id_task);
-                  cont_id_task++;
-               
-                   ////////////////////////////////LOSAS/////////////////////////
-                  
-                  var taskId = gantt.addTask({
-                    id:cont_id_task,
-                    text:datos[i],
-                    start_date:hoy,
-                    type: gantt.config.types.project,
-                    duration:1
-                  },15,1);  
-                  ids_task.push(cont_id_task);
-                  cont_id_task++;
-               
-                   ////////////////////////////////LOSAS/////////////////////////
-                  
-                  var taskId = gantt.addTask({
-                          id:cont_id_task,
-                          text:datos[i],
-                          start_date:hoy,
-                          type: gantt.config.types.project,
-                          duration:1
-                        },20,1);  
-                        ids_task.push(cont_id_task);
-                        cont_id_task++;
-
-                   ////////////////////////////////REBAR/////////////////////////   
-               //    console.log("valor estructrura!!!!!! "+ datos[i]);     
-                        var taskId = gantt.addTask({
-                          id:cont_id_task,
-                          text:datos[i],
-                          start_date:hoy,
-                          type: gantt.config.types.project,
-                          duration:1
-                        },24,1);  
-                        ids_task.push(cont_id_task);
-                        cont_id_task++;                         
-
                    // var botones =botones+ "<a class=\"dropdown-item\" onclick=\"selecciona2("+"\'"+filtro_boton+"\'"+ ","+filtro_boton+" );\">"+datos[i]+"</a>";
                    var botones =botones+ "<option value=\""+datos[i]+"\" >"+datos[i]+"</option>";
                 }
 
-            //    console.log("Idsss");
-            //    console.log(ids_task);
-             
-           //     gantt.render();
+         
                 document.getElementById("piso_option").innerHTML = botones;
-                //  document.getElementById("selectores2").innerHTML = botones;
-
-                // PEGA LOS BOTONES PARA FILTRAR SEGUN PARÁMETROS
+             
            });
 
-           // ELIGE LOS NIVELES PARA EL PARÁMETRO ELEGIDO (PISO ) CREE LA GANTT 
-         //  filtros_selec_piso =    ["00.- Radier EDA","01.- Cielo 1° Piso EDA","03.- Cielo 3° Piso EDA","04.- Cielo 4° Piso EDA",,"05.- Cielo 5° Piso EDA"]; 
-}
+          }
 
 function savePedido(){
   encontro_elemento = 0;
@@ -2748,108 +2608,180 @@ function set_clave(q){
                 //  console.log("RESULTADO IDS");
                 //  console.log(resultado_ids[0][a]);
                   let id_actual_tarea_1 = resultado_ids[t][a];
-                  viewer.getProperties( resultado_ids[t][a], (result) => { 
-                    console.log("PROPIEDADES OBJETO");
-                    console.log(result);
-                    let nombre_actua_objeto  =  result.name;
-                 // console.log("actual name  "+nombre_actua_objeto);
-                 // BUSCA LAS PROPIEDADES DEL OBJETO SELECCIONADO / APROXIMA LA CANTIDAD DE PROPIEDADES DISPONIBLES A 60 
-                 for(i=0 ;i< 50;i++){
-                  let nombre_actual = "";
-               //   console.log("PROPIEDAD ACTUAL  "+result.properties[i].displayName);
-                //   console.log('control error');
-              //   console.log(result); 
-                  if(result.properties[i].displayName != undefined || result.properties[i].length != 0|| result.properties.length != 0  ){
+                  let resultadoBusqueda= existeId(resultado_ids[t][a]);
+                  if(resultadoBusqueda == false){
+                    viewer.getProperties( resultado_ids[t][a], (result) => { 
+                      console.log("PROPIEDADES OBJETO");
+                      console.log(result);
+                      let nombre_actua_objeto  =  result.name;
+                   // console.log("actual name  "+nombre_actua_objeto);
+                   // BUSCA LAS PROPIEDADES DEL OBJETO SELECCIONADO / APROXIMA LA CANTIDAD DE PROPIEDADES DISPONIBLES A 60 
+                   for(i=0 ;i< 50;i++){
+                    let nombre_actual = "";
+                   console.log("PROPIEDAD ACTUAL  "+result.properties[i].displayName);
+                  //   console.log('control error');
+                //   console.log(result); 
+                   if(result.properties[i]){
+
+                    if(result.properties[i].displayName != undefined || result.properties[i].length != 0|| result.properties.length != 0  ){
                       nombre_actual = ""+result.properties[i].displayName;
                    }
                     
-               
-                    if(nombre_actual ===parametro_fecha){
-                   
-               //    console.log("VALOR PARA HORMIGONADO: "+  result.properties[i].displayValue);
-                 //  console.log("VALOR PARA  ID: "+ );
-                      if( result.properties[i].displayValue != "" && result.properties[i].displayValue != "XX"  ){
-                          activo_hormigonado = 1;
-                       //   let elementos_fecha = result.properties[i].displayValue.split("-");
-                        //  fecha_objeto = elementos_fecha[0]+"-"+elementos_fecha[1]+"-"+elementos_fecha[2]; // FECHA PLAN
-                         
-                         /////////////calcula fecha///////////////
-                         
-                         
-                         fecha_hormigonado = result.properties[i].displayValue;
-                        let elementos_fecha = fecha_hormigonado.split("/");
-                        console.log("FECHA HORMIGONADO PRECONSULTA: "+elementos_fecha);
-                        var today = new Date();
-                        var dd = String(today.getDate()).padStart(2, '0');
-                        var mm = String(today.getMonth() + 1).padStart(2, '0'); //
-                        var yyyy = today.getFullYear();
-                        if(mm>0){
-                          mm = mm-1; 
-                        }
-                        today = '0'+mm + '/' + dd + '/' + yyyy;
-                        if(elementos_fecha[1] >0){
-                         // elementos_fecha[1] = elementos_fecha[1]-1;
-                        }
-         
-                        var d2 = '0'+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
-                        var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                        console.log("FECHAS 123456789");
-                        console.log(d2);
-                        console.log(d3);
-                        console.log(today);
-                        
-                        let compara = dates.compare(today,d2);
-                        console.log("valor comparado : "+compara);
-                        if(compara == 1){
-                        // boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-
-                     //     console.log("PINTO VENCIDO");
-
-                          const color10 = new THREE.Vector4(0.9765,0.0549,0.0235, 1);
-                          viewer.setThemingColor(parseInt(result.dbId+'',0),color10, null,true);
-                
-                    }else{
-                      if(compara == -1){
-                     //   boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-                  //   console.log("PINTO OK"); 
-                     const colorConFormato = new THREE.Vector4(0.0235, 0.1961,0.9765, 1);
-                        viewer.setThemingColor(parseInt(result.dbId+'',0),colorConFormato, null,true);
+                   }
                  
-                      }else{
-                        if(compara == 0){
-                    //      console.log("PINTO HOY"); 
-                        //  boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-                          const color10 = new THREE.Vector4(0.9451,0.9765,0.0235, 1);
-                          viewer.setThemingColor(parseInt(result.dbId+'',0),color10, null,true);
-    
-
+                 
+                      if(nombre_actual ===parametro_fecha){
+                     
+                 //    console.log("VALOR PARA HORMIGONADO: "+  result.properties[i].displayValue);
+                   //  console.log("VALOR PARA  ID: "+ );
+                        if( result.properties[i].displayValue != "" && result.properties[i].displayValue != "XX"  ){
+                            activo_hormigonado = 1;
+                         //   let elementos_fecha = result.properties[i].displayValue.split("-");
+                          //  fecha_objeto = elementos_fecha[0]+"-"+elementos_fecha[1]+"-"+elementos_fecha[2]; // FECHA PLAN
+                           
+                           /////////////calcula fecha///////////////
+                           
+                           
+                           fecha_hormigonado = result.properties[i].displayValue;
+                          let elementos_fecha = fecha_hormigonado.split("/");
+                          console.log("FECHA HORMIGONADO PRECONSULTA: "+elementos_fecha);
+                          var today = new Date();
+                          var dd = String(today.getDate()).padStart(2, '0');
+                          var mm = String(today.getMonth() + 2).padStart(2, '0'); //
+                          var yyyy = today.getFullYear();
+                          if(mm>0){
+                            mm = mm-1; 
+                          }
+                          today =   dd+'/' +'0'+mm + '/' + yyyy;
+                          if(elementos_fecha[1] >0){
+                           // elementos_fecha[1] = elementos_fecha[1]-1;
+                          }
+           
+                          var d2 = ''+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                          var d3=  ''+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                          console.log("FECHAS 123456789");
+                          console.log(d2);
+                          console.log(d3);
+                          console.log(today);
+                          
+                          let compara = dates.compare(today,d2);
+                          console.log("valor comparado : "+compara);
+                          if(compara == 1){
+                          // boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+  
+                       //     console.log("PINTO VENCIDO");
+  
+                            const color10 = new THREE.Vector4(0.9765,0.0549,0.0235, 1);
+                            viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                  
+                          }else{
+                            if(compara == -1|| compara ==  NaN){
+                          //   boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                        //   console.log("PINTO OK"); 
+                          const colorConFormato = new THREE.Vector4(0.0235, 0.1961,0.9765, 1);
+                              viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),colorConFormato, null,true);
+                      
+                            }else{
+                              if(compara == 0){
+                          //      console.log("PINTO HOY"); 
+                              //  boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                                const color10 = new THREE.Vector4(0.9451,0.9765,0.0235, 1);
+                                viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+          
+      
+                              }
+                              else{
+                                console.log("VALOR DE COMPARA PARA FORMATO FECHA");
+                                console.log(compara);
+                                boton_fecha ="FECHA SIN FORMATO 1";
+      
+                                const color10 = new THREE.Vector4(0.9765,0,0.2549, 1);
+                                viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                              
+                              }
+                            }
+                          }
+                       
                         }
                         else{
-                          console.log("VALOR DE COMPARA PARA FORMATO FECHA");
-                          console.log(compara);
-                          boton_fecha ="FECHA SIN FORMATO 1";
-
-                          const color10 = new THREE.Vector4(0.9765,0,0.2549, 1);
-                          viewer.setThemingColor(parseInt(result.dbId+'',0),color10, null,true);
-                         
+                          const color10 = new THREE.Vector4(0.9765,0.0549,0.0235, 1);
+                          viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                      //    console.log("NO ENTRE A HORMIGONADO: "+  fecha_objeto);
+                          activo_hormigonado = 0;
+                          fecha_objeto = "";
                         }
-                      }
-                    }
+                     }
+                 
                      
                       }
-                      else{
-                        const color10 = new THREE.Vector4(0.9765,0.0549,0.0235, 1);
-                        viewer.setThemingColor(parseInt(result.dbId+'',0),color10, null,true);
-                    //    console.log("NO ENTRE A HORMIGONADO: "+  fecha_objeto);
-                        activo_hormigonado = 0;
-                        fecha_objeto = "";
-                      }
-                   }
-               
-                   
-                    }
-                   
-                  }) 
+                     
+                    }) 
+                  }
+                  else{
+                    console.log("INGRESO A ELEMENTO CON FECHA GUARDADA ");
+                    fecha_plan = resultadoBusqueda[2];
+
+                          fecha_hormigonado = fecha_plan;
+                          let elementos_fecha = fecha_hormigonado.split("/");
+                          console.log("FECHA HORMIGONADO PRECONSULTA: "+elementos_fecha);
+                          var today = new Date();
+                          var dd = String(today.getDate()).padStart(2, '0');
+                          var mm = String(today.getMonth() + 2).padStart(2, '0'); //
+                          var yyyy = today.getFullYear();
+                          if(mm>0){
+                            mm = mm-1; 
+                          }
+                          today =  '' + dd+'/' +'0'+mm + '/' + yyyy;
+                          if(elementos_fecha[1] >0){
+                           // elementos_fecha[1] = elementos_fecha[1]-1;
+                          }
+           
+                          var d2 = ''+elementos_fecha[0]+"/"+elementos_fecha[1]+"/"+elementos_fecha[2]; // FECHA PLAN
+                          var d3=  ''+elementos_fecha[0]+"-"+elementos_fecha[1]+"-"+elementos_fecha[2]; // FECHA PLAN
+                          console.log("FECHAS 123456789");
+                          console.log(d2);
+                          console.log(d3);
+                          console.log(today);
+                          
+                          let compara = dates.compare(today,d2);
+                          console.log("valor comparado : "+compara);
+                          if(compara == 1){
+                          // boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+  
+                       //     console.log("PINTO VENCIDO");
+  
+                            const color10 = new THREE.Vector4(0.9765,0.0549,0.0235, 1);
+                            viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                  
+                          }else{
+                            if(compara == -1 || compara == NaN){
+                          //   boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                        //   console.log("PINTO OK"); 
+                          const colorConFormato = new THREE.Vector4(0.0235, 0.1961,0.9765, 1);
+                              viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),colorConFormato, null,true);
+                      
+                            }else{
+                              if(compara == 0){
+                          //      console.log("PINTO HOY"); 
+                              //  boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                                const color10 = new THREE.Vector4(0.9451,0.9765,0.0235, 1);
+                                viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+          
+      
+                              }
+                              else{
+                                console.log("VALOR DE COMPARA PARA FORMATO FECHA");
+                                console.log(compara);
+                                boton_fecha ="FECHA SIN FORMATO 1";
+      
+                                const color10 = new THREE.Vector4(0.9765,0,0.2549, 1);
+                                viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                              
+                              }
+                            }
+                          }
+
+                  }
                   id_tareas_objetos++;
                 }
             }
@@ -3030,12 +2962,51 @@ function launchViewer(urn) {
         console.log(event);
         console.log(event.dbIdArray);
         var a= event.dbIdArray;
-        for(let r =0; r<a.length;r++){
-        // const color = new THREE.Vector4(1.0, 0.0, 0.0, 0.5);
-        /// viewer.setThemingColor(a[r], color, null, true);
-        
-        }
+        console.log("ELEMENTOS SELECCIONADOS");
         let selects = event.dbIdArray;
+        console.log(selects);
+        for(let r =0; r<selects.length;r++){
+         const colorFierro = new THREE.Vector4(0.0, 0.0, 1.0,1.0);
+        /// viewer.setThemingColor(a[r], color, null, true);
+        viewer.getProperties(selects[r], (result) => { 
+          console.log('RESULTADO SELECCION'); 
+          console.log(selects[0]);
+              
+            let fecha_hormigonado = "";
+            if(result.name){
+              var categoria_actual = result.name.split("[");
+              console.log(categoria_actual);
+               // nombre_objeto
+            
+              let boton_fecha = "";
+    
+            }
+            
+        //   console.log(result.name.split("["));
+            if(categoria_actual){
+          
+  
+         
+            if(categoria_actual[0] === "Rebar Bar "){
+              console.log("si es Rebar Bar ");
+              viewer.setThemingColor(selects[r], colorFierro , null, true);
+            }
+            }
+           
+          
+  
+            
+        
+            
+        //    console.log("VALORES");
+        //   console.log(result);
+            
+        }) ;
+        }
+        
+      
+
+
           let dbId = viewer.getSelection(); 
         // this.existeId(125);
           //idsSeleccionados = dbId;
@@ -4271,32 +4242,134 @@ function launchViewer(urn) {
   });
 
 }
-
-/*
-
-function generaBotones(){
-    console.log("GENERA BOTONES LLAMADO");
-     getData().then((data) => {
-
-           let keys = Object.keys(data);
-           datos = keys;
-            console.log("DATOS DATA:"+ datos);
-
-            var i;
-            botones = "";
-          for (i = 0; i < datos.length; i++) {
-              if(datos[i] != "undefined"){
-                var botones =botones+ "<a class=\"dropdown-item\" onclick=\"selecciona("+"\'"+datos[i]+"\'"+");\">ddd"+datos[i]+"55</a>";
-              }
-              
+//Busca si el id (elemento de modelo) tiene una fecha
+// plan asignada.Si encuentra envía , si no la tiene devuelve 0
+//
+function analisiFecha(idElemento){
+  
+    viewer.getProperties(dbId[0], (result) => { 
+      console.log('RESULTADO SELECCION'); 
+      
+        let fecha_hormigonado = "";
+        if(result.name){
+          var categoria_actual = result.name.split("[");
+          let boton_fecha = "";
+        }
+        
+        console.log("tipo resultado propiedades "+typeof result.properties);
+        for(i=0 ;i< 50;i++){
+     
+          if(result.properties[i].displayName){
+            let nombre_actual = ""+result.properties[i].displayName;
+            if(nombre_actual  === parametro_fecha){
           
-          }
-          document.getElementById("selectores").innerHTML = botones;
-           });
-} 
 
+          
+              fecha_hormigonado = result.properties[i].displayValue;
+              let elementos_fecha = fecha_hormigonado.split("/");
+              if(elementos_fecha.length<=1){
+                 elementos_fecha = fecha_hormigonado.split("-");
+              }
+              var today = new Date();
+              var dd = String(today.getDate()).padStart(2, '0');
+              var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+              var yyyy = today.getFullYear();
+              if(mm>0){
+                mm = mm-1; 
+              }
+              today = '0'+mm + '/' + dd + '/' + yyyy;
+              if(elementos_fecha[1] >0){
+                elementos_fecha[1] = elementos_fecha[1];
+              }
+            // // // // // // // // // // // alert(elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]);
+              //// // // // // // // // // // alert(today);
+              if(elementos_fecha[1].length ==0){
+                var d2 = '0'+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+             
+              }else{
+                var d2 = elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                var d3   = elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+             
+              }
+               let compara = dates.compare(today,d2);
+              if(compara == 1){
+                boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+
+
+          
+
+
+              }else{
+                if(compara == -1){
+                  boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+
+              /*    gantt.parse({
+                    data: [
+                        { id: 1, text: result.name, start_date: d3, duration: 5, progress: 0.4, open: true },
+                        { id: 2, text: "Inicio", start_date: d3, duration: 1, progress: 0.6, parent: 1 }
+                    ],
+                    links: [
+                        {id: 1, source: 1, target: 2, type: "1"},
+                        
+                    ]
+                });
 
 */
+                }else{
+                  if(compara == 0){
+                    boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+/*
+                    gantt.parse({
+                      data: [
+                          { id: 1, text: result.name, start_date: d3, duration: 5, progress: 0.4, open: true },
+                          { id: 2, text: "Inicio", start_date: d3, duration: 1, progress: 0.6, parent: 1 }
+                      ],
+                      links: [
+                          {id: 1, source: 1, target: 2, type: "1"},
+                          
+                      ]
+                  });
+*/
+
+                  }
+                  else{
+                    boton_fecha ="FECHA SIN FORMATO 2";
+                    /*
+                    gantt.parse({
+                      data: [
+                          { id: 1, text: "Seleccione Un objeto", start_date: "25-05-2021", duration:1, progress: 0.4, open: true },
+                          { id: 2, text: "Inicio", start_date: "25-05-2021", duration: 1, progress: 0.6, parent: 1 }
+                      ],
+                      links: [
+                          {id: 1, source: 1, target: 2, type: "1"}
+                        
+                      ]
+                  });
+                  */
+                  }
+                }
+              }
+              
+            }
+          }
+        
+         
+      }
+
+        
+        document.getElementById("propiedades_id").innerHTML += " AEC Secuencia Hormigonado <li><b>"+" :</b>"+fecha_hormigonado+" Estado: "+boton_fecha+"</li>";
+      $("#dateMask1").val(fecha_hormigonado);
+      $("#plan1").val(fecha_hormigonado);
+      $("#dateMask2").val(fecha_hormigonado);
+      $("#plan2").val(fecha_hormigonado);
+        
+    //    console.log("VALORES");
+    //   console.log(result);
+        
+    }) ;
+  
+}
 
 $('#ha_option').change(function() {
   var selected_ha_option = $('#ha_option').val();
@@ -4324,30 +4397,14 @@ function selecciona(clave,filt){
   //  // // // // // // // // // alert( "Valor Seleccionado " +clave);
 
     valor_fil1 = clave;
-/*    consulta_filtro(filt).then((data) => {
-           let keys = Object.keys(data);
-           
-           let dbIds = data[clave].dbIds;                        
-              viewer.isolate(dbIds);
-              viewer.fitToView(dbIds, viewer.model);
-    });
-    
-*/
+
 }
 
 function selecciona2(clave,filt){
 //    // // // // // // // // // alert( "Valor Seleccionado " +clave);
 
     valor_fil2 = clave;
-  /*  consulta_filtro(filt).then((data) => {
-           let keys = Object.keys(data);
-           
-           let dbIds = data[clave].dbIds;                        
-              viewer.isolate(dbIds);
-              viewer.fitToView(dbIds, viewer.model);
-    });
-    
-  */
+ 
 }
 
 function quitar_filtros(){
@@ -4359,34 +4416,7 @@ function quitar_filtros(){
   viewer.isolate();
   $("#id_seleccionados3").val('');
   $("#id_seleccionados4").val('');
- // viewer.fitToView( viewer.model);
-//	gantt.clearAll(); 
-
- // gantt.init("gantt_here");
-  //location.reload();
-
-  /* gantt.config.columns = [
-        {name: "text", tree: true, width: 180, resize: true},
-        {name: "start_date", align: "center", resize: true},
-        {name: "duration", align: "center"},
-        {name: "buttons", label: "Actions", width: 120, template: function(task){
-          var buttons = 
-          '<input type=button value="Filtrar" onclick=seleccion_modelo('+task.id+')>';
-          return buttons; 
-        }}
-      ];*/
-  /*    gantt.parse({
-        "data": [
-          {"id": 11, "text": "PROYECTO", type: gantt.config.types.project, "progress": 0.6, "open": true},
-          {"id": 13, "text": "Walls", "start_date": "01-04-2021",  type: gantt.config.types.project,"parent": "11", "progress": 1, "open": true},
-          {"id": 14, "text": "Columns", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-          {"id": 15, "text": "Framing", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-          {"id": 20, "text": "Foundation - Wall", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-          {"id": 21, "text": "Foundation - Aislada", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-          {"id": 22, "text": "Foundation - Slab", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-          {"id": 23, "text": "Floors", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-        ]
-      });*/
+ 
       console.log("CLEAR !!");
     
       document.getElementById('largo').innerHTML = '';
@@ -4403,15 +4433,11 @@ function quitar_filtros(){
         tableRef.deleteRow(tableHeaderRowCount);
       }
      
- // gantt.refreshData();
 
-
- // gantt.init("gantt_here");
 
  getFiltros();
 
-  //getFiltros_2();
-  //gantt.render();
+
 }
 
 
@@ -4754,7 +4780,7 @@ function Pintar_Categorias( ){
          viewer.setThemingColor(result.dbId, color3, null,true);
         }
          
-        if(categoria_actual_obj == "Revit Structural Rebar"){
+        if(categoria_actual_obj == ""+parametro_fierro+""){
                     
          const color4 = new THREE.Vector4(0, 0, 1, 1);
          viewer.setThemingColor(result.dbId, color4, null,true);
@@ -4991,7 +5017,7 @@ function Pintar_Categorias2( ){
          viewer.setThemingColor(result.dbId, color3, null,true);
         }
          
-        if(categoria_actual_obj == "Revit Structural Rebar"){
+        if(categoria_actual_obj == ""+parametro_fierro+""){
                     
          const color4 = new THREE.Vector4(0.1059,0.3804, 0.9059,0.1);
          viewer.setThemingColor(result.dbId, color4, null,true);
@@ -5129,7 +5155,7 @@ function filtro_gantt_inicio( arreglo_filros){
               categoria_actual_obj = result.properties[i].displayValue;
             
               console.log("valor categoria actual: "+categoria_actual_obj);
-              if(categoria_actual_obj=="Revit Structural Rebar"){
+              if(categoria_actual_obj==""+parametro_fierro+""){
                 let peso = parseFloat(result.properties[82].displayValue);
                 peso = peso.toFixed(0);
                 peso = parseFloat(peso);
@@ -5915,19 +5941,7 @@ function genera_gantt(){
   
 
 }
-/*
-function selecciona2(clave){
 
-  getData().then((data) => {
-         let keys = Object.keys(data);
-         
-         let dbIds = data[clave].dbIds;                        
-            viewer.isolate(dbIds);
-            viewer.fitToView(dbIds, viewer.model);
-  });
-  
-
-}*/
 
 function onDocumentLoadSuccess(doc) {
   var geometryItems = doc
@@ -5972,17 +5986,21 @@ function onDocumentLoadSuccess(doc) {
       
     // documented loaded, any action?
     viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, (e) => {
-      console.log("SELECCION");
+      console.log("SELECCION 5");
       console.log(e);
       console.log(e.dbIdArray);
       if (e.dbIdArray.length === 0) return;
-      viewer.model.getBulkProperties(e.dbIdArray, ['4D_Task_ID'], (props) => {
-        props.forEach((ele) => {
-          if (ele.properties.lenght === 0) return;
-          var taskId = ele.properties[0].displayValue;
-          charts["Gantt"]._gantt.chart.get_bar(taskId).show_popup();
+      for(var q = 0; i < e.dbIdArray.length;q++){
+        viewer.getProperties(e.dbIdArray[q], (props) => {
+          props.forEach((ele) => {
+            if (ele.properties.lenght === 0) return;
+            var taskId = ele.properties[0].displayValue;
+            console.log("Valor propiedad 1"+taskId);
+           
+          })
         })
-      })
+      }
+    
     })
   });
 }
