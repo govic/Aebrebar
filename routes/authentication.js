@@ -885,9 +885,9 @@ router.post('/prueba', isLoggedIn, async (req, res) => {
   //asigno
   console.log(rows2[0].fullname);
   req.session.passport.user.fullname = rows2[0].fullname;
-  req.session.username = rows2[0].username;
+  req.session.passport.user.username = rows2[0].username;
   var nom = req.session.passport.user.fullname;
-  var nom2 = req.session.username;
+  var nom2 = req.session.passport.user.username;
   //id de la sesión
   const idUsu = req.session.passport.user.idUsu;
 
@@ -1031,9 +1031,9 @@ router.post('/vista', isLoggedIn, async (req, res) => {
   //asigno
   console.log(rows2[0].fullname);
   req.session.passport.user.fullname = rows2[0].fullname;
-  req.session.username = rows2[0].username;
+  req.session.passport.user.username = rows2[0].username;
   var nom = req.session.passport.user.fullname;
-  var nom2 = req.session.username;
+  var nom2 = req.session.passport.user.username;
   //id de la sesión
   const idUsu = req.session.passport.user.idUsu;
 
@@ -1183,7 +1183,7 @@ if (req.session.passport.user.tipoUsuario == "Visualizador") {
   console.log(rows2[0].fullname);
   req.session.passport.user.fullname = rows2[0].fullname;
   var nom = req.session.passport.user.fullname;
-  var nom2 = req.session.username;
+  var nom2 = req.session.passport.user.username;
 
   var rows3 = await pool.query('SELECT * FROM filtros WHERE id = ?', [1]);
   const filtro_1 = rows3[0].filtro_1;
@@ -1233,12 +1233,12 @@ if (req.session.passport.user.tipoUsuario == "Visualizador") {
 
 //index
 router.get('/index', isLoggedIn, async (req, res, next) => {
-  idUsua = req.session.idUsu;
+  idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
-  req.session.fullname = rows2[0].fullname;
-  var nom = req.session.fullname;
-  var nom2 = req.session.username;
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  var nom2 = req.session.passport.user.username;
 
   var rows3 = await pool.query('SELECT * FROM filtros WHERE id = ?', [1]);
   const filtro_1 = rows3[0].filtro_1;
@@ -1252,7 +1252,7 @@ router.get('/index', isLoggedIn, async (req, res, next) => {
   const categoria_04 = rows4[0].categoria_04;
   const parametro_nivel = rows4[0].parametro_nivel;
   const parametro_fecha = rows4[0].parametro_fecha;
-  if (req.session.tipoUsuario == "Administrador") {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
 
     res.render('index', {
       alert: true,
@@ -1263,10 +1263,10 @@ router.get('/index', isLoggedIn, async (req, res, next) => {
       ruta: 'index',
       nom,
       nom2,
-      idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha,filtro_3
+      idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3
     });
   }
-  if (req.session.tipoUsuario == "Editor") {
+  if (req.session.passport.user.tipoUsuario == "Editor") {
 
     res.render('indexV3', {
       alert: true,
@@ -1277,10 +1277,10 @@ router.get('/index', isLoggedIn, async (req, res, next) => {
       ruta: 'indexV3',
       nom,
       nom2,
-      idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha,filtro_3
+      idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3
     });
   }
-  if (req.session.tipoUsuario == "Visualizador") {
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
     //res.render('indexV2', { nom, filtro_1 });
     res.render('indexV2', {
       alert: true,
@@ -1291,7 +1291,7 @@ router.get('/index', isLoggedIn, async (req, res, next) => {
       ruta: 'indexV2',
       nom,
       nom2,
-      idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha,filtro_3
+      idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3
     });
   }
 })
@@ -1318,12 +1318,12 @@ router.get('/indexV2', isLoggedIn, async (req, res, next) => {
 })
 
 router.post('/filtro', isLoggedIn, async (req, res) => {
-  const categorias = { filtro_v1, filtro_v2,fierro } = req.body;
+  const categorias = { filtro_v1, filtro_v2, fierro } = req.body;
   await pool.query('UPDATE filtros set ? WHERE id = ?', [categorias, 1], async (error, results) => {
     if (error) {
       console.log(error);
     } else {
-      idUsua = req.session.idUsu;
+      idUsua = req.session.passport.user.idUsu;
       const rows2 = await pool.query('SELECT * FROM gantt', [idUsua]);
       console.log(rows2[0].categoria_01);
       const filtro_v1 = "";
@@ -1338,16 +1338,16 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
       const parametro_fecha = rows2[0].parametro_fecha;
 
 
-      var nom = req.session.fullname;
-      var nom2 = req.session.username;
+      var nom = req.session.passport.user.fullname;
+      var nom2 = req.session.passport.user.username;
 
       var rows3 = await pool.query('SELECT * FROM filtros', [idUsua]);
       const filtro_1 = rows3[0].filtro_1;
       const filtro_2 = rows3[0].filtro_2;
       const filtro_3 = rows3[0].fierro;
 
-      const idUsu = req.session.idUsu;
-      if (req.session.tipoUsuario == "Administrador") {
+      const idUsu = req.session.passport.user.idUsu;
+      if (req.session.passport.user.tipoUsuario == "Administrador") {
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1357,10 +1357,10 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
           ruta: 'config',
           nom,
           nom2,
-          idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha,filtro_3
+          idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3
         })
       }
-      if (req.session.tipoUsuario == "Editor") {
+      if (req.session.passport.user.tipoUsuario == "Editor") {
         res.render('configV3', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1370,10 +1370,10 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
           ruta: 'configV3',
           nom,
           nom2,
-          idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha,filtro_3
+          idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3
         })
       }
-      if (req.session.tipoUsuario == "Visualizador") {
+      if (req.session.passport.user.tipoUsuario == "Visualizador") {
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1383,7 +1383,7 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
           ruta: 'config',
           nom,
           nom2,
-          idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha,filtro_3
+          idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3
         })
         console.log(idUsu);
       }
@@ -1415,7 +1415,7 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
 
 
       var nom = req.session.passport.user.fullname;
-      var nom2 = req.session.username;
+      var nom2 = req.session.passport.user.username;
 
       var rows3 = await pool.query('SELECT * FROM filtros', [idUsua]);
       const filtro_1 = rows3[0].filtro_1;
@@ -1490,7 +1490,7 @@ router.post('/parametro_fecha', isLoggedIn, async (req, res) => {
 
 
       var nom = req.session.passport.user.fullname;
-      var nom2 = req.session.username;
+      var nom2 = req.session.passport.user.username;
 
       const idUsu = req.session.passport.user.idUsu;
       if (req.session.passport.user.tipoUsuario == "Administrador") {
@@ -1560,7 +1560,7 @@ router.post('/parametro_niveles', isLoggedIn, async (req, res) => {
 
 
       var nom = req.session.passport.user.fullname;
-      var nom2 = req.session.username;
+      var nom2 = req.session.passport.user.username;
 
       const idUsu = req.session.passport.user.idUsu;
       if (req.session.passport.user.tipoUsuario == "Administrador") {
@@ -1630,7 +1630,7 @@ router.post('/categorias', isLoggedIn, async (req, res) => {
 
 
       var nom = req.session.passport.user.fullname;
-      var nom2 = req.session.username;
+      var nom2 = req.session.passport.user.username;
 
       const idUsu = req.session.passport.user.idUsu;
       if (req.session.passport.user.tipoUsuario == "Administrador") {
@@ -1875,9 +1875,9 @@ router.get('/profile', isLoggedIn, async (req, res, next) => {
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
   req.session.passport.user.fullname = rows2[0].fullname;
-  req.session.username = rows2[0].username;
+  req.session.passport.user.username = rows2[0].username;
   var nom = req.session.passport.user.fullname;
-  var nom2 = req.session.username;
+  var nom2 = req.session.passport.user.username;
   const idUsu = req.session.passport.user.idUsu;
   if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.render('profile', { nom, nom2 });
@@ -1896,9 +1896,9 @@ router.post('/profile', isLoggedIn, async (req, res) => {
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
   req.session.passport.user.fullname = rows2[0].fullname;
-  req.session.username = rows2[0].username;
+  req.session.passport.user.username = rows2[0].username;
   var nom = req.session.passport.user.fullname;
-  var nom2 = req.session.username;
+  var nom2 = req.session.passport.user.username;
 
   const idUsu = req.session.passport.user.idUsu;
   if (req.session.passport.user.tipoUsuario == "Administrador") {
