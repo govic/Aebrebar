@@ -1620,7 +1620,7 @@ function launchViewer(urn) {
     
     viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser', 'HandleSelectionExtension'] });
     viewer.start();
-    cargarProyecto();
+    //cargarProyecto();
     
     var documentId = 'urn:' + urn;
     
