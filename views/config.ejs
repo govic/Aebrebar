@@ -299,7 +299,7 @@
 												<a href="#settings" data-toggle="tab" aria-expanded="true"> <span class="visible-xs"><i class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">FILTROS VISUALES</span> </a>
 											</li>
 											<li class="">
-												<a href="#home" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-align-right"></i></span> <span class="hidden-xs">CONFIGURACIÓN GANTT</span> </a>
+												<a href="#home" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="fa fa-align-right"></i></span> <span class="hidden-xs">VARIABLES DE TIEMPO</span> </a>
 											</li>
 											
 											
@@ -318,7 +318,10 @@
 													<label for="filtro_v2">FILTRO VISUAL 2</label>
 													<input type="text" value="<%=filtro_2%>" id="filtro_2" class="form-control" name="filtro_2">
 												</div>
-												
+												<div class="form-group">
+													<label for="filtro_v3">Parámetro Fierros</label>
+													<input type="text" value="<%=filtro_3%>" id="fierro" class="form-control" name="fierro">
+												</div>
 												
 												
 												<button class="btn btn-primary waves-effect waves-light w-md" type="submit">Guardar</button>
@@ -348,30 +351,7 @@
 												
 												<button class="btn btn-primary waves-effect waves-light w-md" type="submit">Guardar</button>
 											</form>-->
-											<P><H5>PARÁMETRO DE SUBDIVISIÓN</H5> </P>
-                                           Utilizado para edificios con zonas o subdivisiones de gran tamaño
-											<form role="form" action="/parametro_subdivision" method="POST">
-												<div class="form-group">
-													<label for="filtro_v1">NOMBRE DE PARAMETRO</label>
-													<input type="text" value="" id="parametro_nivel" class="form-control" name="parametro_nivel">
-												</div>
 										
-												
-												<button class="btn btn-primary waves-effect waves-light w-md" type="submit">Guardar</button>
-											</form>
-                                           
-                                          
-                                            <P><H5>PARÁMETRO DE NIVELES</H5> </P>
-                                            Permite aplicar el conjunto de Categorías y SubCategorías a la definición existente de niveles
-											<form role="form" action="/parametro_niveles" method="POST">
-												<div class="form-group">
-													<label for="filtro_v1">NOMBRE NIVEL</label>
-													<input type="text" value="<%=parametro_nivel%>" id="parametro_nivel" class="form-control" name="parametro_nivel">
-												</div>
-										
-												
-												<button class="btn btn-primary waves-effect waves-light w-md" type="submit">Guardar</button>
-											</form>
                                            
                                             <P><H5>PARAMETRO FECHA</H5> <P>
 											<form role="form" action="/parametro_fecha" method="POST">
