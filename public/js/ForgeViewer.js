@@ -203,6 +203,13 @@ function getDBIds_update(plan,base,id){
       console.log('RESULTADO UPDATE BD');
       console.log(res);
     },
+    error: function( jqXHR, textStatus, errorThrown ) {
+      console.log('ERROR AL INSERTAR');
+      console.log(jqXHR);
+      console.log(textStatus);
+      console.log(errorThrown);
+      getDBIds_update(plan,base,id);
+    }
   });
 
 
@@ -222,6 +229,7 @@ function getDBIds_insert(plan,base,id){
       console.log(jqXHR);
       console.log(textStatus);
       console.log(errorThrown);
+      getDBIds_insert(plan,base,id);
     }
 
   });
