@@ -2652,7 +2652,7 @@ function set_clave(q){
                           if(mm>0){
                             mm = mm-1; 
                           }
-                          today =   dd+'/' +'0'+mm + '/' + yyyy;
+                          today =   mm+'/' +''+dd + '/' + yyyy;
                           if(elementos_fecha[1] >0){
                            // elementos_fecha[1] = elementos_fecha[1]-1;
                           }
@@ -2675,10 +2675,10 @@ function set_clave(q){
                             viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
                   
                           }else{
-                            if(compara == -1|| compara ==  NaN){
+                            if(compara == -1|| compara ===  NaN){
                           //   boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-                        //   console.log("PINTO OK"); 
-                          const colorConFormato = new THREE.Vector4(0.0235, 0.1961,0.9765, 1);
+                           console.log("PINTO SIN FORMATO"); 
+                          const colorConFormato = new THREE.Vector4(0, 1,0.2, 1);
                               viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),colorConFormato, null,true);
                       
                             }else{
@@ -2731,13 +2731,13 @@ function set_clave(q){
                           if(mm>0){
                             mm = mm-1; 
                           }
-                          today =  '' + dd+'/' +'0'+mm + '/' + yyyy;
+                          today =  '' + mm+'/' +''+dd + '/' + yyyy;
                           if(elementos_fecha[1] >0){
                            // elementos_fecha[1] = elementos_fecha[1]-1;
                           }
            
-                          var d2 = ''+elementos_fecha[0]+"/"+elementos_fecha[1]+"/"+elementos_fecha[2]; // FECHA PLAN
-                          var d3=  ''+elementos_fecha[0]+"-"+elementos_fecha[1]+"-"+elementos_fecha[2]; // FECHA PLAN
+                          var d2 = ''+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                          var d3=  ''+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
                           console.log("FECHAS 123456789");
                           console.log(d2);
                           console.log(d3);
@@ -2774,7 +2774,7 @@ function set_clave(q){
                                 console.log(compara);
                                 boton_fecha ="FECHA SIN FORMATO 1";
       
-                                const color10 = new THREE.Vector4(0.9765,0,0.2549, 1);
+                                const color10 = new THREE.Vector4(0.9,1,0.1, 1);
                                 viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
                               
                               }
