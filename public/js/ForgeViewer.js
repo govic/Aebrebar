@@ -2413,6 +2413,8 @@ function eliminar_vista(){
   });
 }
 function set_clave(q){
+  getDBIds();
+  getPlanObj();
   d = q;
   console.log("selección");
   console.log(d);
@@ -2796,7 +2798,13 @@ function set_clave(q){
 
       }
       if(d == "3"){
-
+        //viewer.tearDown();
+      //  viewer.stop();
+        //viewer.start();
+      
+        getDBIds();
+        getPlanObj();
+      
         Pintar_Categorias_reflow();
       }
    
