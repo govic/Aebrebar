@@ -1891,6 +1891,29 @@ router.get('/profile', isLoggedIn, async (req, res, next) => {
   }
 })
 
+getConfigViewParams = async (req) => {
+  const userRows = await pool.query('SELECT * FROM users WHERE idUsu = ?', [req.session.passport.user.idUsu]);
+  const filtrosRows = await pool.query('SELECT * FROM filtros WHERE id = ?', [1]);
+  const ganttRows = await pool.query('SELECT * FROM gantt', [req.session.passport.user.idUsu]);
+  return {
+    nom: userRows[0].fullname,
+    filtro_1: filtrosRows[0].filtro_1,
+    filtro_2: filtrosRows[0].filtro_2,
+    filtro_3: filtrosRows[0].filtro_3,
+    filtro_v2: "",
+    categoria_01: ganttRows[0].categoria_01,
+    categoria_02: ganttRows[0].categoria_02,
+    categoria_03: ganttRows[0].categoria_03,
+    categoria_04: ganttRows[0].categoria_04,
+    parametro_fecha: ganttRows[0].parametro_fecha
+  }
+}
+
+router.get('/config', isLoggedIn, async (req, res, next) => {
+  res.render('config', await getConfigViewParams(req));
+  next();
+});
+
 router.post('/profile', isLoggedIn, async (req, res) => {
   idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
