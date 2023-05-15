@@ -126,7 +126,7 @@ function saveHormigonado(){
     }
   }
  // setTimeout( set_clave(3),2000);
- set_clave(3);
+ set_clave(2);
   setTimeout( set_clave(2),4000);
   
 }
