@@ -126,7 +126,9 @@ function saveHormigonado(){
     }
   }
  // setTimeout( set_clave(3),2000);
- set_clave(2);
+
+ set_clave(3);
+ getDBIds();
   setTimeout( set_clave(2),4000);
   
 }
@@ -2823,7 +2825,7 @@ function set_clave(q){
                   id_tareas_objetos++;
                 }
             }
-
+            getDBIds();
       }
       if(d == "3"){
         //viewer.tearDown();
@@ -2834,6 +2836,7 @@ function set_clave(q){
         getPlanObj();
       
         Pintar_Categorias_reflow();
+        getDBIds()
       }
    
      
@@ -3544,7 +3547,7 @@ function launchViewer(urn) {
                   console.log("tipo resultado propiedades "+typeof result.properties);
                   for(i=0 ;i< 50;i++){
                
-                    if(result.properties[i].displayName){
+                    if(result.properties[i]&&result.properties[i].displayName){
                       let nombre_actual = ""+result.properties[i].displayName;
                       if(nombre_actual  === parametro_fecha){
                     
@@ -4129,8 +4132,11 @@ function launchViewer(urn) {
                       
                       }
                     }
-                
-                         let nombre_actual = ""+result.properties[i].displayName;
+                    let nombre_actual ="";
+                    if(result.properties[i]){
+                      nombre_actual = ""+result.properties[i].displayName;
+                    }
+                        
                       
                         fecha_hormigonado = base;
                         let elementos_fecha = fecha_hormigonado.split("/");
