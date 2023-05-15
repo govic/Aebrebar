@@ -125,8 +125,9 @@ function saveHormigonado(){
       getPlanObj();
     }
   }
-  setTimeout( set_clave(3),2000);
-  set_clave(2);
+ // setTimeout( set_clave(3),2000);
+ set_clave(3);
+  setTimeout( set_clave(2),4000);
   
 }
 
@@ -4159,7 +4160,7 @@ function launchViewer(urn) {
                           if(compara2 != 0){compara = compara2;}
                         }
                         if(compara == 1){
-                          boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido o Sin Formato <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                          boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido o Sin Formato (Fecha Plan) <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
           
           
                     
@@ -4337,7 +4338,7 @@ function analisiFecha(idElemento){
               }
                let compara = dates.compare(today,d2);
               if(compara == 1){
-                boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido o sin Formato <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido o sin Formato (Fecha Plan) <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
 
 
           
