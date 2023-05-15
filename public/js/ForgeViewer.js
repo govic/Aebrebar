@@ -125,8 +125,8 @@ function saveHormigonado(){
       getPlanObj();
     }
   }
-  setTimeout( set_clave(3), 4000);
-  setTimeout( set_clave(2), 3000);
+  setTimeout( set_clave(3),2000);
+  set_clave(2);
   
 }
 
