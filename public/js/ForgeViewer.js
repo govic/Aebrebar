@@ -126,6 +126,7 @@ function saveHormigonado(){
     }
   }
   set_clave(3);
+  set_clave(2);
 }
 
 function isValidDate(date) {
@@ -2512,17 +2513,42 @@ function set_clave(q){
                     }
                   
                     if(nombre_actual ===parametro_fecha){
-                   
+                      fecha_hormigonado = result.properties[i].displayValue;
+                      let elementos_fecha = fecha_hormigonado.split("/");
                    console.log("VALOR PARA HORMIGONADO: "+  result.properties[i].displayValue);
                    console.log("VALOR PARA  ID: " );
-                      if( result.properties[i].displayValue != "" && result.properties[i].displayValue != "XX"   && result.properties[i].displayValue != "XXXX"  && result.properties[i].displayValue != "X"  && result.properties[i].displayValue != "xx"  && result.properties[i].displayValue != "xxxx"){
+
+                   var today = new Date();
+                   var dd = String(today.getDate()).padStart(2, '0');
+                   var mm = String(today.getMonth() + 2).padStart(2, '0'); //
+                   var yyyy = today.getFullYear();
+                   if(mm>0){
+                     mm = mm-1; 
+                   }
+                   today =   mm+'/' +''+dd + '/' + yyyy;
+                   if(elementos_fecha[1] >0){
+                    // elementos_fecha[1] = elementos_fecha[1]-1;
+                   }
+    
+                   var d2 = ''+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                   var d3=  ''+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                   console.log("FECHAS 123456789");
+                   console.log(d2);
+                   console.log(d3);
+                   console.log(today);
+                   
+                   let compara = dates.compare(today,d2);
+                   console.log("valor comparado : "+compara);
+                   console.log("///////////////////////");
+                   console.log("VALORES REvision "+compara);
+                      if( compara != NaN &&compara !=-1 && result.properties[i].displayValue != "" && result.properties[i].displayValue != "XX"   && result.properties[i].displayValue != "XXXX" && result.properties[i].displayValue != "X"  && result.properties[i].displayValue != "xx" && result.properties[i].displayValue != "xxxx"){
                           activo_hormigonado = 1;
                           let  fecha_hormigonado = result.properties[i].displayValue;
                           let formato_hormigonado_1 = fecha_hormigonado.indexOf("/");
                           let formato_hormigonado_2 = fecha_hormigonado.indexOf("-");
                   
                           console.log("Pinto OK"+  id_para_pintar);
-                            const colorConFormato = new THREE.Vector4(0.098, 1,0.078, 1);
+                            const colorConFormato = new THREE.Vector4(0.5, 1,0.1, 1);
                          // alert(id_para_pintar);
                           viewer.setThemingColor(parseInt(id_para_pintar+'',0),colorConFormato, null,true);
                           
@@ -2531,7 +2557,7 @@ function set_clave(q){
                       }
                       else{
                         console.log("Pinto no OK"+  id_para_pintar);
-                        const color10 = new THREE.Vector4(1,0.0580,0.0235, 0.078);
+                        const color10 = new THREE.Vector4(0.9, 1,0.1, 1);
                         viewer.setThemingColor(parseInt(id_para_pintar+'',0),color10, null,true);
                          console.log("NO ENTRE A HORMIGONADO: "+  fecha_objeto);
                         activo_hormigonado = 0;
@@ -4132,7 +4158,7 @@ function launchViewer(urn) {
                           if(compara2 != 0){compara = compara2;}
                         }
                         if(compara == 1){
-                          boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                          boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido o Sin Formato <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
           
           
                     
@@ -4310,7 +4336,7 @@ function analisiFecha(idElemento){
               }
                let compara = dates.compare(today,d2);
               if(compara == 1){
-                boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido o sin Formato <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
 
 
           
