@@ -129,7 +129,8 @@ function saveHormigonado(){
 
  set_clave(3);
  getDBIds();
-  setTimeout( set_clave(2),4000);
+ getPlanObj();
+
   
 }
 
@@ -4955,6 +4956,7 @@ function Pintar_Categorias_reflow( ){
      }
      viewer.start();
      getDBIds();
+     getPlanObj();
     });
 }
 
