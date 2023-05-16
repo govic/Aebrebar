@@ -4946,7 +4946,7 @@ function Pintar_Categorias_reflow( ){
     
         const color12 = new THREE.Vector4(0.882, 0.878,0.854, 0.6);
         viewer.setThemingColor(parseInt(result.dbId+'',0),color12, null,true);
-        getDBIds();
+       
      
                     
      }) 
@@ -4954,6 +4954,7 @@ function Pintar_Categorias_reflow( ){
         }
      }
      viewer.start();
+     getDBIds();
     });
 }
 
