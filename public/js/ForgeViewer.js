@@ -128,6 +128,7 @@ function saveHormigonado(){
  // setTimeout( set_clave(3),2000);
 
  set_clave(3);
+ getFiltros();
  getDBIds();
  getPlanObj();
 
