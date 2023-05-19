@@ -111,18 +111,22 @@ function saveHormigonado(){
       console.log('INSERTO OBJETO NO EXISTENTE');
       console.log(plan+" "+base+" "+ac);
       getDBIds_insert(plan,base,ac);
-      ids_bd =[];
+     // ids_bd =[];
       getDBIds();
       getPlanObj();
+      console.log("IDS DESDE SERVER");
+      console.log(ids_bd);
      
     }
     else{
       console.log('UPDATE OBJETO  EXISTENTE');
       console.log(plan+" "+base+" "+ac);
       getDBIds_update(plan,base,ac);
-      ids_bd =[];
+      //ids_bd =[];
       getDBIds();
       getPlanObj();
+      console.log("IDS DESDE SERVER");
+      console.log(ids_bd);
     }
   }
  // setTimeout( set_clave(3),2000);
@@ -6053,6 +6057,252 @@ function onDocumentLoadSuccess(doc) {
            
           })
         })
+      }
+
+      let c =1;
+      var hoy = 10 + '-' +05 + '-' +2021;
+      var cat_count=1;
+      var esta =0;
+      var categorias = Array();
+      var categoria_actual;
+      var indice_actual = 0;
+      var pesoTotal = 0;
+      var largoTotal = 0;
+      var xTotal = 0;
+      var pesoActual =0;
+      var largoActual = 0;
+      var tableTotales = document.getElementById('tabla_total');
+      var tableRef = document.getElementById('tabla_fierro');
+      var rowCount = tableRef.rows.length;
+      var rowCountTotales = tableTotales.rows.length;
+      var tableHeaderRowCount = 1;
+     
+      
+      
+      for (var i = tableHeaderRowCount; i < rowCount; i++) {
+        tableRef.deleteRow(tableHeaderRowCount);
+      }
+      identificadores_fierros = e.dbIdArray;
+      for(var a=0; a< identificadores_fierros.length;a++){
+        let actual =  identificadores_fierros[a];
+        
+        viewer.getProperties( identificadores_fierros[a], (result) => { 
+         
+          for(i=0 ;i< 60;i++){
+            let nombre_actual = ""+result.properties[i].displayName;
+            if(nombre_actual ==="Category"){
+              categoria_actual_obj = result.properties[i].displayValue;
+              console.log("CATEGORIA BUSCADA");
+              console.log(categoria_actual_obj);
+              //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
+                if(categoria_actual_obj==""+parametro_fierro+""){
+                console.log("ENTRAR REBAR");
+                for(t=0;t<result.properties.length;t++){
+                  let val_actual = result.properties[t].displayName;
+                  if( val_actual == "RS Peso Lineal (kg/m)"){
+                 
+                    console.log("ENTRO A PESO LINEAL");
+                    let peso = parseFloat(result.properties[t].displayValue);
+                    
+                    console.log("ANTES PESO BUSCADO");
+                    console.log(peso);
+                    console.log(result.properties[t].displayValue);
+                    console.log(result);
+                    
+                    peso = parseFloat(peso);
+                    pesoActual = peso;
+                    console.log("PESO BUSCADO");
+                    console.log(peso);
+                   
+                
+                
+                    // pesoTotal  = parseFloat(pesoTotal).toFixed(0);
+                    
+                     console.log( "SUMATORIA PESO");
+                     console.log( pesoTotal);
+                     
+                  }
+                  if(val_actual == "Total Bar Length"){
+                    console.log("TOTAL LENGTH BAR");
+                    
+                    let largo = parseFloat(result.properties[t].displayValue);
+                    console.log(largo );
+                    largo = largo.toFixed(0);
+                    largo = parseFloat(largo,0);
+                    
+                    largo = largo /100;
+                    largoActual = largo;
+                    console.log("convertido "+largo);
+                    listado_largos = listado_largos+","+largo;
+                    listado_pesos = listado_pesos + ","+peso;
+                    largoTotal = largoTotal+ largo;
+                    largoTotal = largoTotal;
+                    console.log( "SUMATORIA LARGO");
+                    console.log( largoTotal);
+                    console.log( "Listado largos");
+                    console.log(listado_largos);
+                    //largoTotal  = parseFloat(largoTotal).toFixed(0);
+                    listado_pesos = listado_pesos +","+peso;
+                    listado_largos = listado_largos +","+largo;
+                    $("#listado_largo").val(listado_largos);
+                    $("#listado_pesos").val(listado_pesos);
+                    document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(0)+ ' mtrs';
+                   
+                  }
+                  if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
+                        
+                     let resultado_mul = pesoActual*largoActual;
+                     console.log("resultado multiplicacion");
+                     console.log(pesoActual+"    "+largoActual );
+                     console.log(resultado_mul);
+                     pesoTotal = pesoTotal+resultado_mul;
+                      $("#largo_total_pedido").val(largoTotal.toFixed(0));
+                      $("#peso_total_pedido").val(pesoTotal.toFixed(0));
+                      $("#resultado_total_pedido").val(pesoTotal);
+                      document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(0)+ ' Kgs';
+
+                      $("#listado_largo").val(listado_largos);
+                      $("#listado_pesos").val(listado_pesos);
+                      //console.log( "Resultado Multiplicación");
+                    // console.log( resultado_mul);
+                  
+                      resultado_mul =resultado_mul.toFixed(0);
+                      xTotal = xTotal + parseFloat(resultado_mul);
+                      console.log( "Total Multiplicación");
+                      console.log( xTotal);
+                   //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(0);
+
+                      document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
+                     // let g = name.split(' ');
+                    //  let y = g[2];
+                    
+                  }
+                }
+                
+               
+                
+                let actuales = $("#id_seleccionados3").val();
+                actual =   actual+","+actuales;
+                $("#id_seleccionados3").val(actual);
+                $("#id_seleccionados4").val(actual);
+               
+                let name = result.name;
+              
+                
+       
+        
+                
+                // Inserta una fila en la tabla, en el índice 0
+               
+               }
+               if(cat_count == 1){ // no hay ningun elemento
+                   indice_actual = 0;
+                   categorias.push(result.properties[i].displayValue);
+                   categoria_actual = result.properties[i].displayValue;
+                   cat_count =cat_count +1;
+               //    console.log("entre una vez "+ cat_count );
+               /*
+                   var taskId = gantt.addTask({
+                    id:cat_count,
+                    text:result.properties[i].displayValue,
+                    start_date:hoy,
+                    duration:1
+                  },11,1);*/
+                  
+               }else{
+                 // busco si se encuentra
+              //   console.log("GUARDAFDAS //////////////////////////////");
+              //   console.log(categorias);
+                  for(var t =0 ; t< cat_count; t++){
+                      if( result.properties[i].displayValue === categorias[t]){
+                        esta = 1; 
+                        indice_actual = t;
+                        break
+                      }
+                  }
+                  if(esta ==0){ // no se encontró  se procede a agregar la nueva categoria
+                    categorias.push(result.properties[i].displayValue);
+                    cat_count =cat_count +1;
+                    indice_actual = cat_count -1;
+                    // console.log("agregue nuevo "+ cat_count);
+                  
+                  /*
+                    var taskId = gantt.addTask({
+                                          id:cat_count,
+                                          text:result.properties[i].displayValue,
+                                          start_date:hoy,
+                                          duration:1
+                      },11,1);*/
+               //   gantt.sort("start_date",false);
+             //     gantt.render();
+                  
+                  }
+                  else{
+                    esta = 0;
+                  }
+                }
+            }
+            if(nombre_actual  === parametro_fecha){
+      
+              fecha_hormigonado = result.properties[i].displayValue;
+
+              let formato_hormigonado_1 = fecha_hormigonado.indexOf("/");
+              let formato_hormigonado_2 = fecha_hormigonado.indexOf("-");
+      
+              if(formato_hormigonado_1 != -1){
+                    let elementos_fecha = fecha_hormigonado.split("/");
+                  if(elementos_fecha.length>0){
+                    var today = new Date();
+                    var dd = String(today.getDate()).padStart(2, '0');
+                    var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+                    var yyyy = today.getFullYear();
+                    if(mm>0){
+                      mm = mm-1; 
+                    }
+                    today = '0'+mm + '/' + dd + '/' + yyyy;
+                    if(elementos_fecha[1] >0){
+                      elementos_fecha[1] = elementos_fecha[1]-1;
+                    }
+      
+                    var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                    // let compara = dates.compare(today,d2);
+                
+                    let resultado  = [result.name,d3];
+              
+                    console.log("NombreInterno" + resultado[0]);
+                    return resultado;
+                  }
+              }
+              if(formato_hormigonado_2 != -1){
+                let elementos_fecha = fecha_hormigonado.split("-");
+                if(elementos_fecha.length>0){
+                  var today = new Date();
+                  var dd = String(today.getDate()).padStart(2, '0');
+                  var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+                  var yyyy = today.getFullYear();
+                  if(mm>0){
+                     mm = mm-1; 
+                  }
+                  today = '0'+mm + '/' + dd + '/' + yyyy;
+                  if(elementos_fecha[1] >0){
+                    elementos_fecha[1] = elementos_fecha[1]-1;
+                  }
+        
+                  var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                  // let compara = dates.compare(today,d2);
+               
+                  let resultado  = [result.name,d3];
+             
+                  console.log("NombreInterno" + resultado[0]);
+                   return resultado;
+                }
+              }
+              
+             }
+          }
+          
+        }) 
+    
       }
     
     })
