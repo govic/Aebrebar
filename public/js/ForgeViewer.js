@@ -2285,7 +2285,7 @@ $list_pedidos = "";
        // console.log(Object.values(res[r]));
        if(urn_usada ==res[r].urn_actual ){
         
-        $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-success btn-block'onclick='filtra_orden("+cont+")'>Visualizar</button><button class='btn btn-danger btn-block' onclick=eliminar_orden("+cont+")>Borrar</button></td>" + "</tr>";
+        $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-warning 'onclick='filtra_orden("+cont+")'><i class='ti-eye'></i></button>&nbsp;<button class='btn btn-warning ' onclick=eliminar_orden("+cont+")><i class='ti-close'></i></button></td>" + "</tr>";
         $list_pedidos = $list_pedidos +$fila;
         console.log(res[r].nombre_pedido);
        
@@ -2968,6 +2968,125 @@ function cargarVista(){
     }
   });*/
 }
+
+function getModifiedWorldBoundingBox(fragIds, fragList) {
+     
+  var fragbBox = new THREE.Box3();
+  var nodebBox = new THREE.Box3();
+
+  fragIds.forEach(function(fragId) {
+
+     fragList.getWorldBounds(fragId, fragbBox);
+     nodebBox.union(fragbBox);
+ });
+
+ return nodebBox;
+}
+
+// Returns bounding box as loaded in the file
+// (no explosion nor transformation)
+function getOriginalWorldBoundingBox(fragIds, fragList) {
+
+  var fragBoundingBox = new THREE.Box3();
+  var nodeBoundingBox = new THREE.Box3();
+
+  var fragmentBoxes = fragList.boxes;
+
+  fragIds.forEach(function(fragId) {
+
+      var boffset = fragId * 6;
+
+      fragBoundingBox.min.x = fragmentBoxes[boffset];
+      fragBoundingBox.min.y = fragmentBoxes[boffset+1];
+      fragBoundingBox.min.z = fragmentBoxes[boffset+2];
+      fragBoundingBox.max.x = fragmentBoxes[boffset+3];
+      fragBoundingBox.max.y = fragmentBoxes[boffset+4];
+      fragBoundingBox.max.z = fragmentBoxes[boffset+5];
+
+      nodeBoundingBox.union(fragBoundingBox);
+  });
+
+  return nodeBoundingBox;
+}
+
+function drawLines(coordsArray, material) {
+
+  for (var i = 0; i < coordsArray.length; i+=2) {
+
+      var start = coordsArray[i];
+      var end = coordsArray[i+1];
+
+      var geometry = new THREE.Geometry();
+
+      geometry.vertices.push(new THREE.Vector3(
+          start.x, start.y, start.z));
+
+      geometry.vertices.push(new THREE.Vector3(
+          end.x, end.y, end.z));
+
+      geometry.computeLineDistances();
+
+      var line = new THREE.Line(geometry, material);
+
+      viewer.impl.scene.add(line);
+  }
+}
+
+function drawBox(min, max) {
+
+  var material = new THREE.LineBasicMaterial({
+      color: 0xffff00,
+      linewidth: 2
+  });
+
+  viewer.impl.matman().addMaterial(
+      'ADN-Material-Line',
+      material,
+      true);
+
+  drawLines([
+
+      {x: min.x, y: min.y, z: min.z},
+      {x: max.x, y: min.y, z: min.z},
+
+      {x: max.x, y: min.y, z: min.z},
+      {x: max.x, y: min.y, z: max.z},
+
+      {x: max.x, y: min.y, z: max.z},
+      {x: min.x, y: min.y, z: max.z},
+
+      {x: min.x, y: min.y, z: max.z},
+      {x: min.x, y: min.y, z: min.z},
+
+      {x: min.x, y: max.y, z: max.z},
+      {x: max.x, y: max.y, z: max.z},
+
+      {x: max.x, y: max.y, z: max.z},
+      {x: max.x, y: max.y, z: min.z},
+
+      {x: max.x, y: max.y, z: min.z},
+      {x: min.x, y: max.y, z: min.z},
+
+      {x: min.x, y: max.y, z: min.z},
+      {x: min.x, y: max.y, z: max.z},
+
+      {x: min.x, y: min.y, z: min.z},
+      {x: min.x, y: max.y, z: min.z},
+
+      {x: max.x, y: min.y, z: min.z},
+      {x: max.x, y: max.y, z: min.z},
+
+      {x: max.x, y: min.y, z: max.z},
+      {x: max.x, y: max.y, z: max.z},
+
+      {x: min.x, y: min.y, z: max.z},
+      {x: min.x, y: max.y, z: max.z}],
+
+      material);
+
+  viewer.impl.sceneUpdated(true);
+}
+
 function launchViewer(urn) {
   var options = {
     env: 'AutodeskProduction',
@@ -3009,17 +3128,55 @@ function launchViewer(urn) {
           // Pintar_Categorias();
     });
 
+    //////////////////////////////////////////////////////
+    ///  SELECCION DE ELEMENTOS
+    //////////////////////////////////////////////////
+    function getModifiedWorldBoundingBox (fragIds) {
+
+      //fragments list array
+      var fragList = NOP_VIEWER.model.getFragmentList();
+      const fragbBox = new THREE.Box3()
+      const nodebBox = new THREE.Box3()
+
+      fragIds.forEach(function(fragId) { 
+         fragList.getWorldBounds(fragId, fragbBox) 
+         nodebBox.union(fragbBox)
+      })
+
+  return nodebBox
+}
+  
+
+  //////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
 // Detección de selección de elementos
       viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT,(event)=>{
-        console.log("Seleccion!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.log("Seleccion!222!!!!!!!!!!!!!!!!!!!!!!!");
         console.log(event);
         console.log(event.dbIdArray);
         var a= event.dbIdArray;
         console.log("ELEMENTOS SELECCIONADOS");
         let selects = event.dbIdArray;
         console.log(selects);
+        //viewer.select( [selects]);
+        console.log("list ids");
+        console.log(event.fragIdsArray);
+        console.log("frag list");
+        console.log(viewer.model.getFragmentList());
+        var bBox = getModifiedWorldBoundingBox(
+          event.fragIdsArray,
+          viewer.model.getFragmentList()
+        );
+
+        drawBox(bBox.min, bBox.max);
+        var box = viewer.utilities.getBoundingBox();
+        console.log(box);
+       // var box = getModifiedWorldBoundingBox(selects);
+       console.log("BOUNDING BOX BOX BOX");
+
         for(let r =0; r<selects.length;r++){
          const colorFierro = new THREE.Vector4(0.0, 0.0, 1.0,1.0);
+       
         /// viewer.setThemingColor(a[r], color, null, true);
         viewer.getProperties(selects[r], (result) => { 
           console.log('RESULTADO SELECCION'); 
@@ -3666,6 +3823,9 @@ function launchViewer(urn) {
                 let base = busqueda[1];
                 let plan = busqueda[2];
                 viewer.getProperties(dbId[0], (result) => { 
+
+
+                  
                   console.log('RESULTADO SELECCION'); 
                   document.getElementById("propiedades_id").innerHTML = "";
                     console.log(result); 
@@ -4253,28 +4413,252 @@ function launchViewer(urn) {
             document.getElementById("id_seleccionados4").value =selects.join();
             
             document.getElementById("elementos_seleccionados").innerHTML = "";
-            let boton_guardar = "<a class='btn ripple btn-info' data-target='#modaldemo4' data-toggle='modal' href=''>Guardar Selección</a>";
+            let boton_guardar = "<a class='btn btn-warning btn-block' data-target='#modaldemo4' data-toggle='modal' href=''><i class='ti-save'></i></a>";
           
-            document.getElementById("elementos_seleccionados").innerHTML = " Selección Activa "+"\n"+boton_guardar;
+            document.getElementById("elementos_seleccionados").innerHTML = "  "+""+boton_guardar;
             
         //   gantt.selectTask(dbId);
           
-
+        
           
             
-
+          
             viewer.model.getBulkProperties(dbId, ['Name','Level','Area','Volume','Thickness'], (result) => {
-                let test = result.filter(x => x.properties[0].displayValue !== '');
+            
+              
+              let test = result.filter(x => x.properties[0].displayValue !== '');
                 let data = {};
+
                 test.forEach(elements => {
-                  console.log('Elementos');
+                  console.log('Elementos22');
                   console.log(elements);
+                  console.log(elements.dbId);
+                  var cat_count=1;
+                  var categorias = Array();
+                  viewer.getProperties(elements.dbId, (result2) => { 
+                    console.log(result2)
+                    for(i=0 ;i< 60;i++){
+                      let nombre_actual = ""+result2.name;
+                      if(nombre_actual ==="Category"){
+                        categoria_actual_obj = result2.properties[i].displayValue;
+                        console.log("CATEGORIA BUSCADA");
+                        console.log(categoria_actual_obj);
+                        //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
+                          if(categoria_actual_obj==""+parametro_fierro+""){
+                          console.log("ENTRAR REBAR");
+                          for(t=0;t<result2.properties.length;t++){
+                            let val_actual = result2.properties[t].displayName;
+                            if( val_actual == "RS Peso Lineal (kg/m)"){
+                           
+                              console.log("ENTRO A PESO LINEAL");
+                              let peso = parseFloat(result2.properties[t].displayValue);
+                              
+                              console.log("ANTES PESO BUSCADO");
+                              console.log(peso);
+                              console.log(result2.properties[t].displayValue);
+                              console.log(result2);
+                              
+                              peso = parseFloat(peso);
+                              pesoActual = peso;
+                              console.log("PESO BUSCADO");
+                              console.log(peso);
+                             
+                          
+                          
+                              // pesoTotal  = parseFloat(pesoTotal).toFixed(0);
+                              
+                               console.log( "SUMATORIA PESO");
+                               console.log( pesoTotal);
+                               
+                            }
+                            if(val_actual == "Total Bar Length"){
+                              console.log("TOTAL LENGTH BAR");
+                              
+                              let largo = parseFloat(result2.properties[t].displayValue);
+                              console.log(largo );
+                              largo = largo.toFixed(0);
+                              largo = parseFloat(largo,0);
+                              
+                              largo = largo /100;
+                              largoActual = largo;
+                              console.log("convertido "+largo);
+                              listado_largos = listado_largos+","+largo;
+                              listado_pesos = listado_pesos + ","+peso;
+                              largoTotal = largoTotal+ largo;
+                              largoTotal = largoTotal;
+                              console.log( "SUMATORIA LARGO");
+                              console.log( largoTotal);
+                              console.log( "Listado largos");
+                              console.log(listado_largos);
+                              //largoTotal  = parseFloat(largoTotal).toFixed(0);
+                              listado_pesos = listado_pesos +","+peso;
+                              listado_largos = listado_largos +","+largo;
+                              $("#listado_largo").val(listado_largos);
+                              $("#listado_pesos").val(listado_pesos);
+                              document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(0)+ ' mtrs';
+                             
+                            }
+                            if((t+1 )==result2.properties.length){ // termina de recorrer todas las propiedades
+                                  
+                               let resultado_mul = pesoActual*largoActual;
+                               console.log("resultado multiplicacion");
+                               console.log(pesoActual+"    "+largoActual );
+                               console.log(resultado_mul);
+                               pesoTotal = pesoTotal+resultado_mul;
+                                $("#largo_total_pedido").val(largoTotal.toFixed(0));
+                                $("#peso_total_pedido").val(pesoTotal.toFixed(0));
+                                $("#resultado_total_pedido").val(pesoTotal);
+                                document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(0)+ ' Kgs';
+                  
+                                $("#listado_largo").val(listado_largos);
+                                $("#listado_pesos").val(listado_pesos);
+                                //console.log( "Resultado Multiplicación");
+                              // console.log( resultado_mul);
+                            
+                                resultado_mul =resultado_mul.toFixed(0);
+                                xTotal = xTotal + parseFloat(resultado_mul);
+                                console.log( "Total Multiplicación");
+                                console.log( xTotal);
+                             //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(0);
+                  
+                                document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
+                               // let g = name.split(' ');
+                              //  let y = g[2];
+                              
+                            }
+                          }
+                          
+                         
+                          
+                          let actuales = $("#id_seleccionados3").val();
+                          actual =   actual+","+actuales;
+                          $("#id_seleccionados3").val(actual);
+                          $("#id_seleccionados4").val(actual);
+                         
+                          let name = result.name;
+                        
+                          
+                  
+                  
+                          
+                          // Inserta una fila en la tabla, en el índice 0
+                         
+                         }
+                         if(cat_count == 1){ // no hay ningun elemento
+                             indice_actual = 0;
+                             categorias.push(result2.properties[i].displayValue);
+                             categoria_actual = result2.properties[i].displayValue;
+                             cat_count =cat_count +1;
+                         //    console.log("entre una vez "+ cat_count );
+                         /*
+                             var taskId = gantt.addTask({
+                              id:cat_count,
+                              text:result.properties[i].displayValue,
+                              start_date:hoy,
+                              duration:1
+                            },11,1);*/
+                            
+                         }else{
+                           // busco si se encuentra
+                        //   console.log("GUARDAFDAS //////////////////////////////");
+                        //   console.log(categorias);
+                            for(var t =0 ; t< cat_count; t++){
+                                if( result2.properties[i].displayValue === categorias[t]){
+                                  esta = 1; 
+                                  indice_actual = t;
+                                  break
+                                }
+                            }
+                            if(esta ==0){ // no se encontró  se procede a agregar la nueva categoria
+                              categorias.push(result2.properties[i].displayValue);
+                              cat_count =cat_count +1;
+                              indice_actual = cat_count -1;
+                              // console.log("agregue nuevo "+ cat_count);
+                            
+                            /*
+                              var taskId = gantt.addTask({
+                                                    id:cat_count,
+                                                    text:result.properties[i].displayValue,
+                                                    start_date:hoy,
+                                                    duration:1
+                                },11,1);*/
+                         //   gantt.sort("start_date",false);
+                       //     gantt.render();
+                            
+                            }
+                            else{
+                              esta = 0;
+                            }
+                          }
+                      }
+                      if(nombre_actual  === parametro_fecha){
+                  
+                        fecha_hormigonado = result2.properties[i].displayValue;
+                  
+                        let formato_hormigonado_1 = fecha_hormigonado.indexOf("/");
+                        let formato_hormigonado_2 = fecha_hormigonado.indexOf("-");
+                  
+                        if(formato_hormigonado_1 != -1){
+                              let elementos_fecha = fecha_hormigonado.split("/");
+                            if(elementos_fecha.length>0){
+                              var today = new Date();
+                              var dd = String(today.getDate()).padStart(2, '0');
+                              var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+                              var yyyy = today.getFullYear();
+                              if(mm>0){
+                                mm = mm-1; 
+                              }
+                              today = '0'+mm + '/' + dd + '/' + yyyy;
+                              if(elementos_fecha[1] >0){
+                                elementos_fecha[1] = elementos_fecha[1]-1;
+                              }
+                  
+                              var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                              // let compara = dates.compare(today,d2);
+                          
+                              let resultado  = [result.name,d3];
+                        
+                              console.log("NombreInterno" + resultado[0]);
+                              return resultado;
+                            }
+                        }
+                        if(formato_hormigonado_2 != -1){
+                          let elementos_fecha = fecha_hormigonado.split("-");
+                          if(elementos_fecha.length>0){
+                            var today = new Date();
+                            var dd = String(today.getDate()).padStart(2, '0');
+                            var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+                            var yyyy = today.getFullYear();
+                            if(mm>0){
+                               mm = mm-1; 
+                            }
+                            today = '0'+mm + '/' + dd + '/' + yyyy;
+                            if(elementos_fecha[1] >0){
+                              elementos_fecha[1] = elementos_fecha[1]-1;
+                            }
+                  
+                            var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                            // let compara = dates.compare(today,d2);
+                         
+                            let resultado  = [result2.name,d3];
+                       
+                            console.log("NombreInterno" + resultado[0]);
+                             return resultado;
+                          }
+                        }
+                        
+                       }
+                    }
+                    
+                  });
                   if(elements.length >=5){
                     let name= elements.properties[0].displayValue;
                       let level= elements.properties[1].displayValue;
                       let struct= elements.properties[2].displayValue;
                       let area= elements.properties[3].displayValue;
                       let vol= elements.properties[4].displayValue;
+                     
+
                   }
                   else{
                     if(elements.properties[0]){
@@ -4288,7 +4672,8 @@ function launchViewer(urn) {
                   
                 
                   });
-                  
+         
+            
               }, (error) => {
                   reject(error);
               });

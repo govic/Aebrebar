@@ -358,11 +358,7 @@
 										<a class="dropdown-item" href="/logout"><i class="bx bx-log-out"></i> Salir</a>
 									</div>
 								</div>
-								<div id="ver_menu" class="dropdown main-header-message right-toggle" onclick="setDerMenu()">
-									<a class="nav-link pr-0" data-toggle="sidebar-right" data-target=".sidebar-right" >
-										<svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-									</a>
-								</div>
+								
 							</div>
 						</div>
 					</div>
@@ -412,18 +408,276 @@
 					<div class="row row-sm">
 						<div class="col-md-12 col-lg-12 col-xl-12">
 							<div class="card">
-								<div id="forgeViewer"  style="width: 80px !important; height: 500px;padding-right:  20px !important;"></div>
-								<div class="card-header bg-transparent pd-b-0 pd-t-20 bd-b-0">
-									<div class="d-flex justify-content-between">
-										<h4 class="card-title mb-0">Visualizador</h4>
-										<i class="mdi mdi-dots-horizontal text-gray"></i>
+
+								<div class="row">
+									<div class="col-8">
+										<div id="forgeViewer"  style="width: 80px !important; height: 1000px;padding-right:  20px !important;"></div>
+										<div class="card-header bg-transparent pd-b-0 pd-t-20 bd-b-0">
+											<div class="d-flex justify-content-between">
+												<h4 class="card-title mb-0">Visualizador</h4>
+												<i class="mdi mdi-dots-horizontal text-gray"></i>
+											</div>
+											
+										</div>
+
 									</div>
-									
+									<div class="col-4" id="tabs-style4">
+										<P></P><P></P>
+									<div class="card-body">
+										<div>
+											<P></P>
+											<h6 class="card-title mb-1">Menú Operación</h6>
+											<p class="text-muted card-sub-title">Encontrará las herramientas disponibles para cada apartado.</p>
+										</div>
+										<div class="text-wrap">
+											<div class="example">
+												<div class="panel panel-primary tabs-style-1">
+													<div class=" tab-menu-heading">
+														<div class="tabs-menu1">
+															<!-- Tabs -->
+															<ul class="nav panel-tabs main-nav-line">
+															
+																<li class="">
+																	<a href="#tab1" class="nav-link" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">Visual</span> </a>
+															   </li>
+																<li class="">
+																		<a href="#tab2" class="nav-link" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">Fierros&Pedidos</span> </a>
+																</li>
+																		
+															</ul>
+														</div>
+													</div>
+													<div
+														class="panel-body tabs-menu-body main-content-body-right border-top-0 border">
+														<div class="tab-content">
+															<div class="tab-pane active" id="tab1">
+																<h6 class="mb-12 tx-12 ">Valores Para <%= filtro_1 %></h6>
+																<div class="row row-sm">
+																	<div class="col-lg-12 ">
+																		<p class="mg-b-10"></p><select class="form-control select2" multiple="multiple" id="ha_option">
+																			<option value="sinValor">
+																				Sin Valor
+																			</option>
+																			<option value="0">
+																				Sin Valor
+																			</option>
+																		</select>
+																	</div>
+															  </div>
+																<p></p>
+																<h6 class="mb-3 tx-12 ">Valores Para  <%= filtro_2 %></h6>
+																<div class="row row-sm">
+																	<div class="col-lg-12 ">
+																		<p class="mg-b-10"></p><select class="form-control select2" multiple="multiple" id="piso_option">
+																			<option value="sinValor">
+																				Sin Valor
+																			</option>
+																			<option value="0">
+																				Sin Valor
+																			</option>
+																			
+																		</select>
+																	</div>
+				
+														 </div>
+																<p></p>
+																<div class="row row-xs ">
+					
+				
+																	<div class="col-sm-4 col-md-4 mg-t-4 mg-md-t-0">
+																		<button class="btn btn-warning  btn-block" onclick="filtro_visual();"><i class="si si-control-play"></i></button>
+																	</div>
+																	
+																	<div class="col-sm-4 col-md-4 mg-t-4 mg-md-t-0">
+																		<button class="btn btn-warning btn-block" onclick="marcar_visual();"><i class="si si-magnifier"></i></button>
+																	</div>
+																	
+																	<div class="col-sm-4 col-md-4 mg-t-4 mg-md-t-0">
+																		<button class="btn btn-warning btn-block" onclick="quitar_filtros();"><i class="si si-action-undo"></i></button>
+																	</div>
+																</div><p></p>
+																<div class="row row-xs ">
+		
+																	<h6>&nbsp;&nbsp;Administración de Vistas</h6><br>
+																
+																	<div class="col-sm-12 col-md-12 mg-t-12 mg-md-t-0">
+																		
+																		&nbsp;&nbsp;<h6 class="mb-3 tx-12 ">Vistas Disponibles</h6>
+																		<div class="form-group" data-select2-id="11">
+																		
+																			<select class="form-control" onchange="set_visor()" id="vistas_previas">
+																				<option value="sinValor">
+																					Sin Valor
+																				</option>
+																				
+																			</select>
+																		</div>
+																	
+																	<p></p>
+																		
+																	</div>
+																	
+																		<div class="col-sm-3 col-md-3 mg-t-3 "  id="elementos_seleccionados">
+																			</div>
+																		<div class="col-sm-3 col-md-3 mg-t-3 ">
+																			<button class="btn btn-warning btn-block" onclick="set_clave(2);"><i class="ti-timer"></i></button>
+																		</div>
+																		<div class="col-sm-3 col-md-3 mg-t-3 ">
+																			<button class="btn btn-warning btn-block" onclick="set_clave(3);"><i class="ti-reload"></i></button>
+																		</div>
+																		<div class="col-sm-3 col-md-3 mg-t-3 ">
+																			<button class="btn btn-warning btn-block " data-target="#modaldemo3" data-toggle="modal" href=""><i class="ti-eye"></i></button>
+																		</div>
+																	
+																	
+																	<p></p>
+																	<div class="col-sm-12 col-md-12 mg-t-12 mg-md-t-0">
+																		
+																	</div>
+																	<div class="col-sm-12 col-md-12 mg-t-12 mg-md-t-0">
+																		
+																	</div>
+																	 
+																</div>
+															</div>
+															<div class="tab-pane" id="tab2">
+																<div class="table-responsive">
+																	<table style="background-color:#FFFFE0;" class="table mg-b-0 text-md-nowrap" id="tabla_total"> 
+																		<thead>
+																			<tr style="background-color:#BDB76B;color:#ffffff;">
+																				
+																				<th>Largo Acumulado</th>
+																				<th>Peso Acumulado</th>
+																				
+																				<th>Acción</th>
+																			</tr>
+																		 </thead>
+																		 <tbody><tr>
+																			 
+																			 <td id="largo">404 mtrs</td>
+																			 <td id="peso">160 Kgs</td>
+																			 
+																			 <td id="btn"><button class="btn btn-warning btn-block" data-target="#modaldemo6" data-toggle="modal" "=""><i class="si si-plus"></i></button></td>
+																		 </tr>
+																	
+																</tbody></table>
+																<p></p>
+																<div class="table-responsive">
+																	<table class="table mg-b-0 text-md-nowrap">
+																		<thead>
+																			<tr>
+																				<th>Fecha</th>
+																				
+																				<th>Total(Kgs)</th>
+																				<th>Pedido</th>
+																				<th>Acciones</th>
+																			</tr>
+																		</thead>
+																		<tbody id="body_pedidos">
+																			<tr><th scope="row">11/05/2023</th>
+																				<td>419</td><td>P02</td>
+																				<td>
+																					<div class="row">
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="filtra_orden(0)"><i class="ti-eye"></i></button>
+																					
+																						</div>
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="eliminar_orden(0)"><i class="ti-close"></i></button>
+																					
+																						</div>
+																					</div>
+																					</td>
+																			</tr>
+																			<tr><th scope="row">11/05/2023</th>
+																				<td>419</td><td>P02</td>
+																				<td>
+																					<div class="row">
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="filtra_orden(0)"><i class="ti-eye"></i></button>
+																					
+																						</div>
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="eliminar_orden(0)"><i class="ti-close"></i></button>
+																					
+																						</div>
+																					</div>
+																					</td>
+																			</tr>
+																			<tr><th scope="row">11/05/2023</th>
+																				<td>419</td><td>P02</td>
+																				<td>
+																					<div class="row">
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="filtra_orden(0)"><i class="ti-eye"></i></button>
+																					
+																						</div>
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="eliminar_orden(0)"><i class="ti-close"></i></button>
+																					
+																						</div>
+																					</div>
+																					</td>
+																			</tr>
+																			<tr><th scope="row">11/05/2023</th>
+																				<td>419</td><td>P02</td>
+																				<td>
+																					<div class="row">
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="filtra_orden(0)"><i class="ti-eye"></i></button>
+																					
+																						</div>
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="eliminar_orden(0)"><i class="ti-close"></i></button>
+																					
+																						</div>
+																					</div>
+																					</td>
+																			</tr>
+																			</tbody>
+																	</table>
+																	<p></p>
+																	<!--
+																	<div class="table-responsive">
+																		<h4 class="tx-15 text-uppercase mb-3">Resumen de Pedido</h4>
+																		
+																		<div id="#resumen_pedido">
+																			<table class="table mg-b-0 text-md-nowrap">
+																				<tbody>
+																				<tr>
+																					<td>Fecha</td>
+																					<td id="fecha_pedido_resumen"></td>
+																					
+																				</tr>
+																				<tr>
+																					<td>Nombre</td>
+																					<td id="nombre_pedido_resumen"></td>
+																				</tr>
+																				
+																				<tr>
+																					<td>Agregar Elementos</td>
+																					<td><button class="btn btn-warning btn-block" data-target="#modaldemo7" data-toggle="modal">Agregar Elemento a Orden</button>
+																					</td>
+																				</tr>
+																			</tbody>
+																			</table>
+																		</div>
+																	</div>-->
+																</div>
+															</div>
+															</div>
+															
+															
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="card-body">
-								 
-									
 								</div>
+								
+								
 
 								<br>
 							</div>
@@ -486,36 +740,12 @@
 										
 			
 										<div class="tab-pane active" id="settings">
-											<div class="row row-sm">
-												<div class="col-lg-12 ">
-													<p class="mg-b-10">Valores Para <%= filtro_1 %></p><select class="form-control select2" multiple="multiple" id="ha_option">
-														<option value="sinValor">
-															Sin Valor
-														</option>
-														<option value="0">
-															Sin Valor
-														</option>
-													</select>
-												</div>
-										  </div>
+											
 										  <div class="row row-sm">
 												<div class="col-lg-12 ">
 												</div>
 										  </div>
-										   <div class="row row-sm">
-													<div class="col-lg-12 ">
-														<p class="mg-b-10">Valores Para  <%= filtro_2 %></p><select class="form-control select2" multiple="multiple" id="piso_option">
-															<option value="sinValor">
-																Sin Valor
-															</option>
-															<option value="0">
-																Sin Valor
-															</option>
-															
-														</select>
-													</div>
-
-										 </div>
+										 
 										 <BR>
 										 <div class="row row-sm">
 										
@@ -534,7 +764,6 @@
 										<br>
 										<div class="row row-sm">
 											<div class="col-lg-12 ">
-												<h4 class="tx-15 text-uppercase mb-3">Administrador de Vistas</h4>
 												<p class="mg-b-10"><h5>Vistas Disponibles</h5></p>
 												<select class="form-control" onchange="set_visor()" id="vistas_previas">
 													<option value="sinValor">
@@ -546,7 +775,7 @@
 									    </div>
 										<br>
 										<div class="row row-sm">
-											
+											<h4 class="tx-15 text-uppercase mb-3">Administrador de Vistas</h4>
 											
 										<!--
 											<button data-toggle="dropdown" class="btn btn-success btn-block" onclick="set_clave(1);">Visualizar Elementos sin Fecha o Formato <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
@@ -647,7 +876,7 @@
 										<div class="tab-pane " id="home">
 											
 										</div>
-										<div class="tab-pane " id="vistas">
+										<div class="tab-pane "><h4 class="tx-15 text-uppercase mb-3">Administrador de Vistas</h4>pane " id="vistas">
 											
 											<p class="m-b-5">En esta sección ud podrá eliminar las vistas guardadas</p>
 											<p class="m-b-5" id="resultado_borrado_vista"></p>
