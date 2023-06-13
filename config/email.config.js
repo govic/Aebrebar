@@ -1,8 +1,8 @@
 const mail = {
     host: 'smtp.gmail.com',
     port: 587,
-    user: 'aecrebar@gmail.com',
-    pass: 'cpooegpeshsfnojf'
+    user: 'aecrebar2@gmail.com',
+    pass: 'oibvqlujkinaubhn'
   }
   
   module.exports = {

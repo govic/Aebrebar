@@ -65,6 +65,87 @@
 			background-repeat: no-repeat;
 			background-position: center;
 		  }</style>
+
+<style>
+	#mydiv {
+		position: absolute;
+		z-index: 9;
+		max-width: 450px;
+		max-height:750px ;
+		background-color: #ffffff;
+		border: 1px solid #d3d3d3;
+		text-align: justify;
+		bottom:100px;
+		left:255px;
+		}
+
+		#mydivheader {
+		padding: 10px;
+		cursor: move;
+		z-index: 10;
+		background-color: #f4b40c;
+		color: #fff;
+		}
+ </style>
+ <script>
+
+window.onload = function(){ 
+dragElement(document.getElementById("mydiv"));
+
+apagarDiv();
+function dragElement(elmnt) {
+	var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+	if (document.getElementById("mydivheader")) {
+		// if present, the header is where you move the DIV from:
+		document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+	} else {
+		// otherwise, move the DIV from anywhere inside the DIV:
+		elmnt.onmousedown = dragMouseDown;
+	}
+
+	function dragMouseDown(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// get the mouse cursor position at startup:
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		document.onmouseup = closeDragElement;
+		// call a function whenever the cursor moves:
+		document.onmousemove = elementDrag;
+	}
+
+	function elementDrag(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// calculate the new cursor position:
+		pos1 = pos3 - e.clientX;
+		pos2 = pos4 - e.clientY;
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		// set the element's new position:
+		elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+		elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+	}
+
+		function closeDragElement() {
+		// stop moving when mouse button is released:
+			document.onmouseup = null;
+			document.onmousemove = null;
+		}
+	}		
+};
+
+
+function apagarDiv(){
+	document.getElementById("mydiv").style.visibility = 'hidden';
+	
+}
+function prenderDiv(){
+	console.log("VISIBLE");
+	document.getElementById("mydiv").style.visibility = 'visible';
+}
+
+ </script>
 		<!-- Maps css -->
 		<link href="assets/plugins/jqvmap/jqvmap.min.css" rel="stylesheet">
 
@@ -367,7 +448,33 @@
 
 				<!-- container -->
 				<div class="container-fluid">
-
+					<div id="mydiv">
+						<!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+						<div id="mydivheader">
+							<div class="row">
+								<div class="col-3">Propiedades  </div>
+								<div class="col-3">  </div><div class="col-3">  </div>
+								<div class="col-3"><button class="btn btn-primary " style="right:0px !important;" onclick="apagarDiv();" ><i class="si si-close"></i></button></div></div>
+							</div>
+							
+						<div class="row">
+							<div class="col-12">
+								<div class="d-flex justify-content-between" style="height:900px !important;" >
+		
+									<div class="listgroup-example " style="width:900px !important;">
+										<ul class="list-group" id="propiedades_id">
+											
+										</ul>
+										
+									</div>
+								</div>
+							</div>
+					
+							<br><br><br>
+						
+						</div>
+					  </div>
+				
 			
 					<!-- /breadcrumb -->
 
@@ -411,7 +518,9 @@
 
 								<div class="row">
 									<div class="col-8">
-										<div id="forgeViewer"  style="width: 80px !important; height: 1000px;padding-right:  20px !important;"></div>
+										<div class="row">
+											<div class="col-12">
+												<div id="forgeViewer"  style="width: 80px !important; height: 1000px;padding-right:  20px !important;"></div>
 										<div class="card-header bg-transparent pd-b-0 pd-t-20 bd-b-0">
 											<div class="d-flex justify-content-between">
 												<h4 class="card-title mb-0">Visualizador</h4>
@@ -419,6 +528,14 @@
 											</div>
 											
 										</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12">
+												
+											</div>
+										</div>
+										
 
 									</div>
 									<div class="col-4" id="tabs-style4">
@@ -526,7 +643,7 @@
 																			<button class="btn btn-warning btn-block" onclick="set_clave(3);"><i class="ti-reload"></i></button>
 																		</div>
 																		<div class="col-sm-3 col-md-3 mg-t-3 ">
-																			<button class="btn btn-warning btn-block " data-target="#modaldemo3" data-toggle="modal" href=""><i class="ti-eye"></i></button>
+																			<button class="btn btn-warning btn-block "  onclick="prenderDiv();" data-toggle="modal" href=""><i class="ti-eye"></i></button>
 																		</div>
 																	
 																	
@@ -554,8 +671,8 @@
 																		 </thead>
 																		 <tbody><tr>
 																			 
-																			 <td id="largo">404 mtrs</td>
-																			 <td id="peso">160 Kgs</td>
+																			 <td id="largo"></td>
+																			 <td id="peso"></td>
 																			 
 																			 <td id="btn"><button class="btn btn-warning btn-block" data-target="#modaldemo6" data-toggle="modal" "=""><i class="si si-plus"></i></button></td>
 																		 </tr>
@@ -688,7 +805,7 @@
 
                     
 				</div>
-				
+			
               
 				<!-- /Container -->
    
@@ -792,31 +909,7 @@
 											</div>
 										</div>
 									    <h4 class="tx-15 text-uppercase mb-3">Maestro de Fierros</h4>
-											<div class="row row-sm">
-												<div class="col-lg-12 " >
-													<div class="table-responsive">
-														<table style="background-color:#FFFFE0;" class="table mg-b-0 text-md-nowrap" id="tabla_total"> 
-															<thead>
-																<tr style="background-color:#BDB76B;color:#ffffff;">
-																	
-																	<th>Largo Acumulado</th>
-																	<th>Peso Acumulado</th>
-																	
-																	<th>Acción</th>
-																</tr>
-															 </thead>
-															 <tr>
-																 
-																 <td id="largo"></td>
-																 <td id="peso"></td>
-																 
-																 <td id="btn"></td>
-															 </tr>
-														
-													</table>
-												</div>
-												</div>
-											</div>
+											
 											
 											<div class="row row-sm">
 												<div class="col-lg-12 " >
@@ -860,9 +953,9 @@
 												<br>
 												<div id="demo" class="collapse">
 													<div class="listgroup-example ">
-														<ul class="list-group" id="propiedades_id">
+														<!--<ul class="list-group" id="propiedades_id">-->
 															
-														</ul>
+														<!--</ul>-->
 													</div>
 				
 				
@@ -871,7 +964,7 @@
 											</div>
 											
 										</div>	
-										
+									
 										</div>
 										<div class="tab-pane " id="home">
 											
@@ -963,6 +1056,7 @@
 										</div>
 										<div class="tab-pane " id="pintado">
 											</div>
+											
 									</div>
 								</div>
 							</div>
@@ -975,7 +1069,7 @@
 									<div class="card">
 										<div class="card-body">
 											
-									
+											
 										  
 									  
 							       </div>		
@@ -1019,8 +1113,7 @@
 			<!--/Sidebar-right-->
 
 			<!-- Message Modal -->
-		
-		
+			
             <div class="modal" id="modaldemo4" >
 				<div class="modal-dialog modal-lg" role="document">
 					<div class="modal-content modal-content-demo">
@@ -1196,7 +1289,7 @@
 											<div class="input-group-text">
 												Fecha Pedido:
 											</div>
-										</div><input class="form-control" id="fecha_pedido_fierro" placeholder="MM/DD/YYYY" type="text" readonly>
+										</div><input class="form-control" id="fecha_pedido_fierro" placeholder="MM/DD/YYYY" type="text" >
 									</div><!-- input-group -->
 								</div><!-- col-4 -->
 							
@@ -1354,7 +1447,22 @@
 				</div>
 			</div>
 			<!-- Audio Modal -->
-		    
+		    <div class="modal" id="modaldemo20">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content tx-size-sm">
+						<div class="modal-body tx-center pd-y-20 pd-x-20">
+							<button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span
+									aria-hidden="true">&times;</span></button> <i
+								class="icon icon ion-ios-close-circle-outline tx-100 tx-danger lh-1 mg-t-20 d-inline-block"></i>
+							<h4 class="tx-danger mg-b-20">Solicitud Duplicada</h4>
+							<p class="mg-b-20 mg-x-20">Está intentando guardar un selección de elementos con un nombre que ya está en nuestros registros. Modifique y vuelva a intentarlo</p>
+							
+								<button class="btn ripple btn-secondary" data-dismiss="modal" type="button"  onclick="closeNegacionVista();">Cancelar</button>
+								
+						</div>
+					</div>
+				</div>
+			</div>
 		
          
 			<!-- Footer opened -->

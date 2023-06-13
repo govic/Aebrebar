@@ -2029,6 +2029,12 @@ function savePedido(){
 function closeNegacionOrden(){
   $('#modaldemo15').modal('toggle');
 }
+function closeNegacionVista(){
+  $('#modaldemo20').modal('toggle');
+}
+function openNegacionVista(){
+  $('#modaldemo20').modal('toggle');
+}
 function guardarPostRevision(){
   $('#modaldemo15').modal('toggle');
   var ids_pedido = $("#id_seleccionados4").val();
@@ -2854,6 +2860,34 @@ function set_clave(q){
   
  
 }
+function revisaPrevisualizaciones(buscada){
+  jQuery.get({
+    url: '/prueba',
+    contentType: 'application/json',
+    success: function (res) {
+      console.log("RESULTADO GET VISTASasssss");
+     console.log(res);
+    // console.log(typeof res);
+    // console.log(res.length);
+    // console.log(res[0]);
+   
+     for(let i =0 ; i<res.length;i++){
+      
+       if(res[i].nombre === buscada){
+         return true
+       }
+     // newCell2.appendChild(newText2);
+
+ 
+     }
+     return false;
+     
+  
+  
+    },
+  });
+
+}
 function loadPrevisualizaciones(){
   $('#vistas_previas').empty();
   $('#resultado_borrado_vista').empty();
@@ -2936,23 +2970,29 @@ function cargarVista(){
   var q =  document.getElementById("id_seleccionados").value;
   var a = document.getElementById("nombre_objeto").value;
 
-  var formData = new FormData();
-  formData.append('nombre', a);
-  formData.append('ids', q);
+  if(revisaPrevisualizaciones(a)){
+     var formData = new FormData();
+     formData.append('nombre', a);
+     formData.append('ids', q);
+  
+     console.log("DATA NOMBRE");
+     console.log(a);
+     console.log("DATA IDS");
+     console.log(q);
+  
+     jQuery.post({
+       url: '/prueba',
+       contentType: 'application/json',
+       data:  JSON.stringify({ 'nombre': a, 'ids': q }),
+       success: function (res) {
+          loadPrevisualizaciones();
+      },
+    });
+  }else{
 
-  console.log("DATA NOMBRE");
-  console.log(a);
-  console.log("DATA IDS");
-  console.log(q);
-
-  jQuery.post({
-    url: '/prueba',
-    contentType: 'application/json',
-    data:  JSON.stringify({ 'nombre': a, 'ids': q }),
-    success: function (res) {
-      loadPrevisualizaciones();
-    },
-  });
+    openNegacionVista();
+  }
+ 
 /*  $.ajax({
     url: '/prueba',
     data: JSON.stringify({ 'nombre': a, 'ids': q }),
@@ -3134,16 +3174,16 @@ function launchViewer(urn) {
     function getModifiedWorldBoundingBox (fragIds) {
 
       //fragments list array
-      var fragList = NOP_VIEWER.model.getFragmentList();
-      const fragbBox = new THREE.Box3()
-      const nodebBox = new THREE.Box3()
+     // var fragList = NOP_VIEWER.model.getFragmentList();
+     // const fragbBox = new THREE.Box3()
+     // const nodebBox = new THREE.Box3()
 
-      fragIds.forEach(function(fragId) { 
-         fragList.getWorldBounds(fragId, fragbBox) 
-         nodebBox.union(fragbBox)
-      })
+    //  fragIds.forEach(function(fragId) { 
+   //      fragList.getWorldBounds(fragId, fragbBox) 
+   //      nodebBox.union(fragbBox)
+  //    })
 
-  return nodebBox
+///  return nodebBox
 }
   
 
@@ -3154,6 +3194,10 @@ function launchViewer(urn) {
         console.log("Seleccion!222!!!!!!!!!!!!!!!!!!!!!!!");
         console.log(event);
         console.log(event.dbIdArray);
+        // Poner en Blanco tabla de pedidos
+        document.getElementById("largo").innerHTML="";
+        document.getElementById("peso").innerHTML="";
+        document.getElementById("btn").innerHTML="";
         var a= event.dbIdArray;
         console.log("ELEMENTOS SELECCIONADOS");
         let selects = event.dbIdArray;
@@ -3168,9 +3212,9 @@ function launchViewer(urn) {
           viewer.model.getFragmentList()
         );
 
-        drawBox(bBox.min, bBox.max);
-        var box = viewer.utilities.getBoundingBox();
-        console.log(box);
+     //   drawBox(bBox.min, bBox.max);
+     //   var box = viewer.utilities.getBoundingBox();
+    //    console.log(box);
        // var box = getModifiedWorldBoundingBox(selects);
        console.log("BOUNDING BOX BOX BOX");
 
@@ -4861,10 +4905,12 @@ function quitar_filtros(){
       console.log("CLEAR !!");
     
       document.getElementById('largo').innerHTML = '';
-      document.getElementById('acum').innerHTML = '' ;
+     // document.getElementById('acum').innerHTML = '' ;
       document.getElementById('peso').innerHTML = '' ;
       document.getElementById('btn').innerHTML = '' ;
-      
+      document.getElementById("largo").innerHTML="";
+      document.getElementById("peso").innerHTML="";
+      document.getElementById("btn").innerHTML="";
       var tableHeaderRowCount = 1;
       var tableRef = document.getElementById('tabla_fierro');
       var tableTotales = document.getElementById('tabla_total');
