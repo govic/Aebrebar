@@ -30,8 +30,8 @@ router.get('/auth/google',
 //video de como obtener credenciales https://www.youtube.com/watch?v=uqUVQ2tW3SY
 
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
-const GOOGLE_CLIENT_ID = "1054394232783-9j2vb2lmfhstph8old5902pgjsnmkdnu.apps.googleusercontent.com";
-const GOOGLE_CLIENT_SECRET = "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";
+const GOOGLE_CLIENT_ID = "604521871686-r8gl6jik58g1dqkihvqn6kqis28gdjs9.apps.googleusercontent.com";
+const GOOGLE_CLIENT_SECRET = "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";
 //estrategia
 //aquí inicia la estrategia, le pasamos las credenciales, una callbackURL y el alcance que habíamos definido
 //luego en una función asincrona  hago una comparación en nuestra base de datos donde están los usuarios
@@ -41,7 +41,7 @@ const GOOGLE_CLIENT_SECRET = "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";
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:31000/auth/google/callback",
+  callbackURL: "http://arbim-server-env.eba-wgmsvkmk.sa-east-1.elasticbeanstalk.com/auth/google/callback",
   passReqToCallback: true,
   scope: ['email', 'profile']
 }, async function (req, accessToken, refreshToken, profile, done) {
