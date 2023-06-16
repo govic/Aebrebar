@@ -478,12 +478,12 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
                        identificadores = Array();
                        contador_lg = 0;
                   }
-              //    pesoTotal  = parseFloat(pesoTotal).toFixed(1);
+                  pesoTotal  = parseFloat(pesoTotal,1);
                   console.log( pesoTotal);
                 
                   let largo = parseFloat(result.properties[46].displayValue);
                //   largo = largo.toFixed(1);
-                  largo = parseFloat(largo,0);
+                  largo = parseFloat(largo,1);
                   console.log( "Largo");
                   console.log( largo);
                   
@@ -497,14 +497,14 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
                   console.log( largoTotal);
                 
                   let name = result.name;
-                  peso = parseFloat(peso,0);
-                  largo = parseFloat(largo,0);
+                  peso = parseFloat(peso,2);
+                  largo = parseFloat(largo,1);
                   let resultado_mul = peso*largo;
                   //console.log( "Resultado Multiplicación");
                 // console.log( resultado_mul);
               
-                  resultado_mul =resultado_mul.toFixed(1);
-                  xTotal = xTotal + parseFloat(resultado_mul);
+                  resultado_mul =resultado_mul.toFixed(3);
+                  xTotal = xTotal + parseFloat(resultado_mul,1);
                   console.log( "Total Multiplicación");
                   console.log( xTotal);
                   let g = name.split(' ');
@@ -742,12 +742,12 @@ if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
                        identificadores = Array();
                        contador_lg = 0;
                   }
-              //    pesoTotal  = parseFloat(pesoTotal).toFixed(1);
+                  pesoTotal  = parseFloat(pesoTotal,1);
                   console.log( pesoTotal);
                 
                   let largo = parseFloat(result.properties[46].displayValue);
                  // largo = largo.toFixed(1);
-                  largo = parseFloat(largo,0);
+                  largo = parseFloat(largo,1);
                   console.log( "Largo");
                   console.log( largo);
                   
@@ -761,14 +761,14 @@ if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
                   console.log( largoTotal);
                 
                   let name = result.name;
-                  peso = parseFloat(peso,0);
-                  largo = parseFloat(largo,0);
+                  peso = parseFloat(peso,2);
+                  largo = parseFloat(largo,1);
                   let resultado_mul = peso*largo;
                   //console.log( "Resultado Multiplicación");
                 // console.log( resultado_mul);
               
-                  resultado_mul =resultado_mul.toFixed(1);
-                  xTotal = xTotal + parseFloat(resultado_mul);
+                  resultado_mul =resultado_mul.toFixed(3);
+                  xTotal = xTotal + parseFloat(resultado_mul,1);
                   console.log( "Total Multiplicación");
                   console.log( xTotal);
                   let g = name.split(' ');
@@ -949,7 +949,7 @@ function filtro_visual(){
                       //pesoTotal = pesoTotal+peso;
                   
                   
-                      // pesoTotal  = parseFloat(pesoTotal).toFixed(1);
+                       pesoTotal  = parseFloat(pesoTotal,1);
                       
                        console.log( "SUMATORIA PESO");
                        console.log( pesoTotal);
@@ -962,7 +962,7 @@ function filtro_visual(){
                       let largo = parseFloat(result.properties[t].displayValue);
                       console.log(largo );
                    //   largo = largo.toFixed(1);
-                      largo = parseFloat(largo,0);
+                      largo = parseFloat(largo,1);
                       largo = largo /100;
                       largoActual = largo;
                       console.log("convertido "+largo);
@@ -996,8 +996,8 @@ function filtro_visual(){
                         //console.log( "Resultado Multiplicación");
                       // console.log( resultado_mul);
                     
-                        resultado_mul =resultado_mul.toFixed(1);
-                        xTotal = xTotal + parseFloat(resultado_mul);
+                        resultado_mul =resultado_mul.toFixed(3);
+                        xTotal = xTotal + parseFloat(resultado_mul,1);
                         console.log( "Total Multiplicación");
                         console.log( xTotal);
                      //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
@@ -1269,11 +1269,12 @@ function filtro_visual(){
                       //pesoTotal = pesoTotal+peso;
                   
                   
-                      // pesoTotal  = parseFloat(pesoTotal).toFixed(1);
-                      
+                       pesoTotal  = parseFloat(pesoTotal,1);
+                       pesoTotal = pesoTotal.toFixed(1);
+                       pesoTotal = pesoTotal*1.0;
                        console.log( "SUMATORIA PESO");
                        console.log( pesoTotal);
-                       document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1);
+                       document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(0);
                        
                     }
                     if(val_actual == "Total Bar Length"){
@@ -1282,7 +1283,7 @@ function filtro_visual(){
                       let largo = parseFloat(result.properties[t].displayValue);
                       console.log(largo );
                   //    largo = largo.toFixed(1);
-                      largo = parseFloat(largo,0);
+                      largo = parseFloat(largo,1);
                       largo = largo /100;
                       largoActual = largo;
                       console.log("convertido "+largo);
@@ -1314,9 +1315,9 @@ function filtro_visual(){
                      
                         pesoTotal = pesoTotal+resultado_mul;
                         $("#largo_total_pedido").val(largoTotal.toFixed(0));
-                        $("#peso_total_pedido").val(pesoTotal.toFixed(0));
+                        $("#peso_total_pedido").val(pesoTotal.toFixed(1));
                         $("#resultado_total_pedido").val(pesoTotal);
-                        document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(0)+ ' Kgs';
+                        document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
   
 
 
@@ -1326,12 +1327,12 @@ function filtro_visual(){
                         //console.log( "Resultado Multiplicación");
                       // console.log( resultado_mul);
                     
-                        resultado_mul =resultado_mul.toFixed(0);
-                        xTotal = xTotal + parseFloat(resultado_mul);
+                       resultado_mul =resultado_mul.toFixed(3);
+                        xTotal = xTotal + parseFloat(resultado_mul,1);
                         console.log( "Total Multiplicación");
                         console.log( xTotal);
                      //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
-                     document.getElementById('peso').innerHTML = ''+ xTotal+ ' Kgs';
+                     document.getElementById('peso').innerHTML = ''+ xTotal.toFixed(1)+ ' Kgs';
   
                         document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
                        // let g = name.split(' ');
@@ -1581,7 +1582,7 @@ function filtro_visual(){
                    
                 
                 
-                    // pesoTotal  = parseFloat(pesoTotal).toFixed(1);
+                    pesoTotal  = parseFloat(pesoTotal,1);
                     
                      console.log( "SUMATORIA PESO");
                      console.log( pesoTotal);
@@ -1593,7 +1594,7 @@ function filtro_visual(){
                     let largo = parseFloat(result.properties[t].displayValue);
                     console.log(largo );
                   //  largo = largo.toFixed(1);
-                    largo = parseFloat(largo,0);
+                    largo = parseFloat(largo,1);
                     
                     largo = largo /100;
                     largoActual = largo;
@@ -1624,15 +1625,15 @@ function filtro_visual(){
                       $("#largo_total_pedido").val(largoTotal.toFixed(0));
                       $("#peso_total_pedido").val(pesoTotal.toFixed(0));
                       $("#resultado_total_pedido").val(pesoTotal);
-                      document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(0)+ ' Kgs';
+                      document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
 
                       $("#listado_largo").val(listado_largos);
                       $("#listado_pesos").val(listado_pesos);
                       //console.log( "Resultado Multiplicación");
                     // console.log( resultado_mul);
                   
-                      resultado_mul =resultado_mul.toFixed(1);
-                      xTotal = xTotal + parseFloat(resultado_mul);
+                      resultado_mul =resultado_mul.toFixed(3);
+                      xTotal = xTotal + parseFloat(resultado_mul,1);
                       console.log( "Total Multiplicación");
                       console.log( xTotal);
                    //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
@@ -4523,7 +4524,7 @@ function launchViewer(urn) {
                              
                           
                           
-                              // pesoTotal  = parseFloat(pesoTotal).toFixed(1);
+                               pesoTotal  = parseFloat(pesoTotal,1);
                               
                                console.log( "SUMATORIA PESO");
                                console.log( pesoTotal);
@@ -4535,7 +4536,7 @@ function launchViewer(urn) {
                               let largo = parseFloat(result2.properties[t].displayValue);
                               console.log(largo );
                             //  largo = largo.toFixed(1);
-                              largo = parseFloat(largo,0);
+                              largo = parseFloat(largo,1);
                               
                               largo = largo /100;
                               largoActual = largo;
@@ -4573,8 +4574,8 @@ function launchViewer(urn) {
                                 //console.log( "Resultado Multiplicación");
                               // console.log( resultado_mul);
                             
-                                resultado_mul =resultado_mul.toFixed(1);
-                                xTotal = xTotal + parseFloat(resultado_mul);
+                                resultado_mul =resultado_mul.toFixed(3);
+                                xTotal = xTotal + parseFloat(resultado_mul,1);
                                 console.log( "Total Multiplicación");
                                 console.log( xTotal);
                              //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
@@ -5670,13 +5671,13 @@ function filtro_gantt_inicio( arreglo_filros){
                 $("#id_seleccionados3").val(actual);
                 $("#id_seleccionados4").val(actual);
                 pesoTotal = pesoTotal+peso;
-            //    pesoTotal  = parseFloat(pesoTotal).toFixed(1);
+               pesoTotal  = parseFloat(pesoTotal,1);
                 console.log( "SUMATORIA PESO");
                 console.log( pesoTotal);
-                document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(0);
+                document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1);
                 let largo = parseFloat(result.properties[46].displayValue);
                // largo = largo.toFixed(1);
-                largo = parseFloat(largo,0);
+                largo = parseFloat(largo,1);
                 console.log( "Largo");
                 console.log( largo);
                 console.log( typeof largo);
@@ -5688,13 +5689,13 @@ function filtro_gantt_inicio( arreglo_filros){
                 document.getElementById('largo').innerHTML = '' +largoTotal;
                 let name = result.name;
                 peso = parseFloat(peso,0);
-                largo = parseFloat(largo,0);
+                largo = parseFloat(largo,1);
                 let resultado_mul = peso*largo;
                 //console.log( "Resultado Multiplicación");
                // console.log( resultado_mul);
              
-                resultado_mul =resultado_mul.toFixed(1);
-                xTotal = xTotal + parseFloat(resultado_mul);
+                resultado_mul =resultado_mul.toFixed(3);
+                xTotal = xTotal + parseFloat(resultado_mul,1);
                console.log( "Total Multiplicación");
                console.log( xTotal);
                // document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
@@ -6563,7 +6564,7 @@ function onDocumentLoadSuccess(doc) {
                    
                 
                 
-                    // pesoTotal  = parseFloat(pesoTotal).toFixed(1);
+                     pesoTotal  = parseFloat(pesoTotal,1);
                     
                      console.log( "SUMATORIA PESO");
                      console.log( pesoTotal);
@@ -6575,7 +6576,7 @@ function onDocumentLoadSuccess(doc) {
                     let largo = parseFloat(result.properties[t].displayValue);
                     console.log(largo );
                  //   largo = largo.toFixed(1);
-                    largo = parseFloat(largo,0);
+                    largo = parseFloat(largo,1);
                     
                     largo = largo /100;
                     largoActual = largo;
@@ -6613,8 +6614,8 @@ function onDocumentLoadSuccess(doc) {
                       //console.log( "Resultado Multiplicación");
                     // console.log( resultado_mul);
                   
-                      resultado_mul =resultado_mul.toFixed(1);
-                      xTotal = xTotal + parseFloat(resultado_mul);
+                      resultado_mul =resultado_mul.toFixed(3);
+                      xTotal = xTotal + parseFloat(resultado_mul,1);
                       console.log( "Total Multiplicación");
                       console.log( xTotal);
                    //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
