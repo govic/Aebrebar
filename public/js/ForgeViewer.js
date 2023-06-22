@@ -1230,14 +1230,21 @@ function filtro_visual(){
       rowCountTotales = tableTotales.rows.length;
       var tableHeaderRowCount = 1;
      
-      
+      console.log("ids revisión");
       
       for (var i = tableHeaderRowCount; i < rowCount; i++) {
         tableRef.deleteRow(tableHeaderRowCount);
       }
+     
+
+      let result10 = identificadores.filter((item,index)=>{
+        return identificadores.indexOf(item) === index;
+      });
+      identificadores = result10;
       for(var a=0; a< identificadores.length;a++){
         let actual =  identificadores[a];
-        
+        console.log("IDS PREVIO A CONSULTA!!!!!!!!");
+        console.log(actual);
         viewer.getProperties( identificadores[a], (result) => { 
          
           for(i=0 ;i< result.properties.length;i++){
@@ -1462,16 +1469,7 @@ function filtro_visual(){
     
       }
        
-   /*   gantt.config.columns = [
-        {name: "text", tree: true, width: 180, resize: true},
-        {name: "start_date", align: "center", resize: true},
-        {name: "duration", align: "center"},
-        {name: "buttons", label: "Actions", width: 120, template: function(task){
-          var buttons = 
-          '<input type=button value="Filtrar" onclick=seleccion_modelo('+task.id+')>';
-          return buttons; 
-        }}
-      ];*/
+
     });
   }
 
