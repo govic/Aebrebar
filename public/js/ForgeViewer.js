@@ -2873,26 +2873,51 @@ function set_clave(q){
  
 }
 function revisaPrevisualizaciones(buscada){
+  resultado = false;
+  var q =  document.getElementById("id_seleccionados").value;
+  var a = document.getElementById("nombre_objeto").value;
   jQuery.get({
     url: '/prueba',
     contentType: 'application/json',
     success: function (res) {
       console.log("RESULTADO GET VISTASasssss");
-     console.log(res);
+      console.log(res);
+      
     // console.log(typeof res);
     // console.log(res.length);
     // console.log(res[0]);
    
      for(let i =0 ; i<res.length;i++){
-      
-       if(res[i].nombre === buscada){
-         return true
+      console.log(res[i].nombre);
+      console.log(buscada);
+      console.log("///");
+       if(res[i].nombre == buscada){
+        openNegacionVista();
+       
        }
      // newCell2.appendChild(newText2);
-
+       if((i+1)==res.length && (res[i].nombre != buscada) ){
+        var formData = new FormData();
+        formData.append('nombre', a);
+        formData.append('ids', q);
+      
+        console.log("DATA NOMBRE");
+        console.log(a);
+        console.log("DATA IDS");
+        console.log(q);
+       
+        jQuery.post({
+          url: '/prueba',
+          contentType: 'application/json',
+          data:  JSON.stringify({ 'nombre': a, 'ids': q }),
+          success: function (res) {
+              loadPrevisualizaciones();
+          },
+        });
+       }
  
      }
-     return false;
+    
      
   
   
@@ -2979,31 +3004,15 @@ function openViewer(urn){
 }
 function cargarVista(){
   
+
+  
   var q =  document.getElementById("id_seleccionados").value;
   var a = document.getElementById("nombre_objeto").value;
-
-  if(revisaPrevisualizaciones(a)){
-     var formData = new FormData();
-     formData.append('nombre', a);
-     formData.append('ids', q);
   
-     console.log("DATA NOMBRE");
-     console.log(a);
-     console.log("DATA IDS");
-     console.log(q);
-  
-     jQuery.post({
-       url: '/prueba',
-       contentType: 'application/json',
-       data:  JSON.stringify({ 'nombre': a, 'ids': q }),
-       success: function (res) {
-          loadPrevisualizaciones();
-      },
-    });
-  }else{
-
-    openNegacionVista();
-  }
+  setTimeout(() => {
+    revisaPrevisualizaciones(a)
+  }, 1000);
+ 
  
 /*  $.ajax({
     url: '/prueba',
@@ -3865,7 +3874,7 @@ function launchViewer(urn) {
                 }
         
                   
-                  document.getElementById("propiedades_id").innerHTML += " AEC Secuencia Hormigonado <li><b>"+" :</b>"+fecha_hormigonado+" Estado: "+boton_fecha+"</li>";
+               //   document.getElementById("propiedades_id").innerHTML += " AEC Secuencia Hormigonado <li><b>"+" :</b>"+fecha_hormigonado+" Estado: "+boton_fecha+"</li>";
                 $("#dateMask1").val(fecha_hormigonado);
                 $("#plan1").val(fecha_hormigonado);
                 $("#dateMask2").val(fecha_hormigonado);
