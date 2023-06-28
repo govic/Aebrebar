@@ -1243,7 +1243,7 @@ function filtro_visual(){
       identificadores = result10;
       for(var a=0; a< identificadores.length;a++){
         let actual =  identificadores[a];
-        console.log("IDS PREVIO A CONSULTA!!!!!!!!");
+        console.log("IDS PREVIO A CONSULTA!!!!!!!!888");
         console.log(actual);
         viewer.getProperties( identificadores[a], (result) => { 
          
@@ -1261,9 +1261,9 @@ function filtro_visual(){
                     if( val_actual == "RS Peso Lineal (kg/m)"){
                    
                       console.log("ENTRO A PESO LINEAL");
-                      let peso = parseFloat(result.properties[t].displayValue,2);
-                      peso = peso.toFixed(2);
-                      peso = Number.parseFloat(peso,2);
+                      let peso = parseFloat(result.properties[t].displayValue);
+                    //  peso = peso.toFixed(2);
+                  //    peso = Number.parseFloat(peso,2);
                       console.log("ANTES PESO BUSCADO");
                       console.log(peso);
                       //console.log(result.properties[t].displayValue);
@@ -1276,12 +1276,12 @@ function filtro_visual(){
                       //pesoTotal = pesoTotal+peso;
                   
                   
-                       pesoTotal  = parseFloat(pesoTotal,1);
-                       pesoTotal = pesoTotal.toFixed(1);
-                       pesoTotal = pesoTotal*1.0;
+                      //pesoTotal  = parseFloat(pesoTotal,5);
+                     //  pesoTotal = pesoTotal.toFixed(5);
+                      //pesoTotal = pesoTotal*1.0;
                        console.log( "SUMATORIA PESO");
                        console.log( pesoTotal);
-                       document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(0);
+                      // document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1);
                        
                     }
                     if(val_actual == "Total Bar Length"){
@@ -1290,7 +1290,7 @@ function filtro_visual(){
                       let largo = parseFloat(result.properties[t].displayValue);
                       console.log(largo );
                   //    largo = largo.toFixed(1);
-                      largo = parseFloat(largo,1);
+                    //  largo = parseFloat(largo,1);
                       largo = largo /100;
                       largoActual = largo;
                       console.log("convertido "+largo);
@@ -1312,19 +1312,19 @@ function filtro_visual(){
                     }
                     if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
                       console.log("PESO ACTUAL ANTES DE MULTIPLICACION");
-                      pesoActual = pesoActual*1.0;
+                     // pesoActual = pesoActual*1.0;
                        console.log(pesoActual);
-                       pesoActual = parseFloat(pesoActual,2); 
+                       //pesoActual = parseFloat(pesoActual,2); 
                        console.log(pesoActual);
                        console.log(typeof(pesoActual));
                        let resultado_mul = pesoActual*largoActual;
                         console.log("opc 1"+resultado_mul);
                      
                         pesoTotal = pesoTotal+resultado_mul;
-                        $("#largo_total_pedido").val(largoTotal.toFixed(0));
+                        $("#largo_total_pedido").val(largoTotal.toFixed(1));
                         $("#peso_total_pedido").val(pesoTotal.toFixed(1));
                         $("#resultado_total_pedido").val(pesoTotal);
-                        document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
+                        document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(2)+ ' Kgs';
   
 
 
@@ -1334,12 +1334,13 @@ function filtro_visual(){
                         //console.log( "Resultado Multiplicación");
                       // console.log( resultado_mul);
                     
-                       resultado_mul =resultado_mul.toFixed(3);
-                        xTotal = xTotal + parseFloat(resultado_mul,1);
+                     // resultado_mul =resultado_mul.toFixed(3);
+                        xTotal = xTotal + resultado_mul;
                         console.log( "Total Multiplicación");
                         console.log( xTotal);
+                        let totalActual = pesoTotal;
                      //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
-                     document.getElementById('peso').innerHTML = ''+ xTotal.toFixed(1)+ ' Kgs';
+                        document.getElementById('peso').innerHTML = ''+  totalActual.toFixed(2)+ ' Kgs';
   
                         document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
                        // let g = name.split(' ');
