@@ -29,6 +29,8 @@ var ids_db_insert =[];
 var listado_pesos = "";
 var listado_largos = "";
 var red = new THREE.Vector4(1, 0, 0, 0.5);
+
+
 function savePlan(){
   let valores = document.getElementById("id_seleccionados2").value;
   console.log('IDS SELECCIONADOS PLAN SAVE()');
@@ -791,6 +793,9 @@ if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
 }
 
 }
+
+
+
 function filtro_visual(){
   estado_filtro = 1;
   let mensaje_1;
@@ -935,8 +940,8 @@ function filtro_visual(){
                    
                       console.log("ENTRO A PESO LINEAL");
                       let peso = parseFloat(result.properties[t].displayValue);
-                      peso = peso.toFixed(2);
-                      peso = Number.parseFloat(peso,2);
+                    //  peso = peso.toFixed(2);
+                 //     peso = Number.parseFloat(peso,2);
                       console.log("ANTES PESO BUSCADO");
                       console.log(peso);
                       console.log(result.properties[t].displayValue);
@@ -962,7 +967,7 @@ function filtro_visual(){
                       let largo = parseFloat(result.properties[t].displayValue);
                       console.log(largo );
                    //   largo = largo.toFixed(1);
-                      largo = parseFloat(largo,1);
+                     // largo = parseFloat(largo,1);
                       largo = largo /100;
                       largoActual = largo;
                       console.log("convertido "+largo);
@@ -997,7 +1002,7 @@ function filtro_visual(){
                       // console.log( resultado_mul);
                     
                         resultado_mul =resultado_mul.toFixed(3);
-                        xTotal = xTotal + parseFloat(resultado_mul,1);
+                        xTotal = xTotal + parseFloat(resultado_mul,2);
                         console.log( "Total Multiplicación");
                         console.log( xTotal);
                      //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
@@ -1008,7 +1013,7 @@ function filtro_visual(){
                       
                     }
                   }
-                  
+           
                  
                   
                   let actuales = $("#id_seleccionados3").val();
@@ -1325,10 +1330,6 @@ function filtro_visual(){
                         $("#peso_total_pedido").val(pesoTotal.toFixed(1));
                         $("#resultado_total_pedido").val(pesoTotal);
                         document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(2)+ ' Kgs';
-  
-
-
-                        
                         $("#listado_largo").val(listado_largos);
                         $("#listado_pesos").val(listado_pesos);
                         //console.log( "Resultado Multiplicación");
@@ -3156,7 +3157,7 @@ function launchViewer(urn) {
   };
   
   Autodesk.Viewing.Initializer(options, () => {
-    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser', 'HandleSelectionExtension'] });
+    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser', 'HandleSelectionExtension','DrawToolExtension'] });
     viewer.start();
     var documentId = 'urn:' + urn;
     
@@ -3189,7 +3190,27 @@ function launchViewer(urn) {
            getFiltros();
           // Pintar_Categorias();
     });
-
+    viewer.addEventListener(Autodesk.Viewing.HIDE_EVENT, (nodes, model)=> {   
+     console.log("nodos no visibles");
+     console.log(nodes);
+      // nodes returns an object like that :
+      // {type: "hide", nodeIdArray: [<dbid>], model: Model, target: GuiViewer3D}
+ 
+ })
+ viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, geometobjectTreeCreated);         
+ function geometobjectTreeCreated(evt){
+             //load the extension MySelectionWindow and call initialization 
+             viewer.loadExtension('MySelectionWindow').then(function(ext){ 
+                 ext.init();  
+             }); 
+  }
+ viewer.addEventListener(Autodesk.Viewing.SHOW_EVENT, (nodes, model)=> {   
+  console.log("nodos  visibles");
+  console.log(nodes);
+      // nodes returns an object like that :
+      // {type: "show", nodeIdArray:[<dbid>], model: Model, target: GuiViewer3D}
+ 
+ })
     //////////////////////////////////////////////////////
     ///  SELECCION DE ELEMENTOS
     //////////////////////////////////////////////////
