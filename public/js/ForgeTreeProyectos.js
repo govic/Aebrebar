@@ -54,6 +54,9 @@ $(document).ready(function () {
           $("#notificaciones").html("Archivo " + "subido exitosamente");
           _this.value = '';
 
+        },error:function(res){
+            console.log("ERROR AL SUBIR");
+            console.log(res);
         }
 
       });
@@ -407,7 +410,10 @@ function translateObject(node) {
     data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectKey }),
     success: function (res) {
       $("#forgeViewer").html('Traducción Iniciada, espere unos instantes..');
-    },
+    },error:function(res){
+        console.log("ERROR AL INTENTAR TRADUCIR");
+        console.log(res);
+    }
   });
 }
 
