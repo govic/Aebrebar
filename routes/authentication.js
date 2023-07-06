@@ -348,17 +348,19 @@ router.get('/deleteVista/:idVS', isLoggedIn, async (req, res) => {
   var nom = req.session.passport.user.fullname;
   if (req.session.passport.user.tipoUsuario == "Administrador") {
     const { idVS } = req.params;
-    await pool.query('DELETE FROM vistas_save WHERE idVS = ?', [idVS]);
+    console.log("ID DELTE");
+    console.log(idVS);
+    await pool.query('DELETE FROM vistas_save WHERE ids = ?', [idVS]);
     res.redirect('/index');
   }
   if (req.session.passport.user.tipoUsuario == "Editor") {
     const { idVS } = req.params;
-    await pool.query('DELETE FROM vistas_save WHERE idVS = ?', [idVS]);
+    await pool.query('DELETE FROM vistas_save WHERE ids = ?', [idVS]);
     res.redirect('/indexV3');
   }
   //rev 
   if (req.session.passport.user.tipoUsuario == "Visualizador") {
-    res.redirect('index');
+   res.redirect('index');
   }
 });
 

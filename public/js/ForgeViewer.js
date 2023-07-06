@@ -2436,23 +2436,34 @@ function set_visor(){
    // // // // // // // // // // // alert(d);
 }
 function eliminar_vista(){
-  let selector = document.getElementById("tabla_vistas").value;
+  var e = document.getElementById("vistas_previas");
+  var value = e.value;
+
+  console.log(value);
+
+  let selector =value;
+  console.log(selector);
+  $('#vistas_previas').empty();
+  //let selector = document.getElementById("tabla_vistas").value;
   jQuery.get({
     url: '/deleteVista/'+selector,
     contentType: 'application/json',
     success: function (res) {
       console.log("RESULTADO GET VISTASasssss");
-     console.log(res);
+    //console.log(res);
     // console.log(typeof res);
     // console.log(res.length);
     // console.log(res[0]);
-    $('#vistas_previas').empty();
+    
     $('#tabla_vistas').empty();
     loadPrevisualizaciones();
-    //$('#resultado_borrado_vista').append( "<b>Borrado Exitoso</b>" );
+   // $('#resultado_borrado_vista').append( "<b>Borrado Exitoso</b>" );
     
   
-    },
+    },error:function(res){
+       console.log(res);
+
+    }
   });
 }
 function set_clave(q){
@@ -2952,12 +2963,12 @@ function loadPrevisualizaciones(){
     // console.log(res.length);
     // console.log(res[0]);
     $('#vistas_previas').empty();
-    $('#tabla_vistas').empty();
+   // $('#tabla_vistas').empty();
      for(let i =0 ; i<res.length;i++){
       
       $('#vistas_previas').append($('<option>', {value:res[i].ids, text:res[i].nombre}));
      
-     $('#tabla_vistas').append($('<option>', {value:res[i].idVS, text:res[i].nombre}));
+   //  $('#tabla_vistas').append($('<option>', {value:res[i].idVS, text:res[i].nombre}));
      
      // newCell2.appendChild(newText2);
 
