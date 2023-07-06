@@ -30,7 +30,19 @@ var listado_pesos = "";
 var listado_largos = "";
 var red = new THREE.Vector4(1, 0, 0, 0.5);
 
+async function enableGeomtricBoxSelection() {
+  // unload the extension, which was loaded with geometric selection turned off
+  viewer.unloadExtension('Autodesk.BoxSelection');
+  // reload the extension with geometric selection turned on
+  ext = await viewer.loadExtension('Autodesk.BoxSelection', {
+      useGeometricIntersection: true
+  });
+  // Display the toolbar button (optional) in the toolbar. You can invoke box 
+  // selection by holding cmd(mac) / ctrl(windows) + mouse drag
+  ext.addToolbarButton(true);
+}
 
+enableGeomtricBoxSelection();
 function savePlan(){
   let valores = document.getElementById("id_seleccionados2").value;
   console.log('IDS SELECCIONADOS PLAN SAVE()');
@@ -3157,7 +3169,7 @@ function launchViewer(urn) {
   };
   
   Autodesk.Viewing.Initializer(options, () => {
-    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser', 'HandleSelectionExtension','DrawToolExtension'] });
+    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser', 'HandleSelectionExtension'] });
     viewer.start();
     var documentId = 'urn:' + urn;
     
@@ -3234,6 +3246,23 @@ function launchViewer(urn) {
   /////////////////////////////////////////////////////
 // Detección de selección de elementos
       viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT,(event)=>{
+      
+        const tree = viewer.model.getInstanceTree();
+        if (tree) { // Could be null if the tree hasn't been loaded yet
+          const selectedIds = viewer.getSelection();
+          for (const dbId of selectedIds) {
+            const fragIds = [];
+            tree.enumNodeFragments(
+              dbId,
+              function (fragId) { fragIds.push(fragId); },
+              false
+            );
+            console.log("Seleccion TEST");
+            console.log('dbId:', dbId, 'fragIds:', fragIds);
+          }
+        }
+      
+      
         console.log("Seleccion!222!!!!!!!!!!!!!!!!!!!!!!!");
         console.log(event);
         console.log(event.dbIdArray);

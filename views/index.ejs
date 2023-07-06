@@ -614,7 +614,7 @@ function prenderDiv(){
 																	</div>
 																</div><p></p>
 																<div class="row row-xs ">
-		
+
 																	<h6>&nbsp;&nbsp;Administración de Vistas</h6><br>
 																
 																	<div class="col-sm-12 col-md-12 mg-t-12 mg-md-t-0">
@@ -628,6 +628,7 @@ function prenderDiv(){
 																				</option>
 																				
 																			</select>
+																			<button data-toggle="dropdown" class="btn btn-success btn-block" onclick="eliminar_vista();">Eliminar <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
 																		</div>
 																	
 																	<p></p>
@@ -654,7 +655,14 @@ function prenderDiv(){
 																	<div class="col-sm-12 col-md-12 mg-t-12 mg-md-t-0">
 																		
 																	</div>
-																	 
+																	
+																</div>
+																<div class="row row-xs ">
+																	<div class="col-sm-12 col-md-12 mg-t-12 mg-md-t-0">
+																		
+																		
+															 
+																	</div>
 																</div>
 															</div>
 															<div class="tab-pane" id="tab2">
@@ -879,6 +887,7 @@ function prenderDiv(){
 											
 										</div>	
 										<br>
+										
 										<div class="row row-sm">
 											<div class="col-lg-12 ">
 												<p class="mg-b-10"><h5>Vistas Disponibles</h5></p>
@@ -891,6 +900,7 @@ function prenderDiv(){
 											</div>
 									    </div>
 										<br>
+										asdasdasd
 										<div class="row row-sm">
 											<h4 class="tx-15 text-uppercase mb-3">Administrador de Vistas</h4>
 											
@@ -969,7 +979,7 @@ function prenderDiv(){
 										<div class="tab-pane " id="home">
 											
 										</div>
-										<div class="tab-pane "><h4 class="tx-15 text-uppercase mb-3">Administrador de Vistas</h4>pane " id="vistas">
+										<div class="tab-pane " id="vistas"><h4 class="tx-15 text-uppercase mb-3">Administrador de Vistas</h4>
 											
 											<p class="m-b-5">En esta sección ud podrá eliminar las vistas guardadas</p>
 											<p class="m-b-5" id="resultado_borrado_vista"></p>
@@ -1551,8 +1561,12 @@ function prenderDiv(){
 		<script src='js/gistfile1.js'></script>
 
  <!--selection window extension-->
-       <script src='js/SelectExtensión.js'></script>
+      <!-- <script src='js/SelectExtensión.js'></script>-->
+<!-- copy from  https://gist.github.com/yomotsu/d845f21e2e1eb49f647f -->
+<script src='AABBCollision.js'></script>
 
+<!--selection window extension-->
+<script src='MySelectionWindow.js'></script>
 
 	<!--Internal  Datepicker js -->
 	<script src="assets/plugins/jquery-ui/ui/widgets/datepicker.js"></script>

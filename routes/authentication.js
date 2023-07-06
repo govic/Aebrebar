@@ -41,7 +41,7 @@ const GOOGLE_CLIENT_SECRET = "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";
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://arbim-server-env.eba-wgmsvkmk.sa-east-1.elasticbeanstalk.com/auth/google/callback",
+  callbackURL: "http://arbim.sa-east-1.elasticbeanstalk.com/auth/google/callback",
   passReqToCallback: true,
   scope: ['email', 'profile']
 }, async function (req, accessToken, refreshToken, profile, done) {
