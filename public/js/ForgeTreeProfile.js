@@ -5,7 +5,7 @@ var MyVars = {
 var urn_usada = "";
 $(document).ready(function () {
   setTimeout(function () {
-    prepareAppBucketTree();
+    //prepareAppBucketTree();
 
   }, 3000);
 
@@ -111,7 +111,7 @@ function callProyectos2() {
 function cargarProyecto() {
 
   var q = document.getElementById("proyectos_disponibles").value;
-   alert(q);
+  // alert(q);
 
   console.log("DATA NOMBRE");
   console.log(q);
@@ -129,7 +129,24 @@ function cargarProyecto() {
   });
 
 }
-
+function gotoProyecto(urn){
+   
+ 
+   console.log("DATA NOMBRE");
+   console.log(urn);
+   console.log("DATA IDS");
+  // console.log(q);
+ 
+   jQuery.post({
+     url: '/vista',
+     contentType: 'application/json',
+     data: JSON.stringify({ 'nombre': urn }),
+     success: function (res) {
+        location.href = "/index"
+       
+     },
+   });
+}
 function callProyectosSeleccion() {
 
   console.log("Llamo a proyectos");
@@ -148,11 +165,11 @@ function callProyectosSeleccion() {
           let dropdown = "";
           for (i = 0; i < res.length; i++) {
 
-            dropdown = dropdown + "<option class='slide-item' href='#' value='" + res[i].urn + "'>" + res[i].objectKey + "</option>";
+           // dropdown = dropdown + "<option class='slide-item' href='#' value='" + res[i].urn + "'>" + res[i].objectKey + "</option>";
             // dropdown = dropdown+ "<a href='#' class='dropdown-item' onclick='openViewer("+"\""+res[i].urn+"\""+")'>"+res[i].objectKey+"</a>"
-
+            dropdown =    dropdown+ "<div class='media'><div class='media-icon bg-primary-transparent text-primary'> <i class='icon ion-md-link'></i> </div><div class='media-body'><span><h3><b>"+ res[i].objectKey +"</b></h3></span> "+"<button data-toggle='dropdown' class='btn btn-warning btn-block' onclick='gotoProyecto(\""+res[i].urn+"\");'>Ir al Proyecto <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>"+"</div></div>";
           }
-          document.getElementById("proyectos_disponibles").innerHTML = dropdown;
+          document.getElementById("listaProyectos").innerHTML = dropdown;
         }
 
       },

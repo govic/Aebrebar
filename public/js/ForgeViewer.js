@@ -3365,9 +3365,7 @@ function launchViewer(urn) {
                   document.getElementById("edicion_data").innerHTML = "";
                   document.getElementById("edicion_data2").innerHTML = "";
                   //<a class='btn ripple btn-info' data-target='#modaldemo3' data-toggle='modal' href=''>Editar Datos</a>
-                  document.getElementById("edicion_data").innerHTML = "<a class='btn ripple btn-info' data-target='#modaldemo3' data-toggle='modal' href=''>Fecha Instalación</a>";
-                  document.getElementById("edicion_data2").innerHTML = "<a class='btn ripple btn-info' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a>";
-                  
+                 
                   let fecha_hormigonado = "";
                   if(result.name){
                     var categoria_actual = result.name.split("[");
@@ -3861,16 +3859,24 @@ function launchViewer(urn) {
                         }
                       // // // // // // // // // // // alert(elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]);
                         //// // // // // // // // // // alert(today);
-                        if(elementos_fecha[1].length ==0){
-                          var d2 = '0'+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
-                          var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                       
-                        }else{
-                          var d2 = elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
-                          var d3   = elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                       
+                        if(elementos_fecha[1]){
+                          if(elementos_fecha[1].length ==0){
+                            var d2 = '0'+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                            var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                         
+                          }else{
+                            var d2 = elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                            var d3   = elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                         
+                          }
+                           
                         }
-                         let compara = dates.compare(today,d2);
+                        if(today&&d2){
+                          let compara = dates.compare(today,d2);
+                        }else{
+                          compara = 1;
+                        }
+                       
                         if(compara == 1){
                           boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
           
@@ -3941,6 +3947,8 @@ function launchViewer(urn) {
                 $("#plan1").val(fecha_hormigonado);
                 $("#dateMask2").val(fecha_hormigonado);
                 $("#plan2").val(fecha_hormigonado);
+                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo3' data-toggle='modal' href=''>Fecha Instalación</a></li>";
+                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a></li>";
                   
               //    console.log("VALORES");
               //   console.log(result);
@@ -3957,8 +3965,8 @@ function launchViewer(urn) {
                   document.getElementById("propiedades_id").innerHTML = "";
                     console.log(result); 
                     //<a class='btn ripple btn-info' data-target='#modaldemo3' data-toggle='modal' href=''>Editar Datos</a>
-                    document.getElementById("edicion_data").innerHTML = "<a class='btn ripple btn-info' data-target='#modaldemo3' data-toggle='modal' href=''>Editar Fecha Instalación</a>";
-                    document.getElementById("edicion_data2").innerHTML = "<br><a class='btn ripple btn-info' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a>";
+                    document.getElementById("edicion_data").innerHTML = "<a class='btn ripple btn-warning block' data-target='#modaldemo3' data-toggle='modal' href=''>Editar Fecha Instalación</a>";
+                    document.getElementById("edicion_data2").innerHTML = "<br><a class='btn ripple btn-warning block' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a>";
                     
                     let fecha_hormigonado = "";
                     if(result.name){
@@ -4521,7 +4529,9 @@ function launchViewer(urn) {
           
                     
                     document.getElementById("propiedades_id").innerHTML += " AEC Secuencia Hormigonado <li><b>"+" :</b>"+base+" Estado: "+boton_fecha+"</li>";
-                 
+                    document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning' data-target='#modaldemo3' data-toggle='modal' href=''>Fecha Instalación</a></li>";
+                    document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a></li>";
+                    
                     
                 //    console.log("VALORES");
                 //   console.log(result);
@@ -4532,6 +4542,9 @@ function launchViewer(urn) {
                 $("#plan1").val(plan);
                 $("#dateMask2").val(base);
                 $("#plan2").val(plan);
+                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo3' data-toggle='modal' href=''>Fecha Instalación</a></li>";
+                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a></li>";
+                
             }
           
             document.getElementById("id_seleccionados").value =selects.join();
@@ -4861,7 +4874,12 @@ function analisiFecha(idElemento){
                 var d3   = elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
              
               }
-               let compara = dates.compare(today,d2);
+              if(today&&d2){
+                let compara = dates.compare(today,d2);
+              }else{
+                compara = 1;
+              }
+              
               if(compara == 1){
                 boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido o sin Formato (Fecha Plan) <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
 

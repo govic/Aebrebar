@@ -1,4 +1,5 @@
 var viewer;
+var regex = /(\d+)/g;
 var filtro_a;
 var registro_ultimo_filtro ;
 var id_pedidos_guardados =[];
@@ -903,8 +904,8 @@ function getOrdenes(){
         valores_pesos_pedidos.push(res[r].pesos);
      //   ids_bd.push(Object.values(res[r]));
         $fila = "";
-      //  console.log("nombre pedido A");
-       // console.log(Object.values(res[r]));
+        console.log("nombre pedido A");
+        console.log(Object.values(res[r]));
       //  $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-success btn-block'onclick='filtra_orden("+r+")'>Visualizar</button><button class='btn btn-danger btn-block' onclick=eliminar_orden("+r+")>Borrar</button></td>" + "</tr>";
       //  $list_pedidos = $list_pedidos +$fila;
          console.log("ORDENES PARA GRAFICO");  
@@ -1021,6 +1022,7 @@ function getOrdenesURN(urnEnvio){
     console.log("VALORES PARA GRAFICO PEDIDOS");
     console.log( labels_graf);
     console.log(valores_pesos_pedidos);
+    alert(valores_pesos_pedidos);
     let valor_maximo = Math.max.apply(null,valores_pesos_pedidos);
     valor_maximo = valor_maximo*1.5;
     valor_maximo = parseInt(valor_maximo);
@@ -1597,7 +1599,8 @@ function getValFiltro(filtro_name){
   consulta_filtro(filtrado).then((data) => {
             let keys = Object.keys(data);
             let datos = keys;
-     
+            console.log("NOMBRES KEYS");
+            console.log(datos);
             var i;
            
             for (i = 0; i < datos.length; i++) {
@@ -1623,7 +1626,7 @@ function launchViewer(urn) {
     //cargarProyecto();
     
     var documentId = 'urn:' + urn;
-    
+    getOrdenesURN(urn);
     Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
    
     viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (event) => { 
@@ -1634,225 +1637,323 @@ function launchViewer(urn) {
     pesos_piso4 = 0;
     pesos_piso5 = 0;
     pesos_piso6 = 0;
+
+    pesos_piso1_12 = 0;
+    pesos_piso2_12 = 0;
+    pesos_piso3_12 = 0;
+    pesos_piso4_12 = 0;
+    pesos_piso5_12 = 0;
+    pesos_piso6_12 = 0;
      // loadPrevisualizaciones();
    //   getDBIds();
  //     getPlanObj();
+
+ window.setTimeout(function() {
       getFiltros();
-      buscarFiltros();
+      window.setTimeout(function() {
+        buscarFiltros();
+        window.setTimeout(function() {
+   
+          const list = document.getElementById("chartBar1");
+          if (list.hasChildNodes()) {
+            list.removeChild(list.children[0]);
+          }
+          
+          const list2 = document.getElementById("chartBar25");
+          if (list2.hasChildNodes()) {
+            list2.removeChild(list2.children[0]);
+          }
+          
+          const list3 = document.getElementById("chartBar56");
+          if (list3.hasChildNodes()) {
+            list3.removeChild(list3.children[0]);
+          }
+    
+    
+         
+          //getOrdenes();  
+          // filtro_visual2('AEC Piso','04.- Cielo 4° Piso EDA');
+         // setTimeout(filtro_visual_ha('AEC Partición HA','1A','1'), 8000);
+    // ""
+        //  setTimeout(filtro_visual2('AEC Piso','01.- Cielo 1° Piso EDA','1'), 8000);
+          //let f = filtro_visual2('AEC Piso','04.- Cielo 4° Piso EDA','4');
+          //console.log("FINAL DE FUNCION "+f);
+         // setTimeout(filtro_visual2('AEC Piso','01.- Cielo 1° Piso EDA','1'), 8000);
+         window.setTimeout(function() {
+           getValFiltro("AEC Piso");
+     
+         window.setTimeout(function() {
+             console.log("BUSQUEDA ASINCRONA FILT");
+             console.log(filtro_a);
+             var a = 1;
+             let act_filtro = filtro_a[0];
+             let valores_f = act_filtro.match(regex);
+
+             identificadores =[];
+            if(Array.isArray(valores_f)){
+               
+                if(valores_f.length>0){
+                  let v_act = valores_f[valores_f.length-1];
+                  filtro_visual2('AEC Piso',filtro_a[0],""+v_act);
+                }
+               
+              }
+
+             
+            
+              // set another timeout once the first completes
+              window.setTimeout(function() {
+                pesoTotal =0;
+                identificadores.length =0;
+                console.log("valor filtro pre char "+filtro_a[1]);
+                console.log("FILTRO PISO");
+                console.log(filtro_a);
+                console.log(filtro_a[1]);
+               
+
+                let act_filtro = filtro_a[1];
+                let valores_f = act_filtro.match(regex);
+                console.log("VALOR SELECCION DE NIVEL");
+                console.log(valores_f);
+                identificadores =[];
+                if(Array.isArray(valores_f)){
+                  
+                    if(valores_f.length>0){
+                      let v_act = valores_f[valores_f.length-1];
+                      console.log("VALOR SELECCION DE NIVEL");
+                      console.log(v_act);
+                      filtro_visual2('AEC Piso',filtro_a[1],""+v_act);
+                      
+                    }
+                  
+                }
+              
+                window.setTimeout(function() {
+                  pesoTotal =0;
+                  identificadores.length =0;
+                  console.log("valor filtro pre char "+filtro_a[2]);
+                  
+                 let act_filtro = filtro_a[2];
+                 let valores_f = act_filtro.match(regex);
+                 console.log("VALOR SELECCION DE NIVEL");
+                 console.log(valores_f);
+                 identificadores =[];
+                 if(Array.isArray(valores_f)){
+                  
+                    if(valores_f.length>0){
+                      let v_act = valores_f[valores_f.length-1];
+                      console.log("VALOR SELECCION DE NIVEL");
+                      console.log(v_act);
+                      filtro_visual2('AEC Piso',filtro_a[2],""+v_act);
+                      
+                    }
+                  
+                  }
+                
+                  window.setTimeout(function() {
+                   // filtro_visual2('AEC Piso',filtro_a[3],'4');
+                    let act_filtro = filtro_a[3];
+                    let valores_f = act_filtro.match(regex);
+                    console.log("VALOR SELECCION DE NIVEL");
+                    console.log(valores_f);
+                    identificadores =[];
+                    if(Array.isArray(valores_f)){
+                      
+                        if(valores_f.length>0){
+                          let v_act = valores_f[valores_f.length-1];
+                          console.log("VALOR SELECCION DE NIVEL");
+                          console.log(v_act);
+                          filtro_visual2('AEC Piso',filtro_a[3],""+v_act);
+                          
+                        }
+                      
+                      }
+                     // set another timeout once the first completes
+                     window.setTimeout(function() {
+                       pesoTotal =0;
+                       identificadores.length =0;
+                       console.log("valor filtro pre char "+filtro_a[4]);
+                      // filtro_visual2('AEC Piso',filtro_a[4],'5');
+                      let act_filtro = filtro_a[4];
+                      let valores_f = act_filtro.match(regex);
+                      console.log("VALOR SELECCION DE NIVEL");
+                      console.log(valores_f);
+                      identificadores =[];
+                      if(Array.isArray(valores_f)){
+                        
+                          if(valores_f.length>0){
+                            let v_act = valores_f[valores_f.length-1];
+                            console.log("VALOR SELECCION DE NIVEL");
+                            console.log(v_act);
+                            filtro_visual2('AEC Piso',filtro_a[4],""+v_act);
+                            
+                          }
+                        
+                        }
+                       window.setTimeout(function() {
+                         pesoTotal =0;
+                         identificadores.length =0;
+                       //  filtro_visual2('AEC Piso',filtro_a[5],'6');
+                            if(filtro_a.length >5){
+                                let act_filtro = filtro_a[5];
+                                  let valores_f = act_filtro.match(regex);
+                                  console.log("VALOR SELECCION DE NIVEL");
+                                  console.log(valores_f);
+                                  identificadores =[];
+                                  if(Array.isArray(valores_f)){
+                                    
+                                      if(valores_f.length>0){
+                                        let v_act = valores_f[valores_f.length-1];
+                                        console.log("VALOR SELECCION DE NIVEL");
+                                        console.log(v_act);
+                                        filtro_visual2('AEC Piso',filtro_a[5],""+v_act);
+                                        
+                                      }
+                                    
+                                    }
+                            }
+                          
+                         window.setTimeout(function(){
+                          //  console.log("PESO COMPLETO PISO 4 "+pesos_piso4);
+                        
+                              
+                             console.log("DATOS PESOS");
+                             console.log(pesos_piso1+"  "+pesos_piso2+"  "+pesos_piso3+"  "+pesos_piso4+"  "+pesos_piso5+"  "+pesos_piso6+"  ");
+                             let valor_maximo = Math.max(pesos_piso1,pesos_piso2,pesos_piso3,pesos_piso4,pesos_piso5,pesos_piso6);
+                             valor_maximo = valor_maximo*1.5;;
+                             valor_maximo = parseInt(valor_maximo);
+                             console.log("VALOR MAXIMO "+valor_maximo);
+
+                             let valor_maximo_12 = Math.max(pesos_piso1,pesos_piso2,pesos_piso3,pesos_piso4,pesos_piso5,pesos_piso6);
+                             valor_maximo_12 = valor_maximo_12*1.5;;
+                             valor_maximo_12 = parseInt(valor_maximo_12);
+                             console.log("VALOR MAXIMO 2 "+valor_maximo_12);
+                              
+                             var ctx1 = document.getElementById('chartBar1').getContext('2d');
+                              var a = "01";
+                              new Chart(ctx1, {
+                                  type: 'bar',
+                                  data: {
+                                      labels: ['0', '01', '02', '03', '04', '05'],
+                                      datasets: [{
+                                          label: '# Kgs',
+                                          data: [pesos_piso1, pesos_piso2, pesos_piso3, pesos_piso4, pesos_piso5, pesos_piso6],
+                                          backgroundColor: '#285cf7'
+                                      }]
+                                  },
+                                  options: {
+                                      maintainAspectRatio: false,
+                                      responsive: true,
+                                      legend: {
+                                          display: false,
+                                          labels: {
+                                              display: false
+                                          }
+                                      },
+                                      scales: {
+                                          yAxes: [{
+                                              ticks: {
+                                                  beginAtZero: true,
+                                                  fontSize: 10,
+                                                  max: valor_maximo,
+                                                  fontColor: "rgba(171, 167, 167,0.9)",
+                                              },
+                                              gridLines: {
+                                                  display: true,
+                                                  color: 'rgba(171, 167, 167,0.2)',
+                                                  drawBorder: false
+                                              },
+                                          }],
+                                          xAxes: [{
+                                              barPercentage: 0.6,
+                                              ticks: {
+                                                  beginAtZero: true,
+                                                  fontSize: 11,
+                                                  fontColor: "rgba(171, 167, 167,0.9)",
+                                              },
+                                              gridLines: {
+                                                  display: true,
+                                                  color: 'rgba(171, 167, 167,0.2)',
+                                                  drawBorder: false
+                                              },
+                                          }]
+                                      }
+                                  }
+                                  
+                              });
+
+                              var ctx2 = document.getElementById('chartBar25').getContext('2d');
+                              var a = "01";
+                              new Chart(ctx2, {
+                                  type: 'bar',
+                                  data: {
+                                      labels: ['0', '02', '03', '04', '05', '06'],
+                                      datasets: [{
+                                          label: '# Kgs',
+                                          data: [pesos_piso1_12, pesos_piso2_12, pesos_piso3_12, pesos_piso4_12, pesos_piso5_12, pesos_piso6_12],
+                                          backgroundColor: '#285cf7'
+                                      }]
+                                  },
+                                  options: {
+                                      maintainAspectRatio: false,
+                                      responsive: true,
+                                      legend: {
+                                          display: false,
+                                          labels: {
+                                              display: false
+                                          }
+                                      },
+                                      scales: {
+                                          yAxes: [{
+                                              ticks: {
+                                                  beginAtZero: true,
+                                                  fontSize: 10,
+                                                  max: valor_maximo,
+                                                  fontColor: "rgba(171, 167, 167,0.9)",
+                                              },
+                                              gridLines: {
+                                                  display: true,
+                                                  color: 'rgba(171, 167, 167,0.2)',
+                                                  drawBorder: false
+                                              },
+                                          }],
+                                          xAxes: [{
+                                              barPercentage: 0.6,
+                                              ticks: {
+                                                  beginAtZero: true,
+                                                  fontSize: 11,
+                                                  fontColor: "rgba(171, 167, 167,0.9)",
+                                              },
+                                              gridLines: {
+                                                  display: true,
+                                                  color: 'rgba(171, 167, 167,0.2)',
+                                                  drawBorder: false
+                                              },
+                                          }]
+                                      }
+                                  }
+                                  
+                              });
+                              
+
+                              
+                       
+                        },1500);
+                       },1500);
+                     }, 1500);
+                 }, 1500);
+                },1500);
+              }, 1500);
+          }, 1500); // longer, but first
+        },1500);
+          
+        },1500);
+      },1500); 
+ },1500);    
+     
      
     
-      
-      const list = document.getElementById("chartBar1");
-      if (list.hasChildNodes()) {
-        list.removeChild(list.children[0]);
-      }
-      
-      const list2 = document.getElementById("chartBar25");
-      if (list2.hasChildNodes()) {
-        list2.removeChild(list2.children[0]);
-      }
-      
-      const list3 = document.getElementById("chartBar56");
-      if (list3.hasChildNodes()) {
-        list3.removeChild(list3.children[0]);
-      }
-
-
-     
-      //getOrdenes();  
-      // filtro_visual2('AEC Piso','04.- Cielo 4° Piso EDA');
-     // setTimeout(filtro_visual_ha('AEC Partición HA','1A','1'), 8000);
-// ""
-    //  setTimeout(filtro_visual2('AEC Piso','01.- Cielo 1° Piso EDA','1'), 8000);
-      //let f = filtro_visual2('AEC Piso','04.- Cielo 4° Piso EDA','4');
-      //console.log("FINAL DE FUNCION "+f);
-     // setTimeout(filtro_visual2('AEC Piso','01.- Cielo 1° Piso EDA','1'), 8000);
-     window.setTimeout(function() {
-        getValFiltro("AEC Piso");
-      
-     window.setTimeout(function() {
-         console.log("BUSQUEDA ASINCRONA FILT");
-         console.log(filtro_a);
-         filtro_visual2('AEC Piso',filtro_a[0],'1');
-        
-          // set another timeout once the first completes
-          window.setTimeout(function() {
-            pesoTotal =0;
-            identificadores.length =0;
-            console.log("valor filtro pre char "+filtro_a[1]);
-            console.log("FILTRO PISO");
-            console.log(filtro_a);
-            console.log(filtro_a[0]);
-            filtro_visual2('AEC Piso',filtro_a[1],'2');
-          
-            window.setTimeout(function() {
-              pesoTotal =0;
-              identificadores.length =0;
-              console.log("valor filtro pre char "+filtro_a[3]);
-              filtro_visual2('AEC Piso',+filtro_a[2],'3');
-            
-              window.setTimeout(function() {
-                filtro_visual2('AEC Piso',filtro_a[3],'4');
-              
-                 // set another timeout once the first completes
-                 window.setTimeout(function() {
-                   pesoTotal =0;
-                   identificadores.length =0;
-                   console.log("valor filtro pre char "+filtro_a[5]);
-                   filtro_visual2('AEC Piso',filtro_a[4],'5');
-                
-                   window.setTimeout(function() {
-                     pesoTotal =0;
-                     identificadores.length =0;
-                     filtro_visual2('AEC Piso',filtro_a[5],'6');
-                     window.setTimeout(function(){
-                      //  console.log("PESO COMPLETO PISO 4 "+pesos_piso4);
-                    
-                          
-                         console.log("DATOS PESOS");
-                         console.log(pesos_piso1+"  "+pesos_piso2+"  "+pesos_piso3+"  "+pesos_piso4+"  "+pesos_piso5+"  "+pesos_piso6+"  ");
-                         let valor_maximo = Math.max(pesos_piso1,pesos_piso2,pesos_piso3,pesos_piso4,pesos_piso5,pesos_piso6);
-                         valor_maximo = valor_maximo*1.5;;
-                         valor_maximo = parseInt(valor_maximo);
-                         console.log("VALOR MAXIMO "+valor_maximo);
-                          var ctx1 = document.getElementById('chartBar1').getContext('2d');
-                          new Chart(ctx1, {
-                              type: 'bar',
-                              data: {
-                                  labels: ['01', '02', '03', '04', '05', '06'],
-                                  datasets: [{
-                                      label: '# Kgs',
-                                      data: [pesos_piso1, pesos_piso2, pesos_piso3, pesos_piso4, pesos_piso5, pesos_piso6],
-                                      backgroundColor: '#285cf7'
-                                  }]
-                              },
-                              options: {
-                                  maintainAspectRatio: false,
-                                  responsive: true,
-                                  legend: {
-                                      display: false,
-                                      labels: {
-                                          display: false
-                                      }
-                                  },
-                                  scales: {
-                                      yAxes: [{
-                                          ticks: {
-                                              beginAtZero: true,
-                                              fontSize: 10,
-                                              max: valor_maximo,
-                                              fontColor: "rgba(171, 167, 167,0.9)",
-                                          },
-                                          gridLines: {
-                                              display: true,
-                                              color: 'rgba(171, 167, 167,0.2)',
-                                              drawBorder: false
-                                          },
-                                      }],
-                                      xAxes: [{
-                                          barPercentage: 0.6,
-                                          ticks: {
-                                              beginAtZero: true,
-                                              fontSize: 11,
-                                              fontColor: "rgba(171, 167, 167,0.9)",
-                                          },
-                                          gridLines: {
-                                              display: true,
-                                              color: 'rgba(171, 167, 167,0.2)',
-                                              drawBorder: false
-                                          },
-                                      }]
-                                  }
-                              }
-                              
-                          });
-                          
-                          window.setTimeout(function() {
-                            filtro_visual_ha('AEC Partición HA','1A','1');
-                            window.setTimeout(function() {
-                              filtro_visual_ha('AEC Partición HA','2A','2');
-                              window.setTimeout(function() {
-                                filtro_visual_ha('AEC Partición HA','3A','3');
-                                window.setTimeout(function() {
-                                  filtro_visual_ha('AEC Partición HA','4A','4');
-                                  window.setTimeout(function() {
-                                    filtro_visual_ha('AEC Partición HA','5A','5');
-                                    window.setTimeout(function() {
-                                      filtro_visual_ha('AEC Partición HA','6A','6');
-                                        window.setTimeout(function(){
-                                        //  console.log("PESO COMPLETO PISO 4 "+pesos_piso4);
-                                      
-                                        let valor_maximo = Math.max(pesos_ha1,pesos_ha2,pesos_ha3,pesos_ha4,pesos_ha5,pesos_ha6);
-                                        valor_maximo = valor_maximo*1.4;;
-                                        valor_maximo = parseInt(valor_maximo);
-                                        console.log("VALOR MAXIMO "+valor_maximo);
-                                            $('#chartBar25').empty();
-                                            var ctx1 = document.getElementById('chartBar25').getContext('2d');
-                                            
-                                            new Chart(ctx1, {
-                                                type: 'bar',
-                                                data: {
-                                                    labels: ['1A', '2A', '3A', '4A', '5A', '6A'],
-                                                    datasets: [{
-                                                        label: '# Kgs',
-                                                        data: [pesos_ha1, pesos_ha2, pesos_ha3, pesos_ha4, pesos_ha5, pesos_ha6],
-                                                        backgroundColor: '#285cf7'
-                                                    }]
-                                                },
-                                                options: {
-                                                    maintainAspectRatio: false,
-                                                    responsive: true,
-                                                    legend: {
-                                                        display: false,
-                                                        labels: {
-                                                            display: false
-                                                        }
-                                                    },
-                                                    scales: {
-                                                        yAxes: [{
-                                                            ticks: {
-                                                                beginAtZero: true,
-                                                                fontSize: 10,
-                                                                max: valor_maximo,
-                                                                fontColor: "rgba(171, 167, 167,0.9)",
-                                                            },
-                                                            gridLines: {
-                                                                display: true,
-                                                                color: 'rgba(171, 167, 167,0.2)',
-                                                                drawBorder: false
-                                                            },
-                                                        }],
-                                                        xAxes: [{
-                                                            barPercentage: 0.6,
-                                                            ticks: {
-                                                                beginAtZero: true,
-                                                                fontSize: 11,
-                                                                fontColor: "rgba(171, 167, 167,0.9)",
-                                                            },
-                                                            gridLines: {
-                                                                display: true,
-                                                                color: 'rgba(171, 167, 167,0.2)',
-                                                                drawBorder: false
-                                                            },
-                                                        }]
-                                                    }
-                                                }
-                                            });getOrdenesURN(urn);
-                                          },500);
-                                    },500);
-                                  },500);
-                                },500);
-                              },500);
-                            },500);
-                          },500);
-                    },500);
-                   }, 500);
-                 }, 500);
-             }, 500);
-            }, 500);
-          }, 500);
-      }, 500); // longer, but first
-    },500);
+   
     
     //  console.log('DB IDS DESDE SERVER');
    //   console.log(ids_bd);
@@ -3296,7 +3397,12 @@ function buscaKeys(arr_objetivos,arr_listado){
 }
 
 function filtro_visual2(nombre_cat_filtro,valor_filtro,piso){
+  console.log("ESTE SI ES");
   viewer.isolate();
+  console.log("PISO RECIBIDO");
+  console.log(typeof(piso))
+  console.log(piso);
+
   var contador_lg = 0;
   identificadores = Array();
   contador_lg = 0;
@@ -3316,21 +3422,27 @@ function filtro_visual2(nombre_cat_filtro,valor_filtro,piso){
   parametro_nivel1 = "";
   parametro_nivel = nombre_cat_filtro;
   if(piso == '1'){
+    console.log("voy piso 1");
     parametro_nivel1 = nombre_cat_filtro;
   }
   if(piso == '2'){
+    console.log("voy piso 2");
     parametro_nivel2 = nombre_cat_filtro;
   }
   if(piso == '3'){
+    console.log("voy piso 3");
     parametro_nivel3 = nombre_cat_filtro;
   }
   if(piso == '4'){
+    console.log("voy piso 4");
     parametro_nivel4 = nombre_cat_filtro;
   }
   if(piso == '5'){
+    console.log("voy piso 5");
     parametro_nivel5 = nombre_cat_filtro;
   }
   if(piso == '6'){
+    console.log("voy piso 6");
     parametro_nivel6 = nombre_cat_filtro;
   }
 
@@ -3418,6 +3530,12 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
     console.log(resultado_ids[0]);
     peso = 0;
     pesoTotal = 0;
+
+    let result10 = identificadores.filter((item,index)=>{
+      return identificadores.indexOf(item) === index;
+    });
+    identificadores = result10;
+
     for(var a=0; a<= identificadores.length;a++){
       console.log("valor de A FINAL " +a + "valor de LARGO " +identificadores.length);
       if(a == identificadores.length){
@@ -3429,18 +3547,31 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
           console.log("RESPUESTA para A lvl "+ a + " && "+identificadores.length);
           console.log(result);
           contador_lg = contador_lg+1;
+          var tipo_barra = 0;
           for(i=0 ;i< 60;i++){
             if(result.properties[i] && result.properties[i].displayName){
               let nombre_actual = ""+result.properties[i].displayName;
               if(nombre_actual ==="Category"){
                 categoria_actual_obj = result.properties[i].displayValue;
-                console.log("valor categoria actual: "+categoria_actual_obj); 
+                console.log("valor categoria actual2: "+categoria_actual_obj); 
               
                 if(categoria_actual_obj=="Revit Structural Rebar"){
                 
                   for(t=0;t<result.properties.length;t++){
                   
                     let val_actual = result.properties[t].displayName;
+                    //console.log( "Valor propiedad!!: ");
+                   // console.log( val_actual);
+                    if(val_actual == "Bar Diameter"){
+                      if(result.properties[t].displayValue == "8"){
+                        console.log("tipo 0.8");
+                        tipo_barra = 1;
+                      }
+                      if(result.properties[t].displayValue == "12"){
+                        console.log("tipo 0.12");
+                        tipo_barra = 2;
+                      }
+                    }
                     if( val_actual == "RS Peso Lineal (kg/m)"){
                       console.log("ENTRO A PESO LINEAL");
                       let peso = parseFloat(result.properties[t].displayValue);
@@ -3452,21 +3583,21 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
                     
                       peso = parseFloat(peso);
                       pesoActual = peso;
-                      console.log("PESO BUSCADO");
+                      console.log("PESO BUSCADO555");
                       console.log(peso);
                   
                
               //    pesoTotal  = parseFloat(pesoTotal).toFixed(2);
                   //   console.log( pesoTotal);
                     }
+                  
                     if(val_actual == "Total Bar Length"){
                       console.log("TOTAL LENGTH BAR");
                       
                       let largo = parseFloat(result.properties[t].displayValue);
-                      largo = largo.toFixed(0);
                       console.log(largo );
-                      
-                      largo = parseFloat(largo,0);
+                  //    largo = largo.toFixed(1);
+                    //  largo = parseFloat(largo,1);
                       largo = largo /100;
                       largoActual = largo;
                       console.log("convertido "+largo);
@@ -3481,55 +3612,121 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
                      
                     }
                     if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
-                      let resultado_mul = pesoActual*largoActual;
-                      resultado_mul.toFixed(0);
+                     let resultado_mul = pesoActual*largoActual;
+                        console.log("opc 1"+resultado_mul);
                       pesoActual = 0;
                       largoActual = 0;
                      // document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(2)+ ' mtrs';
                       console.log("ANTES DE PISO");
                      if(piso == '1'){
                       //   pesos_piso1 = pesoTotal;
-                         pesos_piso1 =  pesos_piso1 + resultado_mul;
-                         console.log("Peso piso 1 "+pesos_piso1);
-                         resultado_mul = 0;
-                         identificadores = Array();
-                         contador_lg = 0;
+
+                        if(tipo_barra == 1){
+                          pesos_piso1 =  pesos_piso1 + resultado_mul;
+                          console.log("Peso piso 1 "+pesos_piso1);
+                          resultado_mul = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+                        }
+                        if(tipo_barra==2){
+                          pesos_piso1_12 =  pesos_piso1_12 + resultado_mul;
+                          console.log("Peso piso 1 "+pesos_piso1_12);
+                          resultado_mul = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+                        }
+                         
                     
                        }
                        if(piso == '2'){
-                         pesos_piso2 =  pesos_piso2 + resultado_mul;
-                         console.log("Peso piso 2 "+pesoTotal);
-                        // pesoTotal = 0;
-                         identificadores = Array();
-                         contador_lg = 0;
+                        console.log("ENTRO A PISO 2");
+                        if(tipo_barra == 1){
+                          pesos_piso2 =  pesos_piso2 + resultado_mul;
+                          console.log("Peso piso 2 "+pesoTotal);
+                         // pesoTotal = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+                        }
+                        if(tipo_barra == 2){
+                          pesos_piso2_12 =  pesos_piso2_12 + resultado_mul;
+                          console.log("Peso piso 2  0.12"+pesos_piso2_12 );
+                         // pesoTotal = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+
+                        }
+                        
                        }
                        if(piso == '3'){
-                         pesos_piso3 =  pesos_piso3 + resultado_mul;
-                         console.log("Peso piso 3 "+pesoTotal);
+                        console.log("ENTRO A PISO 3");
+
+                        if(tipo_barra == 1){
+                          pesos_piso3 =  pesos_piso3 + resultado_mul;
+                          console.log("Peso piso 3 "+pesos_piso3);
+                        //  pesoTotal = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+                        }
+                        if(tipo_barra == 2){
+                          pesos_piso3_12 =  pesos_piso3_12 + resultado_mul;
+                          console.log("Peso piso 3 0.12 "+pesos_piso3_12);
                        //  pesoTotal = 0;
-                         identificadores = Array();
-                         contador_lg = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+                        }
+                         
                        }
                        if(piso == '4'){
-                         pesos_piso4 =  pesos_piso4 + resultado_mul;
-                         console.log("Peso piso 4 "+pesoTotal);
-                        //  pesoTotal = 0;
-                         identificadores = Array();
-                         contador_lg = 0;
+                        if(tipo_barra == 1){
+                          pesos_piso4 =  pesos_piso4 + resultado_mul;
+                          console.log("Peso piso 4 "+pesos_piso4);
+                          //  pesoTotal = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+                        }
+                        if(tipo_barra == 2){
+                          pesos_piso4_12 =  pesos_piso4_12 + resultado_mul;
+                          console.log("Peso piso 4 0.12 "+pesos_piso4_12);
+                          //  pesoTotal = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+                        }
+                         
                        }
                        if(piso == '5'){
-                        pesos_piso5 = pesos_piso5 + resultado_mul;
-                        console.log("Peso piso 5 "+pesoTotal);
-                       //  pesoTotal = 0;
-                        identificadores = Array();
-                        contador_lg = 0;
+                        if(tipo_barra == 1){
+                          pesos_piso5 = pesos_piso5 + resultado_mul;
+                          console.log("Peso piso 5 0.8 "+pesos_piso5);
+                        //  pesoTotal = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+                        }
+                        if(tipo_barra == 2){
+                          pesos_piso5_12 = pesos_piso5_12 + resultado_mul;
+                          console.log("Peso piso 5 0.12"+pesos_piso5_12);
+                        //  pesoTotal = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+
+                        }
+                        
                       }
                       if(piso == '6'){
-                        pesos_piso6 =  pesos_piso6 + resultado_mul;
-                        console.log("Peso piso 6 "+pesos_piso6);
-                       //  pesoTotal = 0;
-                        identificadores = Array();
-                        contador_lg = 0;
+                        if(tipo_barra == 1){
+                          pesos_piso6 =  pesos_piso6 + resultado_mul;
+                          console.log("Peso piso 6 "+pesos_piso6);
+                        //  pesoTotal = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+                        }
+                        if(tipo_barra == 2){
+                          pesos_piso6_12 =  pesos_piso6_12 + resultado_mul;
+                          console.log("Peso piso 6 "+pesos_piso6_12);
+                        //  pesoTotal = 0;
+                          identificadores = Array();
+                          contador_lg = 0;
+                        }
+                        
                       }    
                     //  let resultado_mul = pesoActual*largoActual;
                      // pesoTotal = pesoTotal+resultado_mul;
@@ -3740,7 +3937,8 @@ if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
     for(var a=0; a<= identificadores.length;a++){
       console.log("valor de A FINAL " +a + "valor de LARGO " +identificadores.length);
       if(a == identificadores.length){
-         console.log("FINALIZADO "+ pesos_piso3+"  "+pesos_piso4);
+         console.log("FINALIZADO ");
+         console.log( pesos_piso3+"  "+pesos_piso4);
       }else{
           let actual =  identificadores;
 
@@ -3753,7 +3951,7 @@ if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
               let nombre_actual = ""+result.properties[i].displayName;
               if(nombre_actual ==="Category"){
                 categoria_actual_obj = result.properties[i].displayValue;
-                console.log("valor categoria actual: "+categoria_actual_obj); 
+                console.log("valor categoria actual5: "+categoria_actual_obj); 
                  
                 if(categoria_actual_obj=="Revit Structural Rebar"){
                   for(t=0;t<result.properties.length;t++){
@@ -4040,7 +4238,7 @@ function filtro_visual(){
               if(nombre_actual ==="Category"){
                 categoria_actual_obj = result.properties[i].displayValue;
               
-                console.log("valor categoria actual: "+categoria_actual_obj);
+                console.log("valor categoria actual4: "+categoria_actual_obj);
                 
                 if(categoria_actual_obj=="Revit Structural Rebar"){
                   let peso = parseFloat(result.properties[82].displayValue);
@@ -4048,7 +4246,7 @@ function filtro_visual(){
                   peso = peso.toFixed(2);
                   peso = parseFloat(peso);
                 
-                  console.log("PESO BUSCADO");
+                  console.log("PESO BUSCADO333");
                   console.log(peso);
                   let actuales = $("#id_seleccionados3").val();
                   actual =   actual+","+actuales;
@@ -4333,7 +4531,7 @@ function filtro_visual(){
               if(categoria_actual_obj=="Revit Structural Rebar"){
                 let peso = parseFloat(result.properties[82].displayValue);
                 peso = peso.toFixed(2);
-                console.log("PESO BUSCADO");
+                console.log("PESO BUSCADO222");
                 console.log(peso);
                 let actuales = $("#id_seleccionados3").val();
                 actual =   actual+","+actuales;
@@ -5460,12 +5658,12 @@ function filtro_gantt_inicio( arreglo_filros){
             if(nombre_actual ==="Category"){
               categoria_actual_obj = result.properties[i].displayValue;
             
-              console.log("valor categoria actual: "+categoria_actual_obj);
+              console.log("valor categoria actual3: "+categoria_actual_obj);
               if(categoria_actual_obj=="Revit Structural Rebar"){
                 let peso = parseFloat(result.properties[82].displayValue);
                 peso = peso.toFixed(2);
                 peso = parseFloat(peso);
-                console.log("PESO BUSCADO");
+                console.log("PESO BUSCADO11");
                 console.log(peso);
                 let actuales = $("#id_seleccionados3").val();
                 actual =   actual+","+actuales;

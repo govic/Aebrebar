@@ -60,7 +60,7 @@ passport.use(new GoogleStrategy({
 //el ingreso sea efectivo, esta redirecciona al index.ejs y si no, devuelve al signin.ejs.
 router.get('/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/index',
+    successRedirect: '/profile',
     failureRedirect: '/signin'
   })
 );
@@ -79,15 +79,16 @@ router.post(
   }), async (req, res) => {
     if (req.session.passport.user.tipoUsuario == "Administrador") {
       var nom = req.session.passport.user.fullname;
-      res.render('proyectos', { nom });
+      var nom2 = req.session.passport.user.username;
+      res.render('profile', { nom, nom2 });
     }
     if (req.session.passport.user.tipoUsuario == "Editor") {
       var nom = req.session.passport.user.fullname;
-      res.render('proyectosV3', { nom });
+      res.render('profile', { nom, nom2 });
     }
     if (req.session.passport.user.tipoUsuario == "Visualizador") {
       var nom = req.session.passport.user.fullname;
-      res.render('proyectosV2', { nom });
+      res.render('profile', { nom, nom2 });
     }
   });
 
