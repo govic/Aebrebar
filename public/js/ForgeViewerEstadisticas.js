@@ -1022,7 +1022,7 @@ function getOrdenesURN(urnEnvio){
     console.log("VALORES PARA GRAFICO PEDIDOS");
     console.log( labels_graf);
     console.log(valores_pesos_pedidos);
-    alert(valores_pesos_pedidos);
+    //alert(valores_pesos_pedidos);
     let valor_maximo = Math.max.apply(null,valores_pesos_pedidos);
     valor_maximo = valor_maximo*1.5;
     valor_maximo = parseInt(valor_maximo);
