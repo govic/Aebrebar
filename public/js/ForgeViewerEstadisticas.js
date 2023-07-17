@@ -1759,6 +1759,20 @@ function launchViewer(urn) {
     pesos_piso4_12 = 0;
     pesos_piso5_12 = 0;
     pesos_piso6_12 = 0;
+
+    pesos_pisoHA1 = 0;
+    pesos_pisoHA2 = 0;
+    pesos_pisoHA3 = 0;
+    pesos_pisoHA4 = 0;
+    pesos_pisoHA5 = 0;
+    pesos_pisoHA6 = 0;
+
+    pesos_HA1_12 = 0;
+    pesos_HA2_12 = 0;
+    pesos_HA3_12 = 0;
+    pesos_HA4_12 = 0;
+    pesos_HA5_12 = 0;
+    pesos_HA6_12 = 0;
      // loadPrevisualizaciones();
    //   getDBIds();
  //     getPlanObj();
@@ -1779,12 +1793,19 @@ function launchViewer(urn) {
             list2.removeChild(list2.children[0]);
           }
           
-          const list3 = document.getElementById("chartBar56");
+      /***   const list3 = document.getElementById("chartBar35");
           if (list3.hasChildNodes()) {
             list3.removeChild(list3.children[0]);
           }
-    
-    
+     */ 
+          const list4 = document.getElementById("chartBar66");
+          if (list4.hasChildNodes()) {
+            list4.removeChild(list4.children[0]);
+          }
+          const list5 = document.getElementById("chartBar67");
+          if (list5.hasChildNodes()) {
+            list5.removeChild(list5.children[0]);
+          }
          
           //getOrdenes();  
           // filtro_visual2('AEC Piso','04.- Cielo 4° Piso EDA');
@@ -2061,7 +2082,273 @@ function launchViewer(urn) {
               }, 1500);
           }, 1500); // longer, but first
         },1500);
-          
+        window.setTimeout(function() {
+          getValFiltro("AEC Partición HA");
+    
+        window.setTimeout(function() {
+            console.log("BUSQUEDA ASINCRONA FILTro AEC Partición HA");
+            console.log(filtro_a);
+            var a = 1;
+            let act_filtro = filtro_a[0];
+            let valores_f = act_filtro.match(regex);
+
+            identificadores =[];
+           if(Array.isArray(valores_f)){
+              
+               if(valores_f.length>0){
+                 let v_act = valores_f[valores_f.length-1];
+                 filtro_visual2('AEC Partición HA',filtro_a[0],""+v_act);
+               }
+              
+             }
+
+            
+           
+             // set another timeout once the first completes
+             window.setTimeout(function() {
+               pesoTotal =0;
+               identificadores.length =0;
+               console.log("valor filtro pre char AEC Partición HA "+filtro_a[1]);
+               console.log("FILTRO AEC Partición HA");
+               console.log(filtro_a);
+               console.log(filtro_a[1]);
+              
+
+               let act_filtro = filtro_a[1];
+               let valores_f = act_filtro.match(regex);
+               console.log("VALOR SELECCION DE NIVEL AEC Partición HA");
+               console.log(valores_f);
+               identificadores =[];
+               if(Array.isArray(valores_f)){
+                 
+                   if(valores_f.length>0){
+                     let v_act = valores_f[valores_f.length-1];
+                     console.log("VALOR SELECCION DE NIVEL");
+                     console.log(v_act);
+                     filtro_visual2('AEC Partición HA',filtro_a[1],""+v_act);
+                     
+                   }
+                 
+               }
+             
+               window.setTimeout(function() {
+                 pesoTotal =0;
+                 identificadores.length =0;
+                 console.log("valor filtro pre char  AEC Partición HA"+filtro_a[2]);
+                 
+                let act_filtro = filtro_a[2];
+                let valores_f = act_filtro.match(regex);
+                console.log("VALOR SELECCION DE NIVEL");
+                console.log(valores_f);
+                identificadores =[];
+                if(Array.isArray(valores_f)){
+                 
+                   if(valores_f.length>0){
+                     let v_act = valores_f[valores_f.length-1];
+                     console.log("VALOR SELECCION DE NIVEL AEC Partición HA");
+                     console.log(v_act);
+                     filtro_visual2('AEC Partición HA',filtro_a[2],""+v_act);
+                     
+                   }
+                 
+                 }
+               
+                 window.setTimeout(function() {
+                  // filtro_visual2('AEC Piso',filtro_a[3],'4');
+                   let act_filtro = filtro_a[3];
+                   let valores_f = act_filtro.match(regex);
+                   console.log("VALOR SELECCION DE NIVEL AEC Partición HA");
+                   console.log(valores_f);
+                   identificadores =[];
+                   if(Array.isArray(valores_f)){
+                     
+                       if(valores_f.length>0){
+                         let v_act = valores_f[valores_f.length-1];
+                         console.log("VALOR SELECCION DE NIVEL AEC Partición HA");
+                         console.log(v_act);
+                         filtro_visual2('AEC Partición HA',filtro_a[3],""+v_act);
+                         
+                       }
+                     
+                     }
+                    // set another timeout once the first completes
+                    window.setTimeout(function() {
+                      pesoTotal =0;
+                      identificadores.length =0;
+                      console.log("valor filtro pre char AEC Partición HA "+filtro_a[4]);
+                     // filtro_visual2('AEC Piso',filtro_a[4],'5');
+                     let act_filtro = filtro_a[4];
+                     let valores_f = act_filtro.match(regex);
+                     console.log("VALOR SELECCION DE NIVEL AEC Partición HA");
+                     console.log(valores_f);
+                     identificadores =[];
+                     if(Array.isArray(valores_f)){
+                       
+                         if(valores_f.length>0){
+                           let v_act = valores_f[valores_f.length-1];
+                           console.log("VALOR SELECCION DE NIVEL AEC Partición HA");
+                           console.log(v_act);
+                           filtro_visual2('AEC Partición HA',filtro_a[4],""+v_act);
+                           
+                         }
+                       
+                       }
+                      window.setTimeout(function() {
+                        pesoTotal =0;
+                        identificadores.length =0;
+                      //  filtro_visual2('AEC Piso',filtro_a[5],'6');
+                           if(filtro_a.length >5){
+                               let act_filtro = filtro_a[5];
+                                 let valores_f = act_filtro.match(regex);
+                                 console.log("VALOR SELECCION DE NIVEL AEC Partición HA");
+                                 console.log(valores_f);
+                                 identificadores =[];
+                                 if(Array.isArray(valores_f)){
+                                   
+                                     if(valores_f.length>0){
+                                       let v_act = valores_f[valores_f.length-1];
+                                       console.log("VALOR SELECCION DE NIVEL AEC Partición HA");
+                                       console.log(v_act);
+                                       filtro_visual2('AEC Partición HA',filtro_a[5],""+v_act);
+                                       
+                                     }
+                                   
+                                   }
+                           }
+                         
+                        window.setTimeout(function(){
+                         //  console.log("PESO COMPLETO PISO 4 "+pesos_piso4);
+                       
+                             
+                            console.log("DATOS PESOS AEC Partición HA");
+                            console.log(pesos_piso1+"  "+pesos_piso2+"  "+pesos_piso3+"  "+pesos_piso4+"  "+pesos_piso5+"  "+pesos_piso6+"  ");
+                            let valor_maximo = Math.max(pesos_piso1,pesos_piso2,pesos_piso3,pesos_piso4,pesos_piso5,pesos_piso6);
+                            valor_maximo = valor_maximo*1.5;;
+                            valor_maximo = parseInt(valor_maximo);
+                            console.log("VALOR MAXIMO "+valor_maximo);
+
+                            let valor_maximo_12 = Math.max(pesos_piso1,pesos_piso2,pesos_piso3,pesos_piso4,pesos_piso5,pesos_piso6);
+                            valor_maximo_12 = valor_maximo_12*1.5;;
+                            valor_maximo_12 = parseInt(valor_maximo_12);
+                            console.log("VALOR MAXIMO 2 AEC Partición HA "+valor_maximo_12);
+                             
+                            var ctx66 = document.getElementById('chartBar66').getContext('2d');
+                             var a = "01";
+                             new Chart(ctx66, {
+                                 type: 'bar',
+                                 data: {
+                                     labels: ['0', '01', '02', '03', '04', '05'],
+                                     datasets: [{
+                                         label: '# Kgs',
+                                         data: [pesos_piso1, pesos_piso2, pesos_piso3, pesos_piso4, pesos_piso5, pesos_piso6],
+                                         backgroundColor: '#285cf7'
+                                     }]
+                                 },
+                                 options: {
+                                     maintainAspectRatio: false,
+                                     responsive: true,
+                                     legend: {
+                                         display: false,
+                                         labels: {
+                                             display: false
+                                         }
+                                     },
+                                     scales: {
+                                         yAxes: [{
+                                             ticks: {
+                                                 beginAtZero: true,
+                                                 fontSize: 10,
+                                                 max: valor_maximo,
+                                                 fontColor: "rgba(171, 167, 167,0.9)",
+                                             },
+                                             gridLines: {
+                                                 display: true,
+                                                 color: 'rgba(171, 167, 167,0.2)',
+                                                 drawBorder: false
+                                             },
+                                         }],
+                                         xAxes: [{
+                                             barPercentage: 0.6,
+                                             ticks: {
+                                                 beginAtZero: true,
+                                                 fontSize: 11,
+                                                 fontColor: "rgba(171, 167, 167,0.9)",
+                                             },
+                                             gridLines: {
+                                                 display: true,
+                                                 color: 'rgba(171, 167, 167,0.2)',
+                                                 drawBorder: false
+                                             },
+                                         }]
+                                     }
+                                 }
+                                 
+                             });
+
+                             var ctx67 = document.getElementById('chartBar67').getContext('2d');
+                             var a = "01";
+                             new Chart(ctx67, {
+                                 type: 'bar',
+                                 data: {
+                                     labels: ['0', '02', '03', '04', '05', '06'],
+                                     datasets: [{
+                                         label: '# Kgs',
+                                         data: [pesos_piso1_12, pesos_piso2_12, pesos_piso3_12, pesos_piso4_12, pesos_piso5_12, pesos_piso6_12],
+                                         backgroundColor: '#285cf7'
+                                     }]
+                                 },
+                                 options: {
+                                     maintainAspectRatio: false,
+                                     responsive: true,
+                                     legend: {
+                                         display: false,
+                                         labels: {
+                                             display: false
+                                         }
+                                     },
+                                     scales: {
+                                         yAxes: [{
+                                             ticks: {
+                                                 beginAtZero: true,
+                                                 fontSize: 10,
+                                                 max: valor_maximo,
+                                                 fontColor: "rgba(171, 167, 167,0.9)",
+                                             },
+                                             gridLines: {
+                                                 display: true,
+                                                 color: 'rgba(171, 167, 167,0.2)',
+                                                 drawBorder: false
+                                             },
+                                         }],
+                                         xAxes: [{
+                                             barPercentage: 0.6,
+                                             ticks: {
+                                                 beginAtZero: true,
+                                                 fontSize: 11,
+                                                 fontColor: "rgba(171, 167, 167,0.9)",
+                                             },
+                                             gridLines: {
+                                                 display: true,
+                                                 color: 'rgba(171, 167, 167,0.2)',
+                                                 drawBorder: false
+                                             },
+                                         }]
+                                     }
+                                 }
+                                 
+                             });
+                          
+                             
+                      
+                       },1500);
+                      },1500);
+                    }, 1500);
+                }, 1500);
+               },1500);
+             }, 1500);
+         }, 1500); // longer, but first
+       },1500);
+           
         },1500);
       },1500); 
       
