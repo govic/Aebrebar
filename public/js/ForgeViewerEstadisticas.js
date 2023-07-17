@@ -1086,6 +1086,120 @@ function getOrdenesURN(urnEnvio){
     }
   });
 }
+function getOrdenesTotalPedidos(urnEnvio){
+  id_pedidos_guardados = [];
+  nombre_pedidos = [];
+  fecha_pedidos =[];
+  labels_graf.length = 0;
+  valores_pesos_pedidos.length = 0;
+  jQuery.get({
+    url: '/getOrdenes',
+    contentType: 'application/json',
+    success: function (res) {
+    
+      console.log("RESULTADO Get server GeT oRDENES");
+     console.log(res);
+     console.log(typeof res);
+     console.log(res.length);
+     console.log(typeof res[0]);
+    // $('#vistas_previas').innerHTML = "";
+    
+
+    $list_pedidos = "";
+    $fila = "";
+    var total_acumulado=0;
+     for(let r = 0; r<res.length; r++){
+        
+        if(res[r].urn_actual== urnEnvio){
+        
+          let val_peso = parseFloat(res[r].pesos);
+          total_acumulado =val_peso+ total_acumulado;
+         
+          //   ids_bd.push(Object.values(res[r]));
+             $fila = "";
+           //  console.log("nombre pedido A");
+            // console.log(Object.values(res[r]));
+           //  $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-success btn-block'onclick='filtra_orden("+r+")'>Visualizar</button><button class='btn btn-danger btn-block' onclick=eliminar_orden("+r+")>Borrar</button></td>" + "</tr>";
+           //  $list_pedidos = $list_pedidos +$fila;
+              console.log("ORDENES PARA GRAFICO 2");  
+              console.log(res[r].nombre_pedido);
+            
+             //id_pedidos_guardados.push(res[r].ids);
+             //nombre_pedidos.push(res[r].nombre_pedido);
+             //fecha_pedidos.push(res[r].fecha);
+        }
+       
+    }
+    labels_graf2 = [];
+    labels_graf2.push("Acumulado");
+    valores_pesos_pedidos.push(total_acumulado);
+    console.log("VALORES PARA GRAFICO PEDIDOS");
+    console.log( labels_graf2);
+    console.log(valores_pesos_pedidos);
+    //alert(valores_pesos_pedidos);
+    let valor_maximo = Math.max.apply(null,valores_pesos_pedidos);
+    valor_maximo = valor_maximo*1.5;
+    valor_maximo = parseInt(valor_maximo);
+    console.log("VALOR MAXIMO "+valor_maximo);
+    var ctx57 = document.getElementById('chartBar57').getContext('2d');
+                          new Chart(ctx57, {
+                              type: 'bar',
+                              data: {
+                                  labels: labels_graf2,
+                                  datasets: [{
+                                      label: '# Kgs',
+                                      data: valores_pesos_pedidos,
+                                      backgroundColor: '#285cf7'
+                                  }]
+                              },
+                              options: {
+                                  maintainAspectRatio: false,
+                                  responsive: true,
+                                  legend: {
+                                      display: false,
+                                      labels: {
+                                          display: false
+                                      }
+                                  },
+                                  scales: {
+                                      yAxes: [{
+                                          ticks: {
+                                              beginAtZero: true,
+                                              fontSize: 10,
+                                              max: valor_maximo,
+                                              fontColor: "rgba(171, 167, 167,0.9)",
+                                          },
+                                          gridLines: {
+                                              display: true,
+                                              color: 'rgba(171, 167, 167,0.2)',
+                                              drawBorder: false
+                                          },
+                                      }],
+                                      xAxes: [{
+                                          barPercentage: 0.6,
+                                          ticks: {
+                                              beginAtZero: true,
+                                              fontSize: 11,
+                                              fontColor: "rgba(171, 167, 167,0.9)",
+                                          },
+                                          gridLines: {
+                                              display: true,
+                                              color: 'rgba(171, 167, 167,0.2)',
+                                              drawBorder: false
+                                          },
+                                      }]
+                                  }
+                              }
+                            });
+  
+  
+    }, error: function (res) {
+        console.log("ERROR GET ORDENES");
+        console.log(res);
+    
+    }
+  });
+}
 function setFechaActualPedido(){
   let date = new Date()
 
@@ -1627,6 +1741,7 @@ function launchViewer(urn) {
     
     var documentId = 'urn:' + urn;
     getOrdenesURN(urn);
+    getOrdenesTotalPedidos(urn);
     Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
    
     viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (event) => { 
