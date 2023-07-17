@@ -1934,7 +1934,7 @@ function launchViewer(urn) {
                                   }
                                   
                               });
-                              
+                              document.getElementById("precarga").style.display = "none";
 
                               
                        
@@ -1949,8 +1949,9 @@ function launchViewer(urn) {
           
         },1500);
       },1500); 
+      
  },1500);    
-     
+
      
     
    

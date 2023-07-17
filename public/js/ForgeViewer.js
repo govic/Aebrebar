@@ -4553,7 +4553,7 @@ function launchViewer(urn) {
             document.getElementById("id_seleccionados4").value =selects.join();
             
             document.getElementById("elementos_seleccionados").innerHTML = "";
-            let boton_guardar = "<a class='btn btn-warning btn-block' data-target='#modaldemo4' data-toggle='modal' href=''><i class='ti-save'></i></a>";
+            let boton_guardar = "<a class='btn btn-warning btn-block' data-target='#modaldemo4' data-toggle='tooltip' data-placement='left' title='' data-original-title='Editar Fecha de Instalación' href=''><i class='ti-save'></i></a>";
           
             document.getElementById("elementos_seleccionados").innerHTML = "  "+""+boton_guardar;
             

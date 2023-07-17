@@ -46,6 +46,9 @@ $(document).ready(function () {
  
  }
 
+
+
+
  function callProyectos2(){
     $("#forgeViewer").empty();
       getForgeToken(function (access_token) {
@@ -57,6 +60,8 @@ $(document).ready(function () {
         //   alert(res);
            console.log("VISTA SELECCIONADA URN");
            console.log(res[0].nombre);
+           callProyectosBusqueda(res[0].nombre);
+           console.log(res);
            openViewer(res[0].nombre);
          },
        });
@@ -83,6 +88,7 @@ $(document).ready(function () {
          });*/
        })
   }
+  
  function cargarProyecto(){
    
    var q =  document.getElementById("proyectos_disponibles").value;
@@ -149,6 +155,32 @@ $(document).ready(function () {
         });
       })
  }
+
+ function callProyectosBusqueda(urnBuscada){
+   var nombre_buscado = "";
+    getForgeToken(function (access_token) {
+       jQuery.ajax({
+         url: '/api/forge/oss/bucketsProyectos',
+         headers: { 'Authorization': 'Bearer ' + access_token },
+         success: function (res) {
+           console.log(res);
+           let dropdown = "";
+            for (i = 0; i < res.length; i++) {
+              if(res[i].urn == urnBuscada){
+                nombre_buscado = res[i].objectKey;
+              }
+             // dropdown = dropdown+ "<a href='#' class='dropdown-item' onclick='openViewer("+"\""+res[i].urn+"\""+")'>"+res[i].objectKey+"</a>"
+               
+            }  
+            document.getElementById("nombreProyecto").innerHTML = ''+nombre_buscado+'';
+         },
+         error: function (err) {
+           console.log("error");
+           console.log(err);
+         }
+       });
+     })
+}
  function openViewer(urn){
     launchViewer(urn);
      getForgeToken(function (access_token) {

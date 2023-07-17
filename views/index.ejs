@@ -592,15 +592,15 @@ function prenderDiv(){
 					
 				
 																	<div class="col-sm-4 col-md-4 mg-t-4 mg-md-t-0">
-																		<button class="btn btn-warning  btn-block" onclick="filtro_visual();"><i class="si si-control-play"></i></button>
+																		<button class="btn btn-warning  btn-block" onclick="filtro_visual();"  data-toggle="tooltip" data-placement="right" title="" data-original-title="Aplicar Filtros"><i class="si si-control-play"></i></button>
 																	</div>
 																	
 																	<div class="col-sm-4 col-md-4 mg-t-4 mg-md-t-0">
-																		<button class="btn btn-warning btn-block" onclick="marcar_visual();"><i class="si si-magnifier"></i></button>
+																		<button class="btn btn-warning btn-block" onclick="marcar_visual();" data-toggle="tooltip" data-placement="right" title="" data-original-title="Revisar Vencimientos de selección"><i class="si si-magnifier"></i></button>
 																	</div>
 																	
 																	<div class="col-sm-4 col-md-4 mg-t-4 mg-md-t-0">
-																		<button class="btn btn-warning btn-block" onclick="quitar_filtros();"><i class="si si-action-undo"></i></button>
+																		<button class="btn btn-warning btn-block" onclick="quitar_filtros();" data-toggle="tooltip" data-placement="right" title="" data-original-title="Quitar Filtros"><i class="si si-action-undo"></i></button>
 																	</div>
 																</div><p></p>
 																<div class="row row-xs ">
@@ -618,7 +618,7 @@ function prenderDiv(){
 																				</option>
 																				
 																			</select>
-																			<button data-toggle="dropdown" class="btn btn-warning btn-block" onclick="eliminar_vista();">Eliminar <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
+																			<button  data-toggle="tooltip" data-placement="right" title="" data-original-title="Eliminar Vista Seleccionada" class="btn btn-warning btn-block" onclick="eliminar_vista();" >Eliminar <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
 																		</div>
 																	
 																	<p></p>
@@ -628,13 +628,13 @@ function prenderDiv(){
 																		<div class="col-sm-3 col-md-3 mg-t-3 "  id="elementos_seleccionados">
 																			</div>
 																		<div class="col-sm-3 col-md-3 mg-t-3 ">
-																			<button class="btn btn-warning btn-block" onclick="set_clave(2);"><i class="ti-timer"></i></button>
+																			<button class="btn btn-warning btn-block" onclick="set_clave(2);" data-toggle="tooltip" data-placement="right" title="" data-original-title="Pintar Fechas de Instalacion"><i class="ti-timer"></i></button>
 																		</div>
 																		<div class="col-sm-3 col-md-3 mg-t-3 ">
-																			<button class="btn btn-warning btn-block" onclick="set_clave(3);"><i class="ti-reload"></i></button>
+																			<button class="btn btn-warning btn-block" onclick="set_clave(3);" data-toggle="tooltip" data-placement="right" title="" data-original-title="Recargar"><i class="ti-reload"></i></button>
 																		</div>
 																		<div class="col-sm-3 col-md-3 mg-t-3 ">
-																			<button class="btn btn-warning btn-block "  onclick="prenderDiv();" data-toggle="modal" href=""><i class="ti-eye"></i></button>
+																			<button class="btn btn-warning btn-block "  onclick="prenderDiv();"  href="" ><i class="ti-eye" data-toggle="tooltip" data-placement="left" title="" data-original-title="Ver Propiedades de Objeto Seleccionado"></i></button>
 																		</div>
 																	
 																	

@@ -298,91 +298,15 @@
 					<div class="row row-sm">
 						<div class="col-md-12 col-lg-12 col-lg-12">
 							<div class="card card-dashboard-map-one">
-								   <label class="main-content-label">Proyectos</label>
-								   <span class="d-block mg-b-20 text-muted tx-12">Directorio de Proyectos disponibles</span>
-								   
-								   <div class="">
-												<div >
-													   <div class="container-fluid fill">
-														 <div class="row fill">
-													
-														   <div class="col-sm-12 fill">
-															<div id="notificaciones"></div><br>
-															   <div id="forgeViewer">
-																
-															   </div>
-															   <br><br><br><br><br><br><br>
-															   <br><br><br><br><br><br><br>
-															   <br><br><br><br><br><br><br>
-														   </div>
-														   <div class="col-sm-7">
-															 
-															 <div class="row">
-															   
-															 </div>
-														   </div>  
-														                
-														 </div>
-													   </div>
-													   <form id="uploadFile" method='post' enctype="multipart/form-data">
-														 <input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden" />
-													   </form>
-							   
-												   <div class="row">
-													   <div class="col-sm-4">
-														   
-													   </div>
-													   <div class="col-sm-4">
-														 
-													   </div>
-													   <div class="col-sm-4">
-														   
-					
-													   </div>
-												   </div>
-												   <div class="row">
-													   <div class="col-sm-4">
-														   
-															   </div>
-													   <div class="col-sm-4">
-														   </div>
-													   <div class="col-sm-4">
-														   
-					
-													   </div>
-												   </div>
-												
-												   <br><br><br><br><br>
-												   <div class="row">
-												   
-													   <div class="col-sm-4">
-														  
-													   </div>
-													   <div class="col-sm-4">
-														
-													   </div>
-												   </div>
-													   <div class="modal fade" id="createBucketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-														 <div class="modal-dialog" role="document">
-														   <div class="modal-content">
-															 <div class="modal-header">
-															   
-															   <br>
-															   <div id="RESULTADO"></div>
-															   <h4 class="modal-title" id="myModalLabel">Crear Nueva Carpeta</h4>
-															 </div>
-															 <div class="modal-body">
-															   <input type="text" id="newBucketKey" class="form-control"> Crea Una nueva Carpeta para almacenamiento de proyectos
-															 </div>
-															 <div class="modal-footer">
-															   <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-															   <button type="button" class="btn btn-primary" id="createNewBucket">Crear Carpeta</button>
-															 </div>
-														   </div>
-														 </div>
-													   </div>
-													 </div>
-								   </div>
+								   <label class="main-content-label" >Estadística</label>
+							
+								 <div class="col-6"> <span class="d-block mg-b-20 text-muted tx-12" >
+									<p class="mg-b-20" id="nombreProyecto"></p>			 
+								</span></div> 
+								  <div class="col-6"> <span  ><div id="precarga">Calculando..<img src="assets/img/cargando_gif.gif" style="width:50px"></div></span>
+								</div> 
+								  
+								  
 							   </div>
 						</div>
 					</div>
@@ -683,7 +607,8 @@
 				</div>
 			</div>
 			<!-- Footer closed -->
-
+			<div id="forgeViewer" style="visibility: hidden !important; height: 5px !important;">
+			</div>
 		</div>
 		<!-- End Page -->
 

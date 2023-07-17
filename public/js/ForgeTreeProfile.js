@@ -167,7 +167,7 @@ function callProyectosSeleccion() {
 
            // dropdown = dropdown + "<option class='slide-item' href='#' value='" + res[i].urn + "'>" + res[i].objectKey + "</option>";
             // dropdown = dropdown+ "<a href='#' class='dropdown-item' onclick='openViewer("+"\""+res[i].urn+"\""+")'>"+res[i].objectKey+"</a>"
-            dropdown =    dropdown+ "<div class='media'><div class='media-icon bg-primary-transparent text-primary'> <i class='icon ion-md-link'></i> </div><div class='media-body'><span><h3><b>"+ res[i].objectKey +"</b></h3></span> "+"<button data-toggle='dropdown' class='btn btn-warning btn-block' onclick='gotoProyecto(\""+res[i].urn+"\");'>Ir al Proyecto <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>"+"</div></div>";
+            dropdown =    dropdown+ "<div class='media'><div class='media-icon bg-primary-transparent text-primary'> <a href='' onclick='gotoProyecto(\""+res[i].urn+"\");'><i class='icon ion-md-link'></i></a> </div><div class='media-body'><span><label for='FullName'>"+ res[i].objectKey +"</label></span> "+""+"</div></div></div>";
           }
           document.getElementById("listaProyectos").innerHTML = dropdown;
         }
