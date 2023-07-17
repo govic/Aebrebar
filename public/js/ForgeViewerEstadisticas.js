@@ -1759,20 +1759,6 @@ function launchViewer(urn) {
     pesos_piso4_12 = 0;
     pesos_piso5_12 = 0;
     pesos_piso6_12 = 0;
-
-    pesos_pisoHA1 = 0;
-    pesos_pisoHA2 = 0;
-    pesos_pisoHA3 = 0;
-    pesos_pisoHA4 = 0;
-    pesos_pisoHA5 = 0;
-    pesos_pisoHA6 = 0;
-
-    pesos_HA1_12 = 0;
-    pesos_HA2_12 = 0;
-    pesos_HA3_12 = 0;
-    pesos_HA4_12 = 0;
-    pesos_HA5_12 = 0;
-    pesos_HA6_12 = 0;
      // loadPrevisualizaciones();
    //   getDBIds();
  //     getPlanObj();
