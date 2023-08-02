@@ -1,65 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta http-equiv='cache-control' content='no-cache'>
-		<meta http-equiv='expires' content='0'>
-		<meta http-equiv='pragma' content='no-cache'>
+
 		<meta charset="UTF-8">
 		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta http-equiv="X-UA-Compatible" content="IE=9" />
-		<meta name="Author" content="AEC Shift LTDA">
-		
+		<meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
+		<meta name="Author" content="Spruko Technologies Private Limited">
+		<meta name="Keywords" content="admin,admin dashboard,admin dashboard template,admin panel template,admin template,admin theme,bootstrap 4 admin template,bootstrap 4 dashboard,bootstrap admin,bootstrap admin dashboard,bootstrap admin panel,bootstrap admin template,bootstrap admin theme,bootstrap dashboard,bootstrap form template,bootstrap panel,bootstrap ui kit,dashboard bootstrap 4,dashboard design,dashboard html,dashboard template,dashboard ui kit,envato templates,flat ui,html,html and css templates,html dashboard template,html5,jquery html,premium,premium quality,sidebar bootstrap 4,template admin bootstrap 4"/>
+
 		<!-- Title -->
 		<title> ARBIM CONSTRUCCIÓN </title>
-	<!--	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-	
-	<script language="JavaScript" src="js2/jquery.min.js"></script>
-	<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"></script>-->	
-		
-		<script language="JavaScript" src="/js2/jquery.storageapi.min.js"></script>
-	<script src="/js2/jstree.js"></script>
-	<!--	 <link rel="stylesheet" href="/css/jstree.style.min.css"/>-->
-		 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css" />
-	
- 		<link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
-  		<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
-  	  
-	<!-- <script src="scripts.js"></script>-->
-  	    <script src="js/Dashboard/Dashboard.js"></script>
-		<script src="js/Dashboard/DashboardPanel.js"></script>
-	 
-
-
-		
-
 		<!-- Favicon -->
-		<link rel="icon" href="assets/img/brand/logo.png" type="image/x-icon"/>
+		
 
 		<!-- Icons css -->
 		<link href="assets/css/icons.css" rel="stylesheet">
 
-		<!--  Owl-carousel css-->
-		<link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet" />
-
-		<!-- P-scroll bar css-->
-		<link href="assets/plugins/perfect-scrollbar/p-scrollbar.css" rel="stylesheet" />
+		<!-- Internal Morris Css-->
+		<script language="JavaScript" src="js2/jquery.min.js"></script>
+		<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"></script>-->	
+			
+			<script language="JavaScript" src="/js2/jquery.storageapi.min.js"></script>
+		<script src="/js2/jstree.js"></script>
+		<!--	 <link rel="stylesheet" href="/css/jstree.style.min.css"/>-->
+			 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css" />
+		
+			 <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
+			  <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+			
+		<!-- <script src="scripts.js"></script>-->
+			  <script src="js/Dashboard/Dashboard.js"></script>
+			<script src="js/Dashboard/DashboardPanel.js"></script>
+		 
+			<link href="assets/plugins/morris.js/morris.css" rel="stylesheet">
 
 		<!--  Right-sidemenu css -->
 		<link href="assets/plugins/sidebar/sidebar.css" rel="stylesheet">
 
-		<!-- Sidemenu css -->
+		<!-- P-scroll bar css-->
+		<link href="assets/plugins/perfect-scrollbar/p-scrollbar.css" rel="stylesheet" />
+
+		<!--  Left-Sidebar css -->
 		<link rel="stylesheet" href="assets/css/sidemenu.css">
 
-		<!-- Maps css -->
-		<link href="assets/plugins/jqvmap/jqvmap.min.css" rel="stylesheet">
-
-		<!-- style css -->
+		<!--- Style css --->
 		<link href="assets/css/style.css" rel="stylesheet">
+
+		<!--- Dark-mode css --->
 		<link href="assets/css/style-dark.css" rel="stylesheet">
 
 		<!---Skinmodes css-->
 		<link href="assets/css/skin-modes.css" rel="stylesheet" />
+
+		<!--- Animations css-->
+		<link href="assets/css/animate.css" rel="stylesheet">
 
 	</head>
 
@@ -156,7 +151,7 @@
 							
 							<div class="nav nav-item  navbar-nav-right ml-auto">
 								<div class="nav-link" id="bs-example-navbar-collapse-1">
-									<form class="navbar-form" role="search">
+									<form action="/chart-morris" class="navbar-form" role="search">
 										<div class="input-group">
 											<input type="text" class="form-control" placeholder="Search">
 											<span class="input-group-btn">
@@ -288,13 +283,15 @@
 				<div class="container-fluid">
 
 					<!-- breadcrumb -->
-					
-					<!-- /breadcrumb -->
-
-		
-
-					<!-- row opened -->
-			
+					<div class="breadcrumb-header justify-content-between">
+						<div class="my-auto">
+							<div class="d-flex">
+								
+							</div>
+						</div>
+						
+					</div>
+					<!-- breadcrumb -->
 					<div class="row row-sm">
 						<div class="col-md-6 col-lg-12 col-lg-12">
 							<div class="card card-dashboard-map-one">
@@ -310,339 +307,369 @@
 							   </div>
 						</div>
 					</div>
+					<!-- row -->
 					<div class="row row-sm">
-						<div class="col-sm-6 col-md-6">
-							<div class="card overflow-hidden">
+					
+						<div class="col-md-6">
+							<div class="card mg-b-md-20">
 								<div class="card-body">
 									<div class="main-content-label mg-b-5">
-										Peso Total Barras 0.8  
+									
 									</div>
-									<p class="mg-b-20">Distribución de Pesos por barra 0.8 / Piso</p>
-									<div class="chartjs-wrapper-demo">
-										<!--<canvas id="chartBar4"></canvas>-->
-										<canvas id="chartBar1"></canvas>
-									</div>
+									<p class="mg-b-20">Pesos Totales / Nivel</p>
+									<div class="morris-donut-wrapper-demo" id="morrisDonut1"></div>
 								</div>
 							</div>
 						</div><!-- col-6 -->
-						<div class="col-sm-6 col-md-6">
-							<div class="card overflow-hidden">
+						<div class="col-md-6">
+							<div class="card mg-b-20">
 								<div class="card-body">
 									<div class="main-content-label mg-b-5">
-										Peso Total Barras 0.12
+										
 									</div>
-									<p class="mg-b-20">Distribución de Pesos por barra 0.12 / Piso</p>
-									<div class="chartjs-wrapper-demo">
-										<!--<canvas id="chartBar4"></canvas>-->
-										<canvas id="chartBar25"></canvas>
+									<p class="mg-b-20">Pesos Diámetro / Nivel</p>
+									<div class="morris-wrapper-demo" id="morrisBar4"></div>
+								</div>
+							</div>
+						</div><!-- col-6 -->
+					</div>
+					<div class="row row-sm">
+						<div class="col-md-6">
+							<div class="card mg-b-20">
+								<div class="card-body">
+									<div class="main-content-label mg-b-5">
+										
 									</div>
+									<p class="mg-b-20"></p>
+									<div class="morris-wrapper-demo" id="morrisLine1"></div>
+								</div>
+							</div>
+						</div><!-- col-6 -->
+						<div class="col-md-6">
+							<div class="card mg-b-20">
+								<div class="card-body">
+									<div class="main-content-label mg-b-5">
+										
+									</div>
+									<p class="mg-b-20"></p>
+									<div class="morris-wrapper-demo" id="morrisLine2"></div>
+								</div>
+							</div>
+						</div><!-- col-6 -->
+					</div>
+					<!-- /row -->
+
+					<!-- row -->
+					<div class="row row-sm">
+						<div class="col-md-6">
+							<div class="card mg-b-20">
+								<div class="card-body">
+									<div class="main-content-label mg-b-5">
+										
+									</div>
+									<p class="mg-b-20"></p>
+									<div class="morris-wrapper-demo" id="morrisArea1"></div>
+								</div>
+							</div>
+						</div><!-- col-6 -->
+						<div class="col-md-6">
+							<div class="card mg-b-20">
+								<div class="card-body">
+									<div class="main-content-label mg-b-5">
+										
+									</div>
+									<p class="mg-b-20"></p>
+									<div class="morris-wrapper-demo" id="morrisArea2"></div>
 								</div>
 							</div>
 						</div><!-- col-6 -->
 					</div>
 
-					
-<!--
+					<!-- row -->
+				
+					<!-- /row -->
+
+
+					<!-- /row -->
+
+						<!-- row -->
 					<div class="row row-sm">
-						<div class="col-sm-12 col-md-12">
-							<div class="card overflow-hidden">
+						<div class="col-md-6">
+							<div class="card mg-b-20">
 								<div class="card-body">
 									<div class="main-content-label mg-b-5">
-										Acumulado de Pedidos
+										
 									</div>
-									<p class="mg-b-20">Sumatoria Total de Pedidos</p>
-									<div class="chartjs-wrapper-demo">
-										<canvas id="chartBar35"></canvas>
-									</div>
-								</div>
-							</div>
-						</div>--><!-- col-6 -->
-					
-					</div>
-					<div class="row row-sm">
-						<div class="col-sm-6 col-md-6">
-							<div class="card overflow-hidden">
-								<div class="card-body">
-									<div class="main-content-label mg-b-5">
-										Peso Total Barras 0.8 / HA
-									</div>
-									<p class="mg-b-20">Distribución de Pesos por Partición HA </p>
-									<div class="chartjs-wrapper-demo">
-										<canvas id="chartBar66"></canvas>
-									</div>
+									<p class="mg-b-20">.</p>
+									<div class="morris-wrapper-demo" id="morrisBar1"></div>
 								</div>
 							</div>
 						</div><!-- col-6 -->
-						<div class="col-sm-6 col-md-6">
-							<div class="card overflow-hidden">
+						<div class="col-md-6">
+							<div class="card mg-b-20">
 								<div class="card-body">
 									<div class="main-content-label mg-b-5">
-										Peso Total Barras 0.12 / HA
+									
 									</div>
-									<p class="mg-b-20">Distribución de Pesos por Partición HA </p>
-									<div class="chartjs-wrapper-demo">
-										<canvas id="chartBar67"></canvas>
-									</div>
+									<p class="mg-b-20"></p>
+									<div class="morris-wrapper-demo" id="morrisBar2"></div>
 								</div>
 							</div>
 						</div><!-- col-6 -->
 					</div>
+					<!-- /row -->
+
+					<!-- row -->
 					<div class="row row-sm">
-					
-					
-					</div>
-					<div class="row row-sm">
-						<div class="col-sm-12 col-md-12">
-							<div class="card overflow-hidden">
-								<div class="card-body">
-									<div class="main-content-label mg-b-5">
-										Acumulado de Pedidos
-									</div>
-									<p class="mg-b-20">Sumatoria Total de Pedidos</p>
-									<div class="chartjs-wrapper-demo">
-										<canvas id="chartBar57"></canvas>
-									</div>
-								</div>
-							</div>
-						</div><!-- col-6 -->
-					
-					</div>
-					
-					<!-- row opened -->
-		
-					<!-- /row 
-					<div id='peso'></div>
-					<div id='largo'></div>
-					<div id='acum'></div>
 						
-				-->
-				</div>
-				<!-- /Container -->
-			</div>
-			<!-- /main-content <DIV id ="proyectos_disponibles"></DIV>-->
-			<div class="modal" id="modaldemo10">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					<div class="modal-content tx-size-sm">
-						<div class="modal-body tx-center pd-y-20 pd-x-20">
-							<button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span
-									aria-hidden="true">&times;</span></button> <i
-								class="icon ion-ios-checkmark-circle-outline tx-100 tx-success lh-1 mg-t-20 d-inline-block"></i>
-							<h4 class="tx-success tx-semibold mg-b-20">Asignación Exitosa</h4>
-							<p class="mg-b-20 mg-x-20">Se ha seleccionado el proyecto exitosamente.</p><button aria-label="Close"
-								class="btn ripple btn-success pd-x-25" data-bs-dismiss="modal" onclick="closeAsignacion();"
-								type="button" onclick="closeAsignacion();"  cl>Continuar</button>
-						</div>
+						
 					</div>
+					<!-- row closed -->
 				</div>
+				<!-- Container closed -->
 			</div>
+			<!-- main-content closed -->
+
 			<!-- Sidebar-right-->
-			<div class="sidebar sidebar-right sidebar-animate">
-				<div class="panel panel-primary card mb-0 box-shadow">
-					<div class="tab-menu-heading border-0 p-3">
-						<div class="card-title mb-0">Menu Visualizador</div>
-						<div class="card-options ml-auto">
-							<a href="#" class="sidebar-remove"><i class="fe fe-x"></i></a>
-						</div>
-					</div>
-					<div class="panel-body tabs-menu-body latest-tasks p-0 border-0">
-						<div class="tabs-menu ">
-							<!-- Tabs -->
-							<ul class="nav panel-tabs">
-								<li class=""><a href="#side1" class="active" data-toggle="tab"><i class="fa fa-align-right"></i> Filtros</a></li>
-								<li><a href="#side2" data-toggle="tab"><i class="fa fa-th"></i>Cubicación</a></li>
-								<li><a href="#side3" data-toggle="tab"><i class="fas fa-chart-line"></i> Herramientas & Estadísticas</a></li>
-							</ul>
-						</div>
-						<div class="tab-content">
-							<div class="tab-pane active " id="side1">
-								<div class="list d-flex align-items-center border-bottom p-3">
-									<div class="">
-										<span class="avatar bg-primary brround avatar-md">AEC</span>
-									</div>
-									<a class="wrapper w-100 ml-3" href="#" >
-										<p class="mb-0 d-flex ">
-											<b>AEC PARTICION HA</b>
-										</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="d-flex align-items-center">
-												<i class="fa fa-cube"></i>
-												<small class="text-muted ml-auto">Descripción del Filtro</small>
-												<p class="mb-0"></p>
-											</div>
-										</div>
-									</a>
-								</div>
-								<div class="list d-flex align-items-center border-bottom p-3">
-									<div class="">
-										<span class="avatar bg-primary brround avatar-md">AEC</span>
-									</div>
-									<a class="wrapper w-100 ml-3" href="#" >
-										<p class="mb-0 d-flex ">
-											<b>AEC PARTICION HA</b>
-										</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="d-flex align-items-center">
-												<i class="fa fa-cube"></i>
-												<small class="text-muted ml-auto">Descripción del Filtro</small>
-												<p class="mb-0"></p>
-											</div>
-										</div>
-									</a>
-								</div>
-								<div class="list d-flex align-items-center border-bottom p-3">
-									<div class="">
-										<span class="avatar bg-primary brround avatar-md">AEC</span>
-									</div>
-									<a class="wrapper w-100 ml-3" href="#" >
-										<p class="mb-0 d-flex ">
-											<b>AEC PARTICION HA</b>
-										</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="d-flex align-items-center">
-												<i class="fa fa-cube"></i>
-												<small class="text-muted ml-auto">Descripción del Filtro</small>
-												<p class="mb-0"></p>
-											</div>
-										</div>
-									</a>
-								</div>
-								<div class="list d-flex align-items-center border-bottom p-3">
-									<div class="">
-										<span class="avatar bg-primary brround avatar-md">AEC</span>
-									</div>
-									<a class="wrapper w-100 ml-3" href="#" >
-										<p class="mb-0 d-flex ">
-											<b>AEC PARTICION HA</b>
-										</p>
-										<div class="d-flex justify-content-between align-items-center">
-											<div class="d-flex align-items-center">
-												<i class="fa fa-cube"></i>
-												<small class="text-muted ml-auto">Descripción del Filtro</small>
-												<p class="mb-0"></p>
-											</div>
-										</div>
-									</a>
-								</div>
-							</div>
-							<div class="tab-pane  " id="side2">
-								<div class="list-group list-group-flush ">
-									<div class="list-group-item d-flex  align-items-center">
-										<div class="mr-3">
-											<div class="">
-										<span class="avatar bg-primary brround avatar-md">CAT</span>
-									</div>
-										</div>
-										<div>
-											<strong>Cubicar Categoria</strong> 
-											<div class="small text-muted">
-											Descripción Herramienta
-											</div>
-										</div>
-									</div>
-								
-								</div>
-								<div class="list-group list-group-flush ">
-									<div class="list-group-item d-flex  align-items-center">
-										<div class="mr-3">
-											<div class="">
-										<span class="avatar bg-primary brround avatar-md">CAT</span>
-									</div>
-										</div>
-										<div>
-											<strong>Cubicar Categoria</strong> 
-											<div class="small text-muted">
-											Descripción Herramienta
-											</div>
-										</div>
-									</div>
-								
-								</div>
-								<div class="list-group list-group-flush ">
-									<div class="list-group-item d-flex  align-items-center">
-										<div class="mr-3">
-											<div class="">
-										<span class="avatar bg-primary brround avatar-md">CAT</span>
-									</div>
-										</div>
-										<div>
-											<strong>Cubicar Categoria</strong> <P>
-											<div class="small text-muted">
-											Descripción Herramienta
-											</div>
-										</div>
-									</div>
-								
-								</div>
-								<div class="list-group list-group-flush ">
-									<div class="list-group-item d-flex  align-items-center">
-										<div class="mr-3">
-											<div class="">
-										<span class="avatar bg-primary brround avatar-md">CAT</span>
-									</div>
-										</div>
-										<div>
-											<strong>Cubicar Categoria</strong> 
-											<div class="small text-muted">
-											Descripción Herramienta
-											</div>
-										</div>
-									</div>
-								
-								</div>
-							</div>
-							<div class="tab-pane  " id="side3">
-								<div class="list-group list-group-flush ">
-									<div class="list-group-item d-flex  align-items-center">
-										<div class="mr-2">
-											<span class="avatar bg-primary brround avatar-md">A</span></span>
-										</div>
-										<div class="">
-											<div class="font-weight-semibold" >Estadística 01</div>
-										</div>
-										
-									</div>
-									<div class="list-group-item d-flex  align-items-center">
-										<div class="mr-2">
-											<span class="avatar bg-primary brround avatar-md">A</span></span>
-										</div>
-										<div class="">
-											<div class="font-weight-semibold" >Estadística 01</div>
-										</div>
-										
-									</div>
-									<div class="list-group-item d-flex  align-items-center">
-										<div class="mr-2">
-											<span class="avatar bg-primary brround avatar-md">A</span></span>
-										</div>
-										<div class="">
-											<div class="font-weight-semibold" >Estadística 01</div>
-										</div>
-										
-									</div>
-									<div class="list-group-item d-flex  align-items-center">
-										<div class="mr-2">
-											<span class="avatar bg-primary brround avatar-md">A</span></span>
-										</div>
-										<div class="">
-											<div class="font-weight-semibold" >Estadística 01</div>
-										</div>
-										
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+		
 			<!--/Sidebar-right-->
 
 			<!-- Message Modal -->
-		
+			<div class="modal fade" id="chatmodel" tabindex="-1" role="dialog"  aria-hidden="true">
+				<div class="modal-dialog modal-dialog-right chatbox" role="document">
+					<div class="modal-content chat border-0">
+						<div class="card overflow-hidden mb-0 border-0">
+							<!-- action-header -->
+							<div class="action-header clearfix">
+								<div class="float-left hidden-xs d-flex ml-2">
+									<div class="img_cont mr-3">
+										<img src="assets/img/faces/6.jpg" class="rounded-circle user_img" alt="img">
+									</div>
+									<div class="align-items-center mt-2">
+										<h4 class="text-white mb-0 font-weight-semibold">Daneil Scott</h4>
+										<span class="dot-label bg-success"></span><span class="mr-3 text-white">online</span>
+									</div>
+								</div>
+								<ul class="ah-actions actions align-items-center">
+									<li class="call-icon">
+										<a href="" class="d-done d-md-block phone-button" data-toggle="modal" data-target="#audiomodal">
+											<i class="si si-phone"></i>
+										</a>
+									</li>
+									<li class="video-icon">
+										<a href="" class="d-done d-md-block phone-button" data-toggle="modal" data-target="#videomodal">
+											<i class="si si-camrecorder"></i>
+										</a>
+									</li>
+									<li class="dropdown">
+										<a href="" data-toggle="dropdown" aria-expanded="true">
+											<i class="si si-options-vertical"></i>
+										</a>
+										<ul class="dropdown-menu dropdown-menu-right">
+											<li><i class="fa fa-user-circle"></i> View profile</li>
+											<li><i class="fa fa-users"></i>Add friends</li>
+											<li><i class="fa fa-plus"></i> Add to group</li>
+											<li><i class="fa fa-ban"></i> Block</li>
+										</ul>
+									</li>
+									<li>
+										<a href=""  class="" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true"><i class="si si-close text-white"></i></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<!-- action-header end -->
+
+							<!-- msg_card_body -->
+							<div class="card-body msg_card_body">
+								<div class="chat-box-single-line">
+									<abbr class="timestamp">February 1st, 2019</abbr>
+								</div>
+								<div class="d-flex justify-content-start">
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/6.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+									<div class="msg_cotainer">
+										Hi, how are you Jenna Side?
+										<span class="msg_time">8:40 AM, Today</span>
+									</div>
+								</div>
+								<div class="d-flex justify-content-end ">
+									<div class="msg_cotainer_send">
+										Hi Connor Paige i am good tnx how about you?
+										<span class="msg_time_send">8:55 AM, Today</span>
+									</div>
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/9.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+								</div>
+								<div class="d-flex justify-content-start ">
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/6.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+									<div class="msg_cotainer">
+										I am good too, thank you for your chat template
+										<span class="msg_time">9:00 AM, Today</span>
+									</div>
+								</div>
+								<div class="d-flex justify-content-end ">
+									<div class="msg_cotainer_send">
+										You welcome Connor Paige
+										<span class="msg_time_send">9:05 AM, Today</span>
+									</div>
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/9.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+								</div>
+								<div class="d-flex justify-content-start ">
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/6.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+									<div class="msg_cotainer">
+										Yo, Can you update Views?
+										<span class="msg_time">9:07 AM, Today</span>
+									</div>
+								</div>
+								<div class="d-flex justify-content-end mb-4">
+									<div class="msg_cotainer_send">
+										But I must explain to you how all this mistaken  born and I will give
+										<span class="msg_time_send">9:10 AM, Today</span>
+									</div>
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/9.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+								</div>
+								<div class="d-flex justify-content-start ">
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/6.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+									<div class="msg_cotainer">
+										Yo, Can you update Views?
+										<span class="msg_time">9:07 AM, Today</span>
+									</div>
+								</div>
+								<div class="d-flex justify-content-end mb-4">
+									<div class="msg_cotainer_send">
+										But I must explain to you how all this mistaken  born and I will give
+										<span class="msg_time_send">9:10 AM, Today</span>
+									</div>
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/9.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+								</div>
+								<div class="d-flex justify-content-start ">
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/6.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+									<div class="msg_cotainer">
+										Yo, Can you update Views?
+										<span class="msg_time">9:07 AM, Today</span>
+									</div>
+								</div>
+								<div class="d-flex justify-content-end mb-4">
+									<div class="msg_cotainer_send">
+										But I must explain to you how all this mistaken  born and I will give
+										<span class="msg_time_send">9:10 AM, Today</span>
+									</div>
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/9.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+								</div>
+								<div class="d-flex justify-content-start">
+									<div class="img_cont_msg">
+										<img src="assets/img/faces/6.jpg" class="rounded-circle user_img_msg" alt="img">
+									</div>
+									<div class="msg_cotainer">
+										Okay Bye, text you later..
+										<span class="msg_time">9:12 AM, Today</span>
+									</div>
+								</div>
+							</div>
+							<!-- msg_card_body end -->
+							<!-- card-footer -->
+							<div class="card-footer">
+								<div class="msb-reply d-flex">
+									<div class="input-group">
+										<input type="text" class="form-control " placeholder="Typing....">
+										<div class="input-group-append ">
+											<button type="button" class="btn btn-primary ">
+												<i class="far fa-paper-plane" aria-hidden="true"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div><!-- card-footer end -->
+						</div>
+					</div>
+				</div>
+			</div>
 
 			<!--Video Modal -->
-		
+			<div id="videomodal" class="modal fade">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content bg-dark border-0 text-white">
+						<div class="modal-body mx-auto text-center p-7">
+							<h5>Valex Video call</h5>
+							<img src="assets/img/faces/6.jpg" class="rounded-circle user-img-circle h-8 w-8 mt-4 mb-3" alt="img">
+							<h4 class="mb-1 font-weight-semibold">Daneil Scott</h4>
+							<h6>Calling...</h6>
+							<div class="mt-5">
+								<div class="row">
+									<div class="col-4">
+										<a class="icon icon-shape rounded-circle mb-0 mr-3" href="#">
+											<i class="fas fa-video-slash"></i>
+										</a>
+									</div>
+									<div class="col-4">
+										<a class="icon icon-shape rounded-circle text-white mb-0 mr-3" href="#" data-dismiss="modal" aria-label="Close">
+											<i class="fas fa-phone bg-danger text-white"></i>
+										</a>
+									</div>
+									<div class="col-4">
+										<a class="icon icon-shape rounded-circle mb-0 mr-3" href="#">
+											<i class="fas fa-microphone-slash"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div><!-- modal-body -->
+					</div>
+				</div><!-- modal-dialog -->
+			</div><!-- modal -->
+
 			<!-- Audio Modal -->
-		
+			<div id="audiomodal" class="modal fade">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content border-0">
+						<div class="modal-body mx-auto text-center p-7">
+							<h5>Valex Voice call</h5>
+							<img src="assets/img/faces/6.jpg" class="rounded-circle user-img-circle h-8 w-8 mt-4 mb-3" alt="img">
+							<h4 class="mb-1  font-weight-semibold">Daneil Scott</h4>
+							<h6>Calling...</h6>
+							<div class="mt-5">
+								<div class="row">
+									<div class="col-4">
+										<a class="icon icon-shape rounded-circle mb-0 mr-3" href="#">
+											<i class="fas fa-volume-up bg-light"></i>
+										</a>
+									</div>
+									<div class="col-4">
+										<a class="icon icon-shape rounded-circle text-white mb-0 mr-3" href="#" data-dismiss="modal" aria-label="Close">
+											<i class="fas fa-phone text-white bg-success"></i>
+										</a>
+									</div>
+									<div class="col-4">
+										<a class="icon icon-shape  rounded-circle mb-0 mr-3" href="#">
+											<i class="fas fa-microphone-slash bg-light"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div><!-- modal-body -->
+					</div>
+				</div><!-- modal-dialog -->
+			</div><!-- modal -->
 
 			<!-- Footer opened -->
 			<div class="main-footer ht-40">
@@ -651,8 +678,9 @@
 				</div>
 			</div>
 			<!-- Footer closed -->
-			<div id="forgeViewer" style="visibility: hidden !important; height: 5px !important;">
-			</div>
+<!-- Footer closed -->
+<div id="forgeViewer" style="visibility: hidden !important; height: 5px !important;">
+</div>
 		</div>
 		<!-- End Page -->
 
@@ -660,13 +688,13 @@
 		<a href="#top" id="back-to-top"><i class="las la-angle-double-up"></i></a>
 
 		<!-- JQuery min js -->
-		<!--<script src="assets/plugins/jquery/jquery.min.js"></script> -->
+		<script src="assets/plugins/jquery/jquery.min.js"></script>
 
-		
+		<!--Internal  Datepicker js -->
+		<script src="assets/plugins/jquery-ui/ui/widgets/datepicker.js"></script>
+
+		<!-- Bootstrap Bundle js -->
 		<script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-		<!--Internal  Chart.bundle js -->
-		<script src="assets/plugins/chart.js/Chart.bundle.min.js"></script>
 
 		<!-- Ionicons js -->
 		<script src="assets/plugins/ionicons/ionicons.js"></script>
@@ -674,537 +702,48 @@
 		<!-- Moment js -->
 		<script src="assets/plugins/moment/moment.js"></script>
 
-		<!--Internal Sparkline js -->
-		<script src="assets/plugins/jquery-sparkline/jquery.sparkline.min.js"></script>
+		<!-- Internal Select2 js-->
+		<script src="assets/plugins/select2/js/select2.min.js"></script>
 
-		<!-- Moment js -->
+		<!-- P-scroll js -->
+		<script src="assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+		<script src="assets/plugins/perfect-scrollbar/p-scroll.js"></script>
+
+		<!-- eva-icons js -->
+		<script src="assets/js/eva-icons.min.js"></script>
+
+		<!--Internal  Morris js -->
 		<script src="assets/plugins/raphael/raphael.min.js"></script>
+		<script src="assets/plugins/morris.js/morris.min.js"></script>
 
-		<!--<script src="assets/js/chart.chartjs.js"></script>-->
-		<!--Internal  Flot js-->
-		<script src="assets/plugins/jquery.flot/jquery.flot.js"></script>
-		<script src="assets/plugins/jquery.flot/jquery.flot.pie.js"></script>
-		<script src="assets/plugins/jquery.flot/jquery.flot.resize.js"></script>
-		<script src="assets/plugins/jquery.flot/jquery.flot.categories.js"></script>
-		<script src="assets/js/dashboard.sampledata.js"></script>
-		<script src="assets/js/chart.flot.sampledata.js"></script>
+		<!--Internal Chart Morris js -->
+		<script src="assets/js/chart.morris.js"></script>
 
-		<!--Internal Apexchart js-->
-		<div id="proyectos_disponibles"></div>
-
+		</script>
 		<!-- Rating js-->
 		<script src="assets/plugins/rating/jquery.rating-stars.js"></script>
 		<script src="assets/plugins/rating/jquery.barrating.js"></script>
 
-		<!--Internal  Perfect-scrollbar js -->
-		<script src="assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-		<script src="assets/plugins/perfect-scrollbar/p-scroll.js"></script>
+		<!-- Sidebar js -->
+		<script src="assets/plugins/side-menu/sidemenu.js"></script>
 
-		<!-- Eva-icons js -->
-		<script src="assets/js/eva-icons.min.js"></script>
-
-		<!-- right-sidebar js -->
+		<!-- Right-sidebar js -->
 		<script src="assets/plugins/sidebar/sidebar.js"></script>
 		<script src="assets/plugins/sidebar/sidebar-custom.js"></script>
 
 		<!-- Sticky js -->
 		<script src="assets/js/sticky.js"></script>
-		<script src="assets/js/modal-popup.js"></script>
-
-		<!-- Left-menu js-->
-		<script src="assets/plugins/side-menu/sidemenu.js"></script>
-
-		<!-- Internal Map -->
-		<script src="assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-		<script src="assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-
-		<!--Internal  index js -->
-		<script src="assets/js/index.js"></script>
-
-		<!-- custom js -->
-		<script src="assets/js/custom.js"></script>
-		<script src="assets/js/jquery.vmap.sampledata.js"></script>
-
-	
 		<script src="js/ForgeTreeEstadisticas.js"></script>
 	    <script src="js/ForgeViewerEstadisticas.js"></script>
 	    <script src="js/handleselectionextension.js"></script>
 	    <!--<script src="js/frappe-gantt.min.js"></script>-->
 	    <script src="js/atbim.js"></script>
+		<!-- custom js -->
+		<script src="assets/js/custom.js"></script>
 		
-		<!--<script src="js/camino.json"></script>
-		-->
+    <script>
 		
-		<script>
-			var referencia = Array();
-			var resultado_ids;
-		/*	console.log("DATA JSON");
-			var mydata = JSON.parse(camino);
-			console.log("DATA JSON");
-			console.log(mydata);*/
-				var aec_peso_1 = 0;
-				var aec_peso_2 = 0;
-				var aec_peso_3 = 0;
-				var aec_peso_4 = 0;
-				var aec_peso_5 = 0;
-				var aec_peso_6 = 0;
-				var aec_peso_7 = 0;
-				var aec_peso_8 = 0;
-				
-			//	launchViewer("dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6YmVsbG90by8xMSUyMEJlbGxvdG8lMjBQcnVlYmElMjBBUkJJTS5ydnQ=");
-				filtro_1 = '';
-				filtro_2 = Object.values(["00.- Radier EDA"]);
-				parametro_nivel = '';
-				filtros_selec_ha =[];
-				
-			
-		 	function buscar_pesos_1(){
-				console.log("ENTRO A BUSCAR PESOS");
-				console.log(filtro_2);
-				consulta_filtro2(filtro_2).then((data) => {
-							console.log("RESULTADO INICIAL");
-							console.log(data);
-							let keys = Object.keys(data);
-							console.log("BUSQUEDA 01");
-							console.log(keys);
-							let elementos = buscaKeys('00.- Radier EDA',keys)
-							var identificadores =0;
-							let dbIds =0;
-							
-							if(elementos.length == 0 || elementos.length  || elementos){
-							console.log("No hay resultados");
-							}else{
-								console.log("FILTRADOS PINTAR "+elementos.length);
-								for(var a = 0; a<elementos.length;a++){
-									if(a==0){
-									dbIds = data[keys[elementos[a]]].dbIds;              
-									referencia.push(dbIds);
-									referencia2.push(dbIds);
-									identificadores = dbIds;
-									}
-									else{
-									referencia.push((data[keys[elementos[a]]].dbIds));
-									referencia2.push((data[keys[elementos[a]]].dbIds));
-									identificadores = dbIds.concat(data[keys[elementos[a]]].dbIds);
-
-									dbIds = identificadores;
-									}
-								}
-
-								resultado_ids = referencia;
-
-							}
-
-							viewer.isolate(identificadores);
-							console.log("IDENTIFICADORES");
-							console.log(identificadores);
-							viewer.fitToView(identificadores, viewer.model);
-							idsSeleccionados =[];
-							idsSeleccionados = identificadores;
-						
-							let c =1;
-							var hoy = 10 + '-' +05 + '-' +2021;
-							var cat_count=1;
-							var esta =0;
-							var categorias = Array();
-							var categoria_actual;
-							var indice_actual = 0;
-							var pesoTotal = 0;
-							var largoTotal = 0;
-							var xTotal = 0;
-							
-						//	var tableTotales = document.getElementById('tabla_total');
-						//	var tableRef = document.getElementById('tabla_fierro');
-
-						//	var tablaPedido = document.getElementById('tabla_fierro_pedido');
-							
-
-						////	document.getElementById('peso').innerHTML = '';
-						//	document.getElementById('largo').innerHTML = '' ;
-						//	document.getElementById('acum').innerHTML = '' ;
-					//		var rowCount = tableRef.rows.length;
-				//			var rowCountTotales = tableTotales.rows.length;
-			//				var tableHeaderRowCount = 1;
-						
-							console.log("RESULTADOS DE IDS FILTRO");
-							console.log(resultado_ids);
-							console.log(resultado_ids[0]);
-							for(var a=0; a< identificadores.length;a++){
-								let actual =  identificadores;
-								
-								viewer.getProperties( identificadores[a], (result) => { 
-								console.log("RESPUESTA");
-								console.log(result);
-								for(i=0 ;i< 60;i++){
-									let nombre_actual = ""+result.properties[i].displayName;
-									if(nombre_actual ==="Category"){
-									categoria_actual_obj = result.properties[i].displayValue;
-									
-									console.log("valor categoria actual!!: "+categoria_actual_obj);
-									let val_actual = result.properties[t].displayName;
-									console.log( "Valor propiedad!!: "+val_actual);
-									if(val_actual == "Bar Diameter"){
-									if(result.properties[t].displayValue == "8"){
-										console.log("tipo 0.8");
-									}
-									if(result.properties[t].displayValue == "12"){
-										console.log("tipo 0.12");
-									}
-									}
-									if(categoria_actual_obj=="Revit Structural Rebar"){
-										let peso = parseFloat(result.properties[82].displayValue);
-										
-										peso = peso.toFixed(2);
-										peso = parseFloat(peso);
-									
-										console.log("PESO BUSCADO444");
-										console.log(peso);
-										//	let actuales = $("#id_seleccionados3").val();
-										//actual =   actual+","+actuales;
-										
-										pesoTotal = pesoTotal+peso;
-									//    pesoTotal  = parseFloat(pesoTotal).toFixed(2);
-										console.log( "SUMATORIA PESO");
-										console.log( pesoTotal);
-										//document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(2);
-										let largo = parseFloat(result.properties[46].displayValue);
-										largo = largo.toFixed(2);
-										largo = parseFloat(largo,0);
-										console.log( "Largo");
-										console.log( largo);
-										
-										listado_pesos = listado_pesos +","+peso;
-										listado_largos = listado_largos +","+largo;
-									//	$("#id_seleccionados3").val(actual);
-										console.log("EDITO SELECCIONADOS ");
-									//	$("#id_seleccionados4").val(actual);
-									//	$("#listado_largo").val(listado_largos);
-								//		$("#listado_pesos").val(listado_pesos);
-
-										console.log( typeof largo);
-										largoTotal = largoTotal+ largo;
-										console.log( "SUMATORIA LARGO");
-										console.log( largoTotal);
-									
-								//		document.getElementById('largo').innerHTML = '';
-								//		document.getElementById('largo').innerHTML = '' +largoTotal;
-									
-										let name = result.name;
-										peso = parseFloat(peso,0);
-										largo = parseFloat(largo,0);
-										let resultado_mul = peso*largo;
-										//console.log( "Resultado Multiplicación");
-									// console.log( resultado_mul);
-									
-										resultado_mul =resultado_mul.toFixed(2);
-										xTotal = xTotal + parseFloat(resultado_mul);
-									console.log( "Total Multiplicación");
-									console.log( xTotal);
-								//		document.getElementById('acum').innerHTML = '' +xTotal.toFixed(2);
-
-								//		document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
-										let g = name.split(' ');
-										let y = g[2];
-							
-								
-										
-										// Inserta una fila en la tabla, en el índice 0
-								//		var newRow   = tableRef.insertRow(1);
-									
-										// Inserta una celda en la fila, en el índice 0
-								////		var newCell  = newRow.insertCell(0);
-									//	var newCell2  = newRow.insertCell(1);
-									//	var newCell3  = newRow.insertCell(2);
-									//	var newCell4  = newRow.insertCell(3);
-
-										//////////MODAL PEDIDOS//////
-									
-										// Añade un nodo de texto a la celda
-									//	var newText  = document.createTextNode(y);
-									//	newCell.appendChild(newText);
-										
-									//	var newText2  = document.createTextNode(largo);
-									//	newCell2.appendChild(newText2);
-									
-									//	var newText3  = document.createTextNode(peso);
-									//	newCell3.appendChild(newText3);
-										
-									//	var newText4  = document.createTextNode(resultado_mul);
-									//	newCell4.appendChild(newText4);
-									
-									}
-									if(cat_count == 1){ // no hay ningun elemento
-										indice_actual = 0;
-										categorias.push(result.properties[i].displayValue);
-										categoria_actual = result.properties[i].displayValue;
-										cat_count =cat_count +1;
-								
-									}else{
-										for(var t =0 ; t< cat_count; t++){
-											if( result.properties[i].displayValue === categorias[t]){
-												esta = 1; 
-												indice_actual = t;
-												break
-											}
-										}
-										if(esta ==0){ // no se encontró  se procede a agregar la nueva categoria
-											categorias.push(result.properties[i].displayValue);
-											cat_count =cat_count +1;
-											indice_actual = cat_count -1;               
-										}
-										else{
-											esta = 0;
-										}
-										}
-									}
-									
-								}
-								
-								}) 
-								
-							}
-				 });
-
-			}
-			
-				$(function() {
-				
-					var ctx4 = document.getElementById('chartBar4').getContext('2d');
-					new Chart(ctx4, {
-						type: 'horizontalBar',
-						data: {
-							labels: ['1A', 'BA', '2A', '3A', 'AA', '4A','5A','6A'],
-							datasets: [{
-								label: '# Diametros',
-								data: [300, 7000, 8500, 13500, 12000, 8000, 7000, 8500],
-								backgroundColor: ['#285cf7', '#f10075', '#f7557a', '#673ab7', '#ffc107', '#7987a1', '#f7557a', '#673ab7']
-							}]
-						},
-						options: {
-							maintainAspectRatio: false,
-							legend: {
-								display: false,
-								labels: {
-									display: false
-								}
-							},
-							scales: {
-								yAxes: [{
-									ticks: {
-										beginAtZero: true,
-										fontSize: 10,
-										fontColor: "rgba(171, 167, 167,0.9)",
-									},
-									gridLines: {
-										display: true,
-										color: 'rgba(171, 167, 167,0.2)',
-										drawBorder: false
-									},
-								}],
-								xAxes: [{
-									ticks: {
-										beginAtZero: true,
-										fontSize: 11,
-										max: 20000,
-										fontColor: "rgba(171, 167, 167,0.9)",
-									},
-									gridLines: {
-										display: true,
-										color: 'rgba(171, 167, 167,0.2)',
-										drawBorder: false
-									},
-								}]
-							}
-						}
-					});
-					var ctx10 = document.getElementById('chartBar10').getContext('2d');
-					new Chart(ctx10, {
-						type: 'horizontalBar',
-						data: {
-							labels: ['00 Base', '01 Piso ', '02 Piso ', ' 03 Piso', '04 Piso', '05 Piso','06 Piso','Base'],
-							datasets: [{
-								label: '# Diametros',
-								data: [1500, 5000, 6500, 8500, 8200, 6500, 5856, 4580],
-								backgroundColor: ['#285cf7', '#f10075', '#f7557a', '#673ab7', '#ffc107', '#7987a1', '#f7557a', '#673ab7']
-							}]
-						},
-						options: {
-							maintainAspectRatio: false,
-							legend: {
-								display: false,
-								labels: {
-									display: false
-								}
-							},
-							scales: {
-								yAxes: [{
-									ticks: {
-										beginAtZero: true,
-										fontSize: 10,
-										fontColor: "rgba(171, 167, 167,0.9)",
-									},
-									gridLines: {
-										display: true,
-										color: 'rgba(171, 167, 167,0.2)',
-										drawBorder: false
-									},
-								}],
-								xAxes: [{
-									ticks: {
-										beginAtZero: true,
-										fontSize: 11,
-										max: 20000,
-										fontColor: "rgba(171, 167, 167,0.9)",
-									},
-									gridLines: {
-										display: true,
-										color: 'rgba(171, 167, 167,0.2)',
-										drawBorder: false
-									},
-								}]
-							}
-						}
-					});
-
-					var ctx11 = document.getElementById('chartBar11').getContext('2d');
-					new Chart(ctx11, {
-						type: 'horizontalBar',
-						data: {
-							labels: ['6m', '6<L<7 ', '7<L<8 ', ' >=12m'],
-							datasets: [{
-								label: '# Diametros',
-								data: [989, 1560, 5457, 2587],
-								backgroundColor: ['#285cf7', '#f10075', '#f7557a', '#673ab7']
-							}]
-						},
-						options: {
-							maintainAspectRatio: false,
-							legend: {
-								display: false,
-								labels: {
-									display: false
-								}
-							},
-							scales: {
-								yAxes: [{
-									ticks: {
-										beginAtZero: true,
-										fontSize: 10,
-										fontColor: "rgba(171, 167, 167,0.9)",
-									},
-									gridLines: {
-										display: true,
-										color: 'rgba(171, 167, 167,0.2)',
-										drawBorder: false
-									},
-								}],
-								xAxes: [{
-									ticks: {
-										beginAtZero: true,
-										fontSize: 11,
-										max: 20000,
-										fontColor: "rgba(171, 167, 167,0.9)",
-									},
-									gridLines: {
-										display: true,
-										color: 'rgba(171, 167, 167,0.2)',
-										drawBorder: false
-									},
-								}]
-							}
-						}
-					});
-
-					var ctx12 = document.getElementById('chartBar12').getContext('2d');
-					new Chart(ctx12, {
-						type: 'horizontalBar',
-						data: {
-							labels: ['Enero', 'Febrero ', 'marzo ', ' Abril', ' Mayo', ' Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-							datasets: [{
-								label: '# Peso Pedidos',
-								data: [8560, 11560, 8879, 7895,9876,10256,13256,7845,6589,13254,14689,4569],
-								backgroundColor: ['#285cf7', '#f10075', '#f7557a', '#673ab7','#ffc107', '#7987a1', '#f7557a', '#673ab7','#285cf7', '#f10075', '#f7557a', '#673ab7']
-							}]
-						},
-						options: {
-							maintainAspectRatio: false,
-							legend: {
-								display: false,
-								labels: {
-									display: false
-								}
-							},
-							scales: {
-								yAxes: [{
-									ticks: {
-										beginAtZero: true,
-										fontSize: 10,
-										fontColor: "rgba(171, 167, 167,0.9)",
-									},
-									gridLines: {
-										display: true,
-										color: 'rgba(171, 167, 167,0.2)',
-										drawBorder: false
-									},
-								}],
-								xAxes: [{
-									ticks: {
-										beginAtZero: true,
-										fontSize: 11,
-										max: 20000,
-										fontColor: "rgba(171, 167, 167,0.9)",
-									},
-									gridLines: {
-										display: true,
-										color: 'rgba(171, 167, 167,0.2)',
-										drawBorder: false
-									},
-								}]
-							}
-						}
-					});
-
-				
-					/* LINE CHART */
-
-					/** AREA CHART **/
-
-					/** PIE CHART **/
-					var datapie = {
-						labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-						datasets: [{
-							data: [20, 20, 30, 5, 25],
-							backgroundColor: ['#285cf7', '#f10075', '#8500ff', '#7987a1', '#74de00']
-						}]
-					};
-					var optionpie = {
-						maintainAspectRatio: false,
-						responsive: true,
-						legend: {
-							display: false,
-						},
-						animation: {
-							animateScale: true,
-							animateRotate: true
-						}
-					};
-					// For a doughnut chart
-					var ctx6 = document.getElementById('chartPie');
-					var myPieChart6 = new Chart(ctx6, {
-						type: 'doughnut',
-						data: datapie,
-						options: optionpie
-					});
-					// For a pie chart
-					var ctx7 = document.getElementById('chartDonut');
-					var myPieChart7 = new Chart(ctx7, {
-						type: 'pie',
-						data: datapie,
-						options: optionpie
-					});
-				});
-		</script>
-	  <!--  <script src="js/atbimDocking.js"></script>-->
-<script>	</script>
+		
+	</script>
 	</body>
 </html>
