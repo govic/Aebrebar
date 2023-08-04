@@ -2206,15 +2206,7 @@ async function getValFiltro(filtro_name,urn){
                             largo = largo / 100;
                             largoActual = largo;
                             console.log("convertido HA " + largo);
-                            // listado_largos = listado_largos+","+largo;
-                            //listado_pesos = listado_pesos + ","+peso;
-                            //largoTotal = largoTotal+ largo;
-                            // largoTotal = largoTotal;
-                            //console.log( "SUMATORIA LARGO");
-                            //console.log( largoTotal);
-                            //console.log( "Listado largos");
-                            //console.log(listado_largos);
-    
+               
                           }
                           if ((t + 1) == result.properties.length) { // termina de recorrer todas las propiedades
                             let resultado_mul = pesoActual * largoActual;
@@ -2378,7 +2370,7 @@ var sumatoria_pesos =0;
         dataPedidos2.push(dona2);
         console.log("LISTADO DE PEDIDOS");
        console.log(ListadoIdsPedidos);
-       
+
      }
     var valorResto = sumatoria_pesos-total_acumulado;
     console.log("VALOR RESTO DONA4");
