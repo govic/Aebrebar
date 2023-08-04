@@ -2378,6 +2378,7 @@ var sumatoria_pesos =0;
         dataPedidos2.push(dona2);
         console.log("LISTADO DE PEDIDOS");
        console.log(ListadoIdsPedidos);
+       
      }
     var valorResto = sumatoria_pesos-total_acumulado;
     console.log("VALOR RESTO DONA4");
