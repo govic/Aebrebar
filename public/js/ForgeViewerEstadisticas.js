@@ -1090,7 +1090,293 @@ function getOrdenesURN(urnEnvio){
     }
   });
 }
-function getOrdenesTotalPedidos(urnEnvio){
+async function getPedidosLago(urnEnvio){
+  id_pedidos_guardados = [];
+  nombre_pedidos = [];
+  fecha_pedidos =[];
+  labels_graf.length = 0;
+  valores_pesos_pedidos.length = 0;
+  identificadores = [];
+  jQuery.get({
+    url: '/getOrdenes',
+    contentType: 'application/json',
+    success: function (res) { }, error: function (res) {
+      console.log("ERROR GET ORDENES");
+      console.log(res);
+    //  identificadores =res["ids"]; // filtrar Ids de elementos
+      if(identificadores.length > 0){
+           viewer.getProperties( identificadores[a], (result) => { 
+        console.log("RESPUESTA para A lvl "+ a + " && "+identificadores.length);
+        console.log(result);
+        contador_lg = contador_lg+1;
+        for(i=0 ;i< 60;i++){
+          if(result.properties[i] && result.properties[i].displayName){
+            let nombre_actual = ""+result.properties[i].displayName;
+            if(nombre_actual ==="Category"){
+              categoria_actual_obj = result.properties[i].displayValue;
+              console.log("valor categoria actual5: "+categoria_actual_obj); 
+               
+              if(categoria_actual_obj=="Revit Structural Rebar"){
+                for(t=0;t<result.properties.length;t++){
+                
+                  let val_actual = result.properties[t].displayName;
+                  if( val_actual == "RS Peso Lineal (kg/m)"){
+                    console.log("ENTRO A PESO LINEAL HA");
+                    let peso = parseFloat(result.properties[t].displayValue);
+                    
+                    console.log("ANTES PESO BUSCADO HA");
+                    console.log(peso);
+                    console.log(result.properties[t].displayValue);
+                    console.log(result);
+                  
+                    peso = parseFloat(peso);
+                    pesoActual = peso;
+                    console.log("PESO BUSCADO HA");
+                    console.log(peso);
+                
+             
+        
+                  }
+                  //LARGO DE LAS BARRAS
+                  if(val_actual == "Total Bar Length"){
+                    console.log("TOTAL LENGTH BAR HA");
+                    
+                    let largo = parseFloat(result.properties[t].displayValue);
+                    largo = largo.toFixed(0);
+                    console.log(largo );
+                    
+                    largo = parseFloat(largo,0);
+                    largo = largo /100;
+                    largoActual = largo;
+                    console.log("convertido HA "+largo);
+              
+                  }
+                  if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
+                    let resultado_mul = pesoActual*largoActual;
+                    resultado_mul.toFixed(0);
+                    pesoActual = 0;
+                    largoActual = 0;
+                   // document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(2)+ ' mtrs';
+                    console.log("ANTES DE PISO");
+                  
+                    //   pesos_piso1 = pesoTotal;
+                       pesos_ha1 =  pesos_ha1 + resultado_mul;
+                       console.log("Peso ha 1 "+pesos_ha1);
+                       resultado_mul = 0;
+                       identificadores = Array();
+                       contador_lg = 0;
+                  
+                   
+                     if(piso == '2'){
+                      
+                       pesos_ha2 =  pesos_ha2 + resultado_mul;
+                       console.log("Peso piso ha 2 "+pesos_ha2 +"   "+ resultado_mul );
+                      // pesoTotal = 0;
+                       identificadores = Array();
+                       contador_lg = 0;
+                     }
+                     if(piso == '3'){
+                      pesos_ha3 =  pesos_ha3 + resultado_mul;
+                       console.log("Peso piso ha 3 "+pesos_ha3);
+                     //  pesoTotal = 0;
+                       identificadores = Array();
+                       contador_lg = 0;
+                     }
+                     if(piso == '4'){
+                      pesos_ha4 =  pesos_ha4 + resultado_mul;
+                       console.log("Peso piso 4 "+pesos_ha4);
+                      //  pesoTotal = 0;
+                       identificadores = Array();
+                       contador_lg = 0;
+                     }
+                     if(piso == '5'){
+                      pesos_ha5 = pesos_ha5 + resultado_mul;
+                      console.log("Peso piso ha 5 "+pesos_ha5);
+                     //  pesoTotal = 0;
+                      identificadores = Array();
+                      contador_lg = 0;
+                    }
+                    if(piso == '6'){
+                      pesos_ha6 = pesos_ha6 + resultado_mul;
+                      console.log("Peso piso ha 6 "+pesos_ha6);
+                     //  pesoTotal = 0;
+                      identificadores = Array();
+                      contador_lg = 0;
+                    }    
+                  
+                   
+                 }
+                }
+          
+      
+              }
+            
+            }
+          
+          }
+         
+        }
+        
+      }) 
+      }
+   
+  }
+  });
+
+}
+function getOrdenesTotalPedidos(urnEnvio,sumatoria_pesos){
+  id_pedidos_guardados = [];
+  nombre_pedidos = [];
+  fecha_pedidos =[];
+  labels_graf.length = 0;
+  valores_pesos_pedidos.length = 0;
+  var dataPedidos2 = [];
+  jQuery.get({
+    url: '/getOrdenes',
+    contentType: 'application/json',
+    success: function (res) {
+    
+      console.log("RESULTADO Get server GeT oRDENES");
+      console.log(res);
+      console.log(typeof res);
+      console.log(res.length);
+      console.log(typeof res[0]);
+    // $('#vistas_previas').innerHTML = "";
+    
+
+    $list_pedidos = "";
+    $fila = "";
+    var total_acumulado=0;
+
+    var ListadoPedidos=[];
+    let dona2 ={};
+     for(let r = 0; r<res.length; r++){
+      dona2 = {};
+        if(res[r].urn_actual== urnEnvio){
+       
+          let val_peso = parseFloat(res[r].pesos);
+          total_acumulado =val_peso+ total_acumulado;
+         
+          //   ids_bd.push(Object.values(res[r]));
+             $fila = "";
+           //  console.log("nombre pedido A");
+            // console.log(Object.values(res[r]));
+           //  $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-success btn-block'onclick='filtra_orden("+r+")'>Visualizar</button><button class='btn btn-danger btn-block' onclick=eliminar_orden("+r+")>Borrar</button></td>" + "</tr>";
+           //  $list_pedidos = $list_pedidos +$fila;
+           if(res[r].nombre_pedido !="" && val_peso !="" ){
+              console.log("ORDENES PARA GRAFICO 2");  
+              console.log(res[r].nombre_pedido);
+              console.log(val_peso);
+              dona2["label"]=res[r].nombre_pedido;
+              dona2["value"]=val_peso;
+           }
+            
+             //id_pedidos_guardados.push(res[r].ids);
+             //nombre_pedidos.push(res[r].nombre_pedido);
+             //fecha_pedidos.push(res[r].fecha);
+        }
+        dataPedidos2.push(dona2);
+       
+    }
+    var valorResto = sumatoria_pesos-total_acumulado;
+    console.log("VALOR RESTO DONA4");
+    console.log(total_acumulado);
+    console.log(typeof total_acumulado);
+    console.log(sumatoria_pesos);
+    console.log(typeof sumatoria_pesos);
+    console.log("VALOR RESTO DONA5");
+    console.log(valorResto);
+    dona2["label"]="Sin Pedir";
+    dona2["value"]=valorResto;
+    dataPedidos2.push(dona2);
+    console.log("PEDIDOS DONA /TOTAL");
+    console.log(dataPedidos2);
+   
+   /*
+    labels_graf2 = [];
+    labels_graf2.push("Acumulado");
+    valores_pesos_pedidos.push(total_acumulado);
+    console.log("VALORES PARA GRAFICO PEDIDOS");
+    console.log( labels_graf2);
+    console.log(valores_pesos_pedidos);
+    //alert(valores_pesos_pedidos);
+    let valor_maximo = Math.max.apply(null,valores_pesos_pedidos);
+    valor_maximo = valor_maximo*1.5;
+    valor_maximo = parseInt(valor_maximo);
+    console.log("VALOR MAXIMO "+valor_maximo);
+*/
+
+    new Morris.Donut({
+      element: 'morrisDonut2',
+      data: dataPedidos2,
+      colors: ['#285cf7', '#6d6ef3','#6d6ef0','#6d6eg3'],
+      resize: true,
+      labelColor:"#8c9fc3"
+      
+    });
+
+
+    var ctx57 = document.getElementById('chartBar57').getContext('2d');
+                          new Chart(ctx57, {
+                              type: 'bar',
+                              data: {
+                                  labels: labels_graf2,
+                                  datasets: [{
+                                      label: '# Kgs',
+                                      data: valores_pesos_pedidos,
+                                      backgroundColor: '#285cf7'
+                                  }]
+                              },
+                              options: {
+                                  maintainAspectRatio: false,
+                                  responsive: true,
+                                  legend: {
+                                      display: false,
+                                      labels: {
+                                          display: false
+                                      }
+                                  },
+                                  scales: {
+                                      yAxes: [{
+                                          ticks: {
+                                              beginAtZero: true,
+                                              fontSize: 10,
+                                              max: valor_maximo,
+                                              fontColor: "rgba(171, 167, 167,0.9)",
+                                          },
+                                          gridLines: {
+                                              display: true,
+                                              color: 'rgba(171, 167, 167,0.2)',
+                                              drawBorder: false
+                                          },
+                                      }],
+                                      xAxes: [{
+                                          barPercentage: 0.6,
+                                          ticks: {
+                                              beginAtZero: true,
+                                              fontSize: 11,
+                                              fontColor: "rgba(171, 167, 167,0.9)",
+                                          },
+                                          gridLines: {
+                                              display: true,
+                                              color: 'rgba(171, 167, 167,0.2)',
+                                              drawBorder: false
+                                          },
+                                      }]
+                                  }
+                              }
+                            });
+  
+  
+    }, error: function (res) {
+        console.log("ERROR GET ORDENES");
+        console.log(res);
+    
+    }
+  });
+}
+
+function getPedidosTotal(urnEnvio){
   id_pedidos_guardados = [];
   nombre_pedidos = [];
   fecha_pedidos =[];
@@ -1113,11 +1399,14 @@ function getOrdenesTotalPedidos(urnEnvio){
     $fila = "";
     var total_acumulado=0;
     var dataPedidos = [];
+    var ListadoPedidos=[];
      for(let r = 0; r<res.length; r++){
         let dona ={};
         if(res[r].urn_actual== urnEnvio){
         
           let val_peso = parseFloat(res[r].pesos);
+          let actual = [res[r].nombre_pedido,val_peso];
+          ListadoPedidos.push(actual);
           total_acumulado =val_peso+ total_acumulado;
          
           //   ids_bd.push(Object.values(res[r]));
@@ -1137,6 +1426,7 @@ function getOrdenesTotalPedidos(urnEnvio){
         dataPedidos.push(dona);
        
     }
+
     labels_graf2 = [];
     labels_graf2.push("Acumulado");
     valores_pesos_pedidos.push(total_acumulado);
@@ -1724,7 +2014,7 @@ function cargarVista(){
   });*/
 }
 
-async function getValFiltro(filtro_name){
+async function getValFiltro(filtro_name,urn){
 
   let filtrado = [filtro_name];
   let arr_resp = [];
@@ -1779,17 +2069,10 @@ async function getValFiltro(filtro_name){
   let resultados = new Promise((resolve, reject) => {
   var matriz_resultados=[]
   for(let p = 0; p<valores.length;p++){
-  
-    
-   
-    
       let diametros_barras = [];
       for(let r =0; r<diametrosTotal.length;r++){
         diametros_barras.push(0);
       }
-     
-
-      
      // a.push(diametros_barras); 
       matriz_resultados.push(diametros_barras);
       console.log("VALORES PISOS resultados");
@@ -1991,7 +2274,11 @@ async function getValFiltro(filtro_name){
 
   
 const jj = await resultados;
+// jj matriz de resutados
+// valores arreglo de nombres-piso
+// diametros arregle de diametros por proyecto
 
+var sumatoria_pesos =0;
   setTimeout(() => {
 
     var morrisData3 = [];
@@ -2013,6 +2300,7 @@ const jj = await resultados;
           console.log(diametrosTotal[f]);
         }
         dn['value'] = cont;
+        sumatoria_pesos = sumatoria_pesos+cont;
         morrisData3.push(qj);
         donaData.push(dn);
       }
@@ -2020,6 +2308,113 @@ const jj = await resultados;
       console.log(dn);
      
     }
+    console.log("VALORES BASE");
+    console.log(diametrosTotal);
+    console.log(valores);
+    console.log(jj);
+    var arr_diametrosTotales =[];
+    for(let q =0;q<diametrosTotal.length;q++){
+      let labelDiametro ={};
+      let valorDiametro ={}; // valor diametro acumulado
+      labelDiametro['y']= diametrosTotal[q];
+      let cont = 0;
+     
+      for(let d=0;d< jj.length;d++){
+        console.log("suma por diametro");
+        console.log("q: "+q+"  d: "+d);
+        console.log(jj[d][q]);
+        cont =  cont +jj[d][q];
+      }
+     
+      arr_diametrosTotales.push(cont);
+    }
+   console.log("sumatoria total de pesos Diametros");
+   console.log(arr_diametrosTotales);
+   document.getElementById("morrisDonut2").innerHTML = "";
+   // getOrdenesTotalPedidos(urn,sumatoria_pesos);
+
+   id_pedidos_guardados = [];
+  nombre_pedidos = [];
+  fecha_pedidos =[];
+  labels_graf.length = 0;
+  valores_pesos_pedidos.length = 0;
+  var dataPedidos2 = [];
+  jQuery.get({
+    url: '/getOrdenes',
+    contentType: 'application/json',
+    success: function (res) {
+    
+      console.log("RESULTADO Get server GeT oRDENES");
+      console.log(res);
+      console.log(typeof res);
+      console.log(res.length);
+      console.log(typeof res[0]);
+    // $('#vistas_previas').innerHTML = "";
+    
+
+    $list_pedidos = "";
+    $fila = "";
+    var total_acumulado=0;
+
+    var ListadoIdsPedidos=[];
+   
+     for(let r = 0; r<res.length; r++){
+     let dona2 = {};
+        if(res[r].urn_actual== urn){
+       
+          let val_peso = parseFloat(res[r].pesos);
+          total_acumulado =val_peso+ total_acumulado;
+             $fila = "";
+          if(res[r].nombre_pedido !="" && val_peso !="" ){
+              console.log("ORDENES PARA GRAFICO 2");  
+              console.log(res[r].nombre_pedido);
+              console.log(val_peso);
+              dona2["label"]=res[r].nombre_pedido;
+              dona2["value"]=val_peso;
+              let idsPedidos = res[r].ids.split(",");
+              ListadoIdsPedidos = ListadoIdsPedidos.concat(idsPedidos);
+           }
+        }
+        dataPedidos2.push(dona2);
+        console.log("LISTADO DE PEDIDOS");
+       console.log(ListadoIdsPedidos);
+     }
+    var valorResto = sumatoria_pesos-total_acumulado;
+    console.log("VALOR RESTO DONA4");
+    console.log( dataPedidos2);
+    console.log(typeof total_acumulado);
+    console.log(sumatoria_pesos);
+    console.log(typeof sumatoria_pesos);
+    console.log("VALOR RESTO DONA5");
+    console.log(valorResto);
+    let dona2 = {};
+    dona2["label"]="Sin Pedir";
+    dona2["value"]=valorResto;
+    dataPedidos2.push(dona2);
+    console.log("PEDIDOS DONA /TOTAL");
+    console.log(dataPedidos2);
+   
+  
+document.getElementById('morrisDonut2').innerHTML ="";
+    new Morris.Donut({
+      element: 'morrisDonut2',
+      data: dataPedidos2,
+      colors: ['#285cf7', '#6d6ef3','#6d6ef0','#6d6eg3'],
+      resize: true,
+      labelColor:"#8c9fc3"
+      
+    });
+
+
+
+  
+  
+    }, error: function (res) {
+        console.log("ERROR GET ORDENES");
+        console.log(res);
+    
+    }
+  });
     console.log("DATOS MORRIS");
    console.log(morrisData3)
   new Morris.Bar({
@@ -2051,7 +2446,7 @@ const jj = await resultados;
 
 
 
-  }, 2000);
+  }, 4000);
 
 
 }
@@ -2080,8 +2475,10 @@ async function launchViewer(urn) {
     
     var documentId = 'urn:' + urn;
     getOrdenesURN(urn);
-    getOrdenesTotalPedidos(urn);
+   
     Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+   
+
    
     viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (event) => { 
     console.log("REICIO APP");
@@ -2089,9 +2486,8 @@ async function launchViewer(urn) {
      // loadPrevisualizaciones();
    //   getDBIds();
  //     getPlanObj();
- getValFiltro("AEC Piso");
-
-     
+ getValFiltro("AEC Piso",urn);
+ //  getOrdenesTotalPedidos(urn);
     
    
     
@@ -2116,7 +2512,8 @@ async function launchViewer(urn) {
         //  getFiltros();
           
           // Pintar_Categorias();
-    });
+   
+        });
 
 // Detección de selección de elementos
     viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT,(event)=>{
