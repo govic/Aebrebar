@@ -2368,104 +2368,108 @@ var sumatoria_pesos =0;
        
         console.log("LISTADO DE PEDIDOS");
        console.log(ListadoIdsPedidos);
-       viewer.getProperties(identificadores[a], (result) => {
-        console.log("RESPUESTA para A lvl " + a + " && " + identificadores.length);
-        console.log(result);
-//        contador_lg = contador_lg + 1;
-        let pos_diametro =0;
-        for (i = 0; i < 60; i++) {
-          if (result.properties[i] && result.properties[i].displayName) {
-            let nombre_actual = "" + result.properties[i].displayName;
-            if (nombre_actual === "Category") {
-              categoria_actual_obj = result.properties[i].displayValue;
-              console.log("valor categoria actual5: " + categoria_actual_obj);
-
-              if (categoria_actual_obj == "Revit Structural Rebar") {
-                for (t = 0; t < result.properties.length; t++) {
-
-                  let val_actual = result.properties[t].displayName;
-                  if (val_actual == "RS Peso Lineal (kg/m)") {
-                    console.log("ENTRO A PESO LINEAL HA");
-                    let peso = parseFloat(result.properties[t].displayValue);
-
-                    console.log("ANTES PESO BUSCADO HA");
-                    console.log(peso);
-                    console.log(result.properties[t].displayValue);
-                    console.log(result);
-
-                    peso = parseFloat(peso);
-                    pesoActual = peso;
-                    console.log("PESO BUSCADO HA");
-                    console.log(peso);
-
-                  }
-                 
-                  if(val_actual =="Model Bar Diameter"){
-                    let diametroFormato =result.properties[t].displayValue;
-                    console.log("Diametro actual");
-                    console.log(result.properties[t].displayValue);
-                    console.log(typeof(result.properties[t].displayValue));
-                    for(let j =0;j<diametrosTotal.length;j++){
-                      console.log(diametrosTotal[j]);
-                      if(diametrosTotal[j] == diametroFormato){
-                        console.log(" es igual");
-                        pos_diametro = j;
-                      }else{console.log("no  es igual");}
+       for(let a=0; a<ListadoIdsPedidos.length;a++){
+        var identificadores = ListadoIdsPedidos;
+        viewer.getProperties(identificadores[a], (result) => {
+          console.log("RESPUESTA para A lvl " + a + " && " + identificadores.length);
+          console.log(result);
+  //        contador_lg = contador_lg + 1;
+          let pos_diametro =0;
+          for (i = 0; i < 60; i++) {
+            if (result.properties[i] && result.properties[i].displayName) {
+              let nombre_actual = "" + result.properties[i].displayName;
+              if (nombre_actual === "Category") {
+                categoria_actual_obj = result.properties[i].displayValue;
+                console.log("valor categoria actual5: " + categoria_actual_obj);
+  
+                if (categoria_actual_obj == "Revit Structural Rebar") {
+                  for (t = 0; t < result.properties.length; t++) {
+  
+                    let val_actual = result.properties[t].displayName;
+                    if (val_actual == "RS Peso Lineal (kg/m)") {
+                      console.log("ENTRO A PESO LINEAL HA");
+                      let peso = parseFloat(result.properties[t].displayValue);
+  
+                      console.log("ANTES PESO BUSCADO HA");
+                      console.log(peso);
+                      console.log(result.properties[t].displayValue);
+                      console.log(result);
+  
+                      peso = parseFloat(peso);
+                      pesoActual = peso;
+                      console.log("PESO BUSCADO HA");
+                      console.log(peso);
+  
+                    }
+                   
+                    if(val_actual =="Model Bar Diameter"){
+                      let diametroFormato =result.properties[t].displayValue;
+                      console.log("Diametro actual");
+                      console.log(result.properties[t].displayValue);
+                      console.log(typeof(result.properties[t].displayValue));
+                      for(let j =0;j<diametrosTotal.length;j++){
+                        console.log(diametrosTotal[j]);
+                        if(diametrosTotal[j] == diametroFormato){
+                          console.log(" es igual");
+                          pos_diametro = j;
+                        }else{console.log("no  es igual");}
+                      }
+                    }
+                    if (val_actual == "Total Bar Length") {
+                      console.log("TOTAL LENGTH BAR HA");
+  
+                      let largo = parseFloat(result.properties[t].displayValue);
+                      largo = largo.toFixed(0);
+                      console.log(largo);
+  
+                      largo = parseFloat(largo, 0);
+                      largo = largo / 100;
+                      largoActual = largo;
+                      console.log("convertido HA " + largo);
+         
+                    }
+                    if ((t + 1) == result.properties.length) { // termina de recorrer todas las propiedades
+                      let resultado_mul = pesoActual * largoActual;
+                      resultado_mul.toFixed(0);
+                      pesoActual = 0;
+                      largoActual = 0;
+                      let mult_actual  = parseFloat( matriz_resultados[h][pos_diametro]);
+                      matriz_resultados[h][pos_diametro] =  mult_actual  +resultado_mul ;
+                      console.log("MATRIZ DE RESULTADOS");
+                      console.log(matriz_resultados);
+                      // document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(2)+ ' mtrs';
+                     
+  
                     }
                   }
-                  if (val_actual == "Total Bar Length") {
-                    console.log("TOTAL LENGTH BAR HA");
-
-                    let largo = parseFloat(result.properties[t].displayValue);
-                    largo = largo.toFixed(0);
-                    console.log(largo);
-
-                    largo = parseFloat(largo, 0);
-                    largo = largo / 100;
-                    largoActual = largo;
-                    console.log("convertido HA " + largo);
-       
-                  }
-                  if ((t + 1) == result.properties.length) { // termina de recorrer todas las propiedades
-                    let resultado_mul = pesoActual * largoActual;
-                    resultado_mul.toFixed(0);
-                    pesoActual = 0;
-                    largoActual = 0;
-                    let mult_actual  = parseFloat( matriz_resultados[h][pos_diametro]);
-                    matriz_resultados[h][pos_diametro] =  mult_actual  +resultado_mul ;
-                    console.log("MATRIZ DE RESULTADOS");
-                    console.log(matriz_resultados);
-                    // document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(2)+ ' mtrs';
-                   
-
-                  }
+                  //    pesoTotal  = parseFloat(pesoTotal).toFixed(2);
+  
+  
+                  //   let name = result.name;
+                  //  peso = parseFloat(peso,0);
+                  //  largo = parseFloat(largo,0);
+                  //  let resultado_mul = peso*largo;
+                  //console.log( "Resultado Multiplicación");
+                  // console.log( resultado_mul);
+  
+                  //     resultado_mul =resultado_mul.toFixed(2);
+                  //     xTotal = xTotal + parseFloat(resultado_mul);
+                  //    console.log( "Total Multiplicación");
+                  //   console.log( xTotal);
+                  //   let g = name.split(' ');
+                  //  let y = g[2];
+  
                 }
-                //    pesoTotal  = parseFloat(pesoTotal).toFixed(2);
-
-
-                //   let name = result.name;
-                //  peso = parseFloat(peso,0);
-                //  largo = parseFloat(largo,0);
-                //  let resultado_mul = peso*largo;
-                //console.log( "Resultado Multiplicación");
-                // console.log( resultado_mul);
-
-                //     resultado_mul =resultado_mul.toFixed(2);
-                //     xTotal = xTotal + parseFloat(resultado_mul);
-                //    console.log( "Total Multiplicación");
-                //   console.log( xTotal);
-                //   let g = name.split(' ');
-                //  let y = g[2];
-
+  
               }
-
+  
             }
-
+  
           }
-
-        }
-
-      })
+  
+        })
+       }
+     
      }
     var valorResto = sumatoria_pesos-total_acumulado;
     console.log("VALOR RESTO DONA4");
