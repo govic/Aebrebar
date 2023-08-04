@@ -3173,6 +3173,7 @@ function drawBox(min, max) {
   viewer.impl.sceneUpdated(true);
 }
 
+
 function launchViewer(urn) {
   var options = {
     env: 'AutodeskProduction',
@@ -3211,6 +3212,7 @@ function launchViewer(urn) {
      
           // document.getElementById("selectores").innerHTML = "<a class=\"dropdown-item\" >Seleccione Filtro</a>";
            getFiltros();
+           getDiametros();
           // Pintar_Categorias();
     });
     viewer.addEventListener(Autodesk.Viewing.HIDE_EVENT, (nodes, model)=> {   
