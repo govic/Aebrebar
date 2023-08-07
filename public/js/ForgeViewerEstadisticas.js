@@ -2309,7 +2309,6 @@ var sumatoria_pesos =0;
         }
         dn['value'] = cont.toFixed(1);
         sumatoria_pesos = sumatoria_pesos+cont;
-        sumatoria_pesos = sumatoria_pesos.toFixed(1);
         morrisData3.push(qj);
         donaData.push(dn);
       }
@@ -2550,7 +2549,7 @@ var sumatoria_pesos =0;
         console.log(resultado_largos);
         
        var valorResto = sumatoria_pesos-total_acumulado;
-       valorResto =  valorResto.toFixed(1);
+       valorResto =  valorResto.toFixed();
        console.log("VALOR RESTO DONA4");
        console.log( dataPedidos2);
        console.log(typeof total_acumulado);
