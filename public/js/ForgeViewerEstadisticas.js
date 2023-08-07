@@ -1,6 +1,7 @@
 var viewer;
 var regex = /(\d+)/g;
 var filtro_a;
+var matriz_largos =[];
 var registro_ultimo_filtro ;
 var id_pedidos_guardados =[];
 var nombre_add_actual;
@@ -2020,6 +2021,7 @@ async function getValFiltro(filtro_name,urn){
   let arr_resp = [];
   var referencia =[];
     referencia2 = [];
+    
   let filtros = new Promise((resolve, reject) => {
         consulta_filtro(filtrado).then((data) => {
           let keys = Object.keys(data);
@@ -2028,7 +2030,7 @@ async function getValFiltro(filtro_name,urn){
           console.log(datos);
           var i;
         
-          for (i = 0; i < datos.length; i++) {
+          for (let i = 0; i < datos.length; i++) {
             arr_resp.push(datos[i]) ;
           }
           // inserta opciones de filtro  para AEC PARTICIÓN HA
@@ -2056,6 +2058,10 @@ async function getValFiltro(filtro_name,urn){
 
      });
 
+    let ordenes = new Promise((resolve,reject)=>{
+
+
+     });
   var valores = await filtros;
   var diametrosTotal = await diametros;
   var resultado_ids = [];
@@ -2067,7 +2073,8 @@ async function getValFiltro(filtro_name,urn){
   console.log(valores);
   var posicion_actual =0;
   let resultados = new Promise((resolve, reject) => {
-  var matriz_resultados=[]
+  var matriz_resultados=[];
+
   for(let p = 0; p<valores.length;p++){
       let diametros_barras = [];
       for(let r =0; r<diametrosTotal.length;r++){
@@ -2080,8 +2087,24 @@ async function getValFiltro(filtro_name,urn){
  
  
   }
+
+  for(let p = 0; p<valores.length;p++){
+    let diametros_barras = [];
+    for(let r =0; r<diametrosTotal.length;r++){
+      diametros_barras.push(0);
+    }
+   // a.push(diametros_barras); 
+    matriz_largos.push(diametros_barras);
+    console.log("VALORES largos resultados 1");
+    console.log(matriz_largos);
+    console.log(valores);
+
+
+}
   console.log("MATRIZ RESULTADOS");
   console.log(matriz_resultados);
+  console.log("MATRIZ LARGOS");
+  console.log(matriz_largos);
   console.log("dimensiones");
   console.log(valores.length+"  "+diametrosTotal.length);
   
@@ -2152,7 +2175,7 @@ async function getValFiltro(filtro_name,urn){
                 console.log(result);
         //        contador_lg = contador_lg + 1;
                 let pos_diametro =0;
-                for (i = 0; i < 60; i++) {
+                for (let i = 0; i < 60; i++) {
                   if (result.properties[i] && result.properties[i].displayName) {
                     let nombre_actual = "" + result.properties[i].displayName;
                     if (nombre_actual === "Category") {
@@ -2202,39 +2225,35 @@ async function getValFiltro(filtro_name,urn){
                             largo = parseFloat(largo, 0);
                             largo = largo / 100;
                             largoActual = largo;
-                            console.log("convertido HA " + largo);
-               
+                            console.log("convertido HA22 " + largo+" // "+ largoActual);
+                            console.log("posicion " + pos_diametro);
+                           
+
+                            console.log("MATRIZ DE RESULTADOS");
+                            console.log(matriz_resultados);
+                           
                           }
                           if ((t + 1) == result.properties.length) { // termina de recorrer todas las propiedades
                             let resultado_mul = pesoActual * largoActual;
                             resultado_mul.toFixed(0);
                             pesoActual = 0;
-                            largoActual = 0;
+                            
+                            console.log("VALOR ACTUAL MATRIZ LARGOS");
+                            console.log(matriz_largos[h][pos_diametro]);
+
+                            matriz_largos[0][pos_diametro] =  largoActual  + matriz_largos[0][pos_diametro] ;
                             let mult_actual  = parseFloat( matriz_resultados[h][pos_diametro]);
+                            largoActual = 0;
                             matriz_resultados[h][pos_diametro] =  mult_actual  +resultado_mul ;
                             console.log("MATRIZ DE RESULTADOS");
                             console.log(matriz_resultados);
-                            // document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(2)+ ' mtrs';
-                           
+                            console.log("MATRIZ DE LARGOS");
+                            console.log(matriz_largos);
+                             
     
                           }
                         }
-                        //    pesoTotal  = parseFloat(pesoTotal).toFixed(2);
-    
-    
-                        //   let name = result.name;
-                        //  peso = parseFloat(peso,0);
-                        //  largo = parseFloat(largo,0);
-                        //  let resultado_mul = peso*largo;
-                        //console.log( "Resultado Multiplicación");
-                        // console.log( resultado_mul);
-    
-                        //     resultado_mul =resultado_mul.toFixed(2);
-                        //     xTotal = xTotal + parseFloat(resultado_mul);
-                        //    console.log( "Total Multiplicación");
-                        //   console.log( xTotal);
-                        //   let g = name.split(' ');
-                        //  let y = g[2];
+                     
     
                       }
     
@@ -2281,15 +2300,16 @@ var sumatoria_pesos =0;
         dn['label'] = valores[g];
         let cont = 0;
         for(var f=0; f< diametrosTotal.length;f++){
-          qj[diametrosTotal[f]]= jj[g][f];
+          qj[diametrosTotal[f]]= jj[g][f].toFixed(1);
          
           console.log("datos pre morris 2");
           console.log(jj[g][f]);
           cont =  cont +jj[g][f];
           console.log(diametrosTotal[f]);
         }
-        dn['value'] = cont;
+        dn['value'] = cont.toFixed(1);
         sumatoria_pesos = sumatoria_pesos+cont;
+        sumatoria_pesos = sumatoria_pesos.toFixed(1);
         morrisData3.push(qj);
         donaData.push(dn);
       }
@@ -2317,216 +2337,280 @@ var sumatoria_pesos =0;
      
       arr_diametrosTotales.push(cont);
     }
-   console.log("sumatoria total de pesos Diametros");
-   console.log(arr_diametrosTotales);
-   document.getElementById("morrisDonut2").innerHTML = "";
+    console.log("sumatoria total de pesos Diametros");
+    console.log(arr_diametrosTotales);
+    document.getElementById("morrisDonut2").innerHTML = "";
    // getOrdenesTotalPedidos(urn,sumatoria_pesos);
 
-   id_pedidos_guardados = [];
-  nombre_pedidos = [];
-  fecha_pedidos =[];
-  labels_graf.length = 0;
-  valores_pesos_pedidos.length = 0;
-  var dataPedidos2 = [];
-  jQuery.get({
-    url: '/getOrdenes',
-    contentType: 'application/json',
-    success: function (res) {
-    
-      console.log("RESULTADO Get server GeT oRDENES");
-      console.log(res);
-      console.log(typeof res);
-      console.log(res.length);
-      console.log(typeof res[0]);
-    // $('#vistas_previas').innerHTML = "";
-    
-
-    $list_pedidos = "";
-    $fila = "";
-    var total_acumulado=0;
-
-    var ListadoIdsPedidos=[];
-   
-     for(let r = 0; r<res.length; r++){
-     let dona2 = {};
-        if(res[r].urn_actual== urn){
-       
-          let val_peso = parseFloat(res[r].pesos);
-          total_acumulado =val_peso+ total_acumulado;
-             $fila = "";
-          if(res[r].nombre_pedido !="" && val_peso !="" ){
-              console.log("ORDENES PARA GRAFICO 2");  
-              console.log(res[r].nombre_pedido);
-              console.log(val_peso);
-              dona2["label"]=res[r].nombre_pedido;
-              dona2["value"]=val_peso;
-              let idsPedidos = res[r].ids.split(",");
-              ListadoIdsPedidos = ListadoIdsPedidos.concat(idsPedidos);
-           }
-           dataPedidos2.push(dona2);
-        }
-       
-        console.log("LISTADO DE PEDIDOS");
-       console.log(ListadoIdsPedidos);
-       for(let a=0; a<ListadoIdsPedidos.length;a++){
-        var identificadores = ListadoIdsPedidos;
-        viewer.getProperties(identificadores[a], (result) => {
-          console.log("RESPUESTA para A lvl " + a + " && " + identificadores.length);
-          console.log(result);
-  //        contador_lg = contador_lg + 1;
-          let pos_diametro =0;
-          for (i = 0; i < 60; i++) {
-            if (result.properties[i] && result.properties[i].displayName) {
-              let nombre_actual = "" + result.properties[i].displayName;
-              if (nombre_actual === "Category") {
-                categoria_actual_obj = result.properties[i].displayValue;
-                console.log("valor categoria actual5: " + categoria_actual_obj);
-  
-                if (categoria_actual_obj == "Revit Structural Rebar") {
-                  for (t = 0; t < result.properties.length; t++) {
-  
-                    let val_actual = result.properties[t].displayName;
-                    if (val_actual == "RS Peso Lineal (kg/m)") {
-                      console.log("ENTRO A PESO LINEAL HA");
-                      let peso = parseFloat(result.properties[t].displayValue);
-  
-                      console.log("ANTES PESO BUSCADO HA");
-                      console.log(peso);
-                      console.log(result.properties[t].displayValue);
-                      console.log(result);
-  
-                      peso = parseFloat(peso);
-                      pesoActual = peso;
-                      console.log("PESO BUSCADO HA");
-                      console.log(peso);
-  
-                    }
-                   
-                    if(val_actual =="Model Bar Diameter"){
-                      let diametroFormato =result.properties[t].displayValue;
-                      console.log("Diametro actual");
-                      console.log(result.properties[t].displayValue);
-                      console.log(typeof(result.properties[t].displayValue));
-                      for(let j =0;j<diametrosTotal.length;j++){
-                        console.log(diametrosTotal[j]);
-                        if(diametrosTotal[j] == diametroFormato){
-                          console.log(" es igual");
-                          pos_diametro = j;
-                        }else{console.log("no  es igual");}
-                      }
-                    }
-                    if (val_actual == "Total Bar Length") {
-                      console.log("TOTAL LENGTH BAR HA");
-  
-                      let largo = parseFloat(result.properties[t].displayValue);
-                      largo = largo.toFixed(0);
-                      console.log(largo);
-  
-                      largo = parseFloat(largo, 0);
-                      largo = largo / 100;
-                      largoActual = largo;
-                      console.log("convertido HA " + largo);
-         
-                    }
-                    if ((t + 1) == result.properties.length) { // termina de recorrer todas las propiedades
-                      let resultado_mul = pesoActual * largoActual;
-                      resultado_mul.toFixed(0);
-                      pesoActual = 0;
-                      largoActual = 0;
-                      let mult_actual  = parseFloat( matriz_resultados[h][pos_diametro]);
-                      matriz_resultados[h][pos_diametro] =  mult_actual  +resultado_mul ;
-                      console.log("MATRIZ DE RESULTADOS");
-                      console.log(matriz_resultados);
-                      // document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(2)+ ' mtrs';
-                     
-  
-                    }
-                  }
-                  //    pesoTotal  = parseFloat(pesoTotal).toFixed(2);
-  
-  
-                  //   let name = result.name;
-                  //  peso = parseFloat(peso,0);
-                  //  largo = parseFloat(largo,0);
-                  //  let resultado_mul = peso*largo;
-                  //console.log( "Resultado Multiplicación");
-                  // console.log( resultado_mul);
-  
-                  //     resultado_mul =resultado_mul.toFixed(2);
-                  //     xTotal = xTotal + parseFloat(resultado_mul);
-                  //    console.log( "Total Multiplicación");
-                  //   console.log( xTotal);
-                  //   let g = name.split(' ');
-                  //  let y = g[2];
-  
-                }
-  
-              }
-  
-            }
-  
-          }
-  
-        })
-       }
-     
-     }
-    var valorResto = sumatoria_pesos-total_acumulado;
-    console.log("VALOR RESTO DONA4");
-    console.log( dataPedidos2);
-    console.log(typeof total_acumulado);
-    console.log(sumatoria_pesos);
-    console.log(typeof sumatoria_pesos);
-    console.log("VALOR RESTO DONA5");
-    console.log(valorResto);
-    let dona2 = {};
-    dona2["label"]="Sin Pedir";
-    dona2["value"]=valorResto;
-    dataPedidos2.push(dona2);
-    console.log("PEDIDOS DONA /TOTAL");
-    console.log(dataPedidos2);
-   
-  
-document.getElementById('morrisDonut2').innerHTML ="";
-    new Morris.Donut({
-      element: 'morrisDonut2',
-      data: dataPedidos2,
-      colors: ['#285cf7', '#6d6ef3','#6d6ef0','#6d6eg3'],
-      resize: true,
-      labelColor:"#8c9fc3"
+    id_pedidos_guardados = [];
+    nombre_pedidos = [];
+    fecha_pedidos =[];
+    labels_graf.length = 0;
+    valores_pesos_pedidos.length = 0;
+    var dataPedidos2 = [];
+    var largoTotalPedido=0;
+    jQuery.get({
+      url: '/getOrdenes',
+      contentType: 'application/json',
+      success: function (res) {
       
-    });
-
-
-
-  
-  
-    }, error: function (res) {
-        console.log("ERROR GET ORDENES");
+        console.log("RESULTADO Get server GeT oRDENES");
         console.log(res);
+        console.log(typeof res);
+        console.log(res.length);
+        console.log(typeof res[0]);
+      // $('#vistas_previas').innerHTML = "";
+      
+
+        $list_pedidos = "";
+        $fila = "";
+       
+        var total_acumulado=0;
+        var ListadoIdsPedidos=[];
+        var totalPorDiametro = [diametrosTotal.length];
+        var resultadoLargodiametrosPedido = Array();
+        for(let w=0; w< diametrosTotal.length;w++){
+            resultadoLargodiametrosPedido.push(0);
+        }
+        
+        var largoTotal = 0;
+           console.log("opciones de diametros : "+diametrosTotal.length);       
+        for(let r = 0; r<res.length; r++){
+            let dona2 = {};
+            if(res[r].urn_actual== urn){
+          
+              let val_peso = parseFloat(res[r].pesos);
+              total_acumulado =val_peso+ total_acumulado;
+                $fila = "";
+              if(res[r].nombre_pedido !="" && val_peso !="" ){
+                  console.log("ORDENES PARA GRAFICO 2");  
+                  console.log(res[r].nombre_pedido);
+                  console.log(val_peso);
+                  dona2["label"]=res[r].nombre_pedido;
+                  dona2["value"]=val_peso.toFixed(1);
+                  if(!isNaN(res[r].largos ) && res[r].largos != null){
+                     console.log("Largos pedidos totales");
+                     console.log(res[r].largos);
+                     let LargosPedidos = parseInt(res[r].largos);
+                     largoTotalPedido = LargosPedidos+ largoTotalPedido;
+                     let actualPedido = res[r].ids.split(',');
+                     var peso =0;
+                     var xTotal,actual
+                     var actuales   = 0;
+                     var posj = 0;
+                     
+                     for(let r =0; r<actualPedido.length;r++){
+
+                      viewer.getProperties( parseInt(actualPedido[r]), (result) => { 
+                        var pos_diametro =0;
+                        for(i=0 ;i< 60;i++){
+                          let nombre_actual = ""+result.properties[i].displayName;
+                          if(nombre_actual ==="Category"){
+                            categoria_actual_obj = result.properties[i].displayValue;
+                            console.log("CATEGORIA BUSCADA barra diametro");
+                            console.log(categoria_actual_obj);
+                            //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
+                              if(categoria_actual_obj=="Revit Structural Rebar"){
+                              console.log("ENTRAR REBAR barra diametro");
+                            
+                              for(t=0;t<result.properties.length;t++){
+                                let val_actual = result.properties[t].displayName;
+                                
+                                if(val_actual == "Total Bar Length" ){
+                                  console.log("TOTAL LENGTH BAR diametros");
+                                  
+                                  let largo = parseFloat(result.properties[t].displayValue);
+                                  if(!isNaN(largo)&& largo >0 && largo !=""){
+                                    console.log("LARGO OBTENIDO DIAMETRO" );
+                                    console.log(largo );
+                                 //   largo = largo.toFixed(1);
+                                    largo = parseFloat(largo,1);
+                                    
+                                    largo = largo /100;
+                                    largoActual = largo.toFixed(1);
+                                    console.log("convertido "+largo);
+                                   
+                                    largoTotal = largoTotal+ largo;
+                                
+                                    console.log( "largo actual diametro");
+                                    console.log( largoActual);
+                                  }
+                                 
+                                  //largoTotal  = parseFloat(largoTotal).toFixed(1);
+                            
+                                
+                                }
+                                if(val_actual =="Model Bar Diameter"){
+                                  let diametroFormato =result.properties[t].displayValue;
+                                  console.log("Diametro actual Barra Largo");
+                                  console.log(diametroFormato);
+                                  console.log(typeof(result.properties[t].displayValue));
+                                  for(let j =0;j<diametrosTotal.length;j++){
+                                    console.log(diametrosTotal[j]);
+                                    if(diametrosTotal[j] == diametroFormato){
+                                      console.log(" es igual");
+                                      console.log("posición pos diametro: "+pos_diametro);
+                                      console.log("posición j: "+j);
+                                      pos_diametro = j;
+                                    }else{
+                                     
+                                      console.log("no  es igual");}
+                                  }
+                                }
+                                if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
+                                 if(!isNaN(largoActual)){
+                                 
+                                  console.log("sumas diametros");
+                                  console.log(resultadoLargodiametrosPedido[pos_diametro]);
+                                  console.log(largoActual);
+                                  resultadoLargodiametrosPedido[pos_diametro] = resultadoLargodiametrosPedido[pos_diametro]+largoActual;
+                                  console.log("Arreglo Diametro Resultante");
+                                  console.log(resultadoLargodiametrosPedido);
+
+                                 }
+                                 
+                                  
+                                  
+                                     //console.log( "Resultado Multiplicación");
+                                  // console.log( resultado_mul);
+                                
+                                  
+                              
+                                  
+                                }
+                              }
+                              
+                             
+                  
+                              actual =   actual+","+actuales;
+                             
+                             
+                              let name = result.name;
+                          
+                             
+                             }
+                            
+                          }
+                         
+                        }
+                        
+                      }) 
+                  
+                     } 
+                  
+
+
+                  }
+                  
+              }
+              dataPedidos2.push(dona2);
+            }
+          
+            
+        
+        }
+
+      
+        setTimeout(() => {
+          console.log("TOTAL DIAMETROS por PEDIDO largos");
+          console.log(resultadoLargodiametrosPedido);
+          console.log(matriz_largos);
+          console.log(diametrosTotal);
+          var resultado_largos =[diametrosTotal.length] ;
+          var diametrosLargoData=[];
+         for(let e = 0; e<matriz_largos[0].length;e++){
+            let bloque = {};
+            console.log("MATRIZ RESULTADOS TOTALES");  
+            console.log(matriz_largos[0][e]);
+
+            var b = parseFloat(matriz_largos[0][e],1);
+            bloque['total']= diametrosTotal[e];
+            bloque[diametrosTotal[0]] = b.toFixed(1);
+           // let porcentaje =(diametrosTotal[e]/matriz_largos[0][e])*100;
+            var a = parseFloat(resultadoLargodiametrosPedido[e]);
+            bloque[diametrosTotal[1]]= a.toFixed(1);
+            diametrosLargoData.push(bloque);
+          }
+          console.log("Resultante");
+          console.log(diametrosLargoData);
+     
+         document.getElementById('morrisBar1').innerHTML ="";
+         new Morris.Bar({
+          element: 'morrisBar1',
+          data: diametrosLargoData,
+          xkey: 'y',
+          ykeys: diametrosTotal,
+          labels: diametrosTotal,
+          barColors: ['#6d6ef3', '#285cf7', '#285cf7'],
+          gridTextSize: 11,
+          hideHover: 'auto',
+          resize: true
+        });
+        console.log("VALOR AGREGADO TOTAL LARGO");
+        console.log(resultado_largos);
+        
+       var valorResto = sumatoria_pesos-total_acumulado;
+       valorResto =  valorResto.toFixed(1);
+       console.log("VALOR RESTO DONA4");
+       console.log( dataPedidos2);
+       console.log(typeof total_acumulado);
+       console.log(sumatoria_pesos);
+       console.log(typeof sumatoria_pesos);
+       console.log("VALOR RESTO DONA5");
+       console.log(valorResto);
+       let dona2 = {};
+       dona2["label"]="Sin Pedir";
+       dona2["value"]=valorResto;
+       dataPedidos2.push(dona2);
+       console.log("PEDIDOS DONA /TOTAL");
+       console.log(dataPedidos2);
+     
+     
+   document.getElementById('morrisDonut2').innerHTML ="";
+       new Morris.Donut({
+         element: 'morrisDonut2',
+         data: dataPedidos2,
+         colors: ['#285cf7', '#6d6ef3','#6d6ef0','#6d6eg3'],
+         resize: true,
+         labelColor:"#8c9fc3"
+         
+       });
+
+
+        }, "12000");
+       
+       
+
+     
+
+
+
     
-    }
-  });
+    
+      }, error: function (res) {
+          console.log("ERROR GET ORDENES");
+          console.log(res);
+      
+      }
+    });
     console.log("DATOS MORRIS");
-   console.log(morrisData3)
-  new Morris.Bar({
-    element: 'morrisBar4',
-    data: morrisData3,
-    xkey: 'y',
-    ykeys: diametrosTotal,
-    labels: diametrosTotal,
-    barColors: ['#6d6ef3', '#285cf7', '#f7557a', '#74DE00'],
-    stacked: true,
-    gridTextSize: 11,
-    hideHover: 'auto',
-    resize: true
-  });
- console.log("Dona 2");
- console.log(donaData);
- document.getElementById("morrisDonut1").innerHTML = "";
+    console.log(morrisData3)
+    new Morris.Bar({
+      element: 'morrisBar4',
+      data: morrisData3,
+      xkey: 'y',
+      ykeys: diametrosTotal,
+      labels: diametrosTotal,
+      barColors: ['#6d6ef3', '#285cf7', '#f7557a', '#74DE00'],
+      stacked: true,
+      gridTextSize: 11,
+      hideHover: 'auto',
+      resize: true
+    });
+    console.log("Dona 2");
+    console.log(donaData);
+    document.getElementById("morrisDonut1").innerHTML = "";
 
-
- 
   new Morris.Donut({
 		element: 'morrisDonut1',
 		data: donaData,
@@ -2538,7 +2622,7 @@ document.getElementById('morrisDonut2').innerHTML ="";
 
 
 
-  }, 4000);
+  }, 14000);
 
 
 }

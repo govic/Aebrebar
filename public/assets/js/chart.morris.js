@@ -1,6 +1,6 @@
 $(function() {
 	'use strict';
-
+/*
 	var morrisData = [{
 		y: '2006',
 		a: 100,
@@ -75,17 +75,7 @@ $(function() {
 		b: 65,
 		c: 85
 	}];
-	new Morris.Bar({
-		element: 'morrisBar1',
-		data: morrisData,
-		xkey: 'y',
-		ykeys: ['a', 'b'],
-		labels: ['Series A', 'Series B'],
-		barColors: ['#6d6ef3', '#285cf7'],
-		gridTextSize: 11,
-		hideHover: 'auto',
-		resize: true
-	});
+	
 	new Morris.Bar({
 		element: 'morrisBar2',
 		data: morrisData2,
@@ -289,6 +279,6 @@ $(function() {
 		resize: true
 	});
 	
-	
+	*/
 	
 });
