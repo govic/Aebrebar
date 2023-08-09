@@ -1902,7 +1902,7 @@ getConfigViewParams = async (req) => {
     nom: userRows[0].fullname,
     filtro_1: filtrosRows[0].filtro_1,
     filtro_2: filtrosRows[0].filtro_2,
-    filtro_3: filtrosRows[0].filtro_3,
+    filtro_3: filtrosRows[0].fierro,
     filtro_v2: "",
     categoria_01: ganttRows[0].categoria_01,
     categoria_02: ganttRows[0].categoria_02,
