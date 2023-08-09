@@ -2435,6 +2435,7 @@ router.get('/estadisticasModelo', isLoggedIn, async (req, res, next) => {
   req.session.passport.user.fullname = rows2[0].fullname;
   var nom = req.session.passport.user.fullname;
   if (req.session.passport.user.tipoUsuario == "Administrador") {
+    
     res.render('estadisticasModelo', { nom });
   }
   if (req.session.passport.user.tipoUsuario == "Editor") {

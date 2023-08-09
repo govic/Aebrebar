@@ -2008,7 +2008,7 @@ function savePedido(){
                      console.log(existe);
                      console.log(ids_buscados[t]);
                      encontro_elemento = 1;
-                     $("#modaldemo15").modal("toggle")
+                     $("#modaldemo15").modal("toggle");
                      break;
                    }
             }
@@ -2076,12 +2076,12 @@ function guardarPostRevision(){
    console.log("VALOR PREVIO ENVIO ORDENES");
    console.log(pesos_pedidos);
    console.log(largos_pedidos);
-   let datas = JSON.stringify({ 'ids': ids_pedido, 'fecha': q,'pesos':total_peso,'largo':total_largo,'listado_largos':largos_pedidos,'listado_pesos':pesos_pedidos,'nombre_pedido':nombre_pedido });
+   let datas = JSON.stringify({ 'ids': ids_pedido, 'fecha': q,'pesos':total_peso,'largos':total_largo,'listado_largos':largos_pedidos,'listado_pesos':pesos_pedidos,'nombre_pedido':nombre_pedido });
  
   jQuery.post({
     url: '/saveOrdenes',
     contentType: 'application/json',
-    data:  JSON.stringify({ 'ids': ids_pedido, 'fecha': q,'pesos':total_peso,'largo':total_largo,'listado_largos':largos_pedidos,'listado_pesos':pesos_pedidos,'nombre_pedido':nombre_pedido,'urn_actual':urn_ac }),
+    data:  JSON.stringify({ 'ids': ids_pedido, 'fecha': q,'pesos':total_peso,'largos':total_largo,'listado_largos':largos_pedidos,'listado_pesos':pesos_pedidos,'nombre_pedido':nombre_pedido,'urn_actual':urn_ac }),
   
     success: function (res) {
       console.log("ingreso ordenesA exitoso");
@@ -6577,7 +6577,20 @@ function onDocumentLoadSuccess(doc) {
                viewer.loadDocumentNode(doc,view).then(i=>{});
             });
           }
+          let diametros = new Promise((resolve, reject) => {
+            let filtrado = ['Bar Diameter'];
+            consulta_filtro(filtrado).then((data) => {
+            let keys = Object.keys(data);
+            let datos = keys;
+            console.log("Diametros");
+            console.log(datos);
+            let d = datos;
+          
+              resolve(d);},(error) => {
+                reject(error);
+           });
       
+           });
     // documented loaded, any action?
     viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, (e) => {
       console.log("SELECCION 5");
@@ -6595,6 +6608,7 @@ function onDocumentLoadSuccess(doc) {
         })
       }
 
+   
       let c =1;
       var hoy = 10 + '-' +05 + '-' +2021;
       var cat_count=1;
