@@ -2434,15 +2434,30 @@ router.get('/estadisticasModelo', isLoggedIn, async (req, res, next) => {
   console.log(rows2[0].fullname);
   req.session.passport.user.fullname = rows2[0].fullname;
   var nom = req.session.passport.user.fullname;
+
+  const rows4 = await pool.query('SELECT * FROM gantt', [idUsua]);
+  const categoria_01 = rows4[0].categoria_01;
+  const categoria_02 = rows4[0].categoria_02;
+  const categoria_03 = rows4[0].categoria_03;
+  const categoria_04 = rows4[0].categoria_04;
+  const parametro_nivel = rows4[0].parametro_nivel;
+  const parametro_fecha = rows4[0].parametro_fecha;
+
+  var rows3 = await pool.query('SELECT * FROM filtros WHERE id = ?', [1]);
+  const filtro_1 = rows3[0].filtro_1;
+  const filtro_2 = rows3[0].filtro_2;
+  const filtro_3 = rows3[0].fierro;
+ 
+  
   if (req.session.passport.user.tipoUsuario == "Administrador") {
     
-    res.render('estadisticasModelo', { nom });
+    res.render('estadisticasModelo', { nom,idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3 });
   }
   if (req.session.passport.user.tipoUsuario == "Editor") {
-    res.render('estadisticasModeloV3', { nom });
+    res.render('estadisticasModeloV3', { nom, idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3 });
   }
   if (req.session.passport.user.tipoUsuario == "Visualizador") {
-    res.render('estadisticasModelo', { nom });
+    res.render('estadisticasModelo', { nom,idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3 });
   }
 })
 //Echart

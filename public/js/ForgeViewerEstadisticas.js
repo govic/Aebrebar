@@ -293,8 +293,7 @@ function getFiltros() {
                 //    var botones =botones+ "<option value=\" "+datos[i]+"\" onclick=\"selecciona("+"\'"+datos[i]+"\'"+ ","+filtro_boton+" );\">"+datos[i]+"</a>";
 
                 }
-                // inserta opciones de filtro  para AEC PARTICIÓN HA
-              //  document.getElementById("ha_option").innerHTML = botones;
+              
            });
 
 /**************************************************************
@@ -321,15 +320,7 @@ function getFiltros() {
       var tableTotales = document.getElementById('tabla_total');
       var tableRef = document.getElementById('tabla_fierro');
 
-    //  document.getElementById('peso').innerHTML = '';
-     // document.getElementById('largo').innerHTML = '' ;
-     // document.getElementById('acum').innerHTML = '' ;
-     // var rowCount = tableRef.rows.length;
-      //var rowCountTotales = tableTotales.rows.length;
-      //var tableHeaderRowCount = 1;
-   /*   for (var i = tableHeaderRowCount; i < rowCount; i++) {
-        //tableRef.deleteRow(tableHeaderRowCount);
-      }*/
+
       consulta_filtro(filtrado).then((data) => {
                 let keys = Object.keys(data);
                 let datos = keys;
@@ -352,96 +343,25 @@ function getFiltros() {
                 for (i = 0; i < datos.length; i++) {
                   
                 
-                 ///// CREA ESTRUCTURA INICIAL////////////////////////////
-                  //////////////////////////////////MUROS -////////////////////////////
-              /*
-                  var taskId = gantt.addTask({
-                    id:cont_id_task,
-                    text:datos[i],
-                    start_date:hoy,
-                    type: gantt.config.types.project,
-                    duration:1
-                  },13,1);
-                  ids_task.push(cont_id_task);
-                  cont_id_task++;
-               
-                */             
-                  
-                  ////////////////////////////////VIGAS/////////////////////////
-                  
-            /*    
-                  var taskId = gantt.addTask({
-                    id:cont_id_task,
-                    text:datos[i],
-                    start_date:hoy,
-                    type: gantt.config.types.project,
-                    duration:1
-                  },14,1);
-                  ids_task.push(cont_id_task);
-                  cont_id_task++;
-               */
-                   ////////////////////////////////LOSAS/////////////////////////
-               /*   
-                  var taskId = gantt.addTask({
-                    id:cont_id_task,
-                    text:datos[i],
-                    start_date:hoy,
-                    type: gantt.config.types.project,
-                    duration:1
-                  },15,1);  
-                  ids_task.push(cont_id_task);
-                  cont_id_task++;
-               */
-                   ////////////////////////////////LOSAS/////////////////////////
-                 /* 
-                  var taskId = gantt.addTask({
-                          id:cont_id_task,
-                          text:datos[i],
-                          start_date:hoy,
-                          type: gantt.config.types.project,
-                          duration:1
-                        },20,1);  
-                        ids_task.push(cont_id_task);
-                        cont_id_task++;
-                                           
-                        var taskId = gantt.addTask({
-                          id:cont_id_task,
-                          text:datos[i],
-                          start_date:hoy,
-                          type: gantt.config.types.project,
-                          duration:1
-                        },24,1);  
-                        ids_task.push(cont_id_task);
-                        cont_id_task++;
-                                                 
-                   // var botones =botones+ "<a class=\"dropdown-item\" onclick=\"selecciona2("+"\'"+filtro_boton+"\'"+ ","+filtro_boton+" );\">"+datos[i]+"</a>";
-               */   
+                 
                     botones =botones+ "<option value=\""+datos[i]+"\" >"+datos[i]+"</option>";
                 }
 
                console.log("Idsss");
                 console.log(ids_task);
              
-             //   gantt.render();
-            //    document.getElementById("piso_option").innerHTML = botones;
-                //  document.getElementById("selectores2").innerHTML = botones;
-
-                // PEGA LOS BOTONES PARA FILTRAR SEGUN PARÁMETROS
+          
            });
 
-           // ELIGE LOS NIVELES PARA EL PARÁMETRO ELEGIDO (PISO ) CREE LA GANTT 
-       //    filtros_selec_piso =    ["00.- Radier EDA","01.- Cielo 1° Piso EDA","03.- Cielo 3° Piso EDA"]; 
+      
 }
 
 async function generaEstadisticas(){
- // const valores =   getValFiltro("AEC Piso");
 
 }
 
 
-function getFiltros_2() { // BUSCA NIVELES Y LUEGO PARTIDAD DENTRO DE CADA NIVEL
-   
- // console.log("MUESTRA.....!!!!");
+function getFiltros_2() { 
       
       let filtrado = [filtro_1];
       let filtro_boton = "['"+filtro_1+"' ]";
@@ -1119,7 +1039,7 @@ async function getPedidosLago(urnEnvio){
               categoria_actual_obj = result.properties[i].displayValue;
               console.log("valor categoria actual5: "+categoria_actual_obj); 
                
-              if(categoria_actual_obj=="Revit Structural Rebar"){
+              if(categoria_actual_obj==parametro_fierro){
                 for(t=0;t<result.properties.length;t++){
                 
                   let val_actual = result.properties[t].displayName;
@@ -2105,7 +2025,7 @@ async function getValFiltro(filtro_name,urn){
         console.log(valorFiltro);
         console.log("parametro nivel");
       //  console.log(parametro_nivel);
-       consulta_filtro2(['AEC Piso']).then((data) => {
+       consulta_filtro2([parametro_nivel]).then((data) => {
           let keys = Object.keys(data);
           let elementos =Array();
           elementos.length = 0;
@@ -2689,10 +2609,10 @@ async function launchViewer(urn) {
      // loadPrevisualizaciones();
    //   getDBIds();
  //     getPlanObj();
- getValFiltro("AEC Piso",urn);
+ getValFiltro(parametro_nivel,urn);
  //  getOrdenesTotalPedidos(urn);
-    
-   
+ 
+ //AEC Piso
     
     //  console.log('DB IDS DESDE SERVER');
    //   console.log(ids_bd);
@@ -3268,49 +3188,16 @@ async function launchViewer(urn) {
                           if(compara == -1){
                             boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
           
-                        /*    gantt.parse({
-                              data: [
-                                  { id: 1, text: result.name, start_date: d3, duration: 5, progress: 0.4, open: true },
-                                  { id: 2, text: "Inicio", start_date: d3, duration: 1, progress: 0.6, parent: 1 }
-                              ],
-                              links: [
-                                  {id: 1, source: 1, target: 2, type: "1"},
-                                  
-                              ]
-                          });
-          
-          */
+                       
                           }else{
                             if(compara == 0){
                               boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-          /*
-                              gantt.parse({
-                                data: [
-                                    { id: 1, text: result.name, start_date: d3, duration: 5, progress: 0.4, open: true },
-                                    { id: 2, text: "Inicio", start_date: d3, duration: 1, progress: 0.6, parent: 1 }
-                                ],
-                                links: [
-                                    {id: 1, source: 1, target: 2, type: "1"},
-                                    
-                                ]
-                            });
-          */
+       
           
                             }
                             else{
                               boton_fecha ="FECHA SIN FORMATO 2";
-                              /*
-                              gantt.parse({
-                                data: [
-                                    { id: 1, text: "Seleccione Un objeto", start_date: "25-05-2021", duration:1, progress: 0.4, open: true },
-                                    { id: 2, text: "Inicio", start_date: "25-05-2021", duration: 1, progress: 0.6, parent: 1 }
-                                ],
-                                links: [
-                                    {id: 1, source: 1, target: 2, type: "1"}
-                                  
-                                ]
-                            });
-                            */
+                             
                             }
                           }
                         }
@@ -3966,31 +3853,7 @@ async function launchViewer(urn) {
 
 }
 
-/*
 
-function generaBotones(){
-    console.log("GENERA BOTONES LLAMADO");
-     getData().then((data) => {
-
-           let keys = Object.keys(data);
-           datos = keys;
-            console.log("DATOS DATA:"+ datos);
-
-            var i;
-            botones = "";
-          for (i = 0; i < datos.length; i++) {
-              if(datos[i] != "undefined"){
-                var botones =botones+ "<a class=\"dropdown-item\" onclick=\"selecciona("+"\'"+datos[i]+"\'"+");\">ddd"+datos[i]+"55</a>";
-              }
-              
-          
-          }
-          document.getElementById("selectores").innerHTML = botones;
-           });
-} 
-
-
-*/
 
 $('#ha_option').change(function() {
   var selected_ha_option = $('#ha_option').val();
@@ -4296,7 +4159,7 @@ if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
                 categoria_actual_obj = result.properties[i].displayValue;
                 console.log("valor categoria actual5: "+categoria_actual_obj); 
                  
-                if(categoria_actual_obj=="Revit Structural Rebar"){
+                if(categoria_actual_obj==parametro_fierro){
                   for(t=0;t<result.properties.length;t++){
                   
                     let val_actual = result.properties[t].displayName;
@@ -4583,7 +4446,7 @@ function filtro_visual(){
               
                 console.log("valor categoria actual4: "+categoria_actual_obj);
                 
-                if(categoria_actual_obj=="Revit Structural Rebar"){
+                if(categoria_actual_obj==parametro_fierro){
                   let peso = parseFloat(result.properties[82].displayValue);
                   
                   peso = peso.toFixed(2);
@@ -4871,7 +4734,7 @@ function filtro_visual(){
               categoria_actual_obj = result.properties[i].displayValue;
               console.log("CATEGORIA BUSCADA");
               console.log(categoria_actual_obj);
-              if(categoria_actual_obj=="Revit Structural Rebar"){
+              if(categoria_actual_obj==parametro_fierro){
                 let peso = parseFloat(result.properties[82].displayValue);
                 peso = peso.toFixed(2);
                 console.log("PESO BUSCADO222");
@@ -5130,7 +4993,7 @@ function filtro_visual(){
               categoria_actual_obj = result.properties[i].displayValue;
               console.log("CATEGORIA BUSCADA");
               console.log(categoria_actual_obj);
-              if(categoria_actual_obj=="Revit Structural Rebar"){
+              if(categoria_actual_obj==parametro_fierro){
                 let peso = parseFloat(result.properties[82].displayValue);
                 peso = peso.toFixed(2);
                 peso = parseFloat(peso,0);
@@ -5626,7 +5489,7 @@ function Pintar_Categorias( ){
          viewer.setThemingColor(result.dbId, color3, null,true);
         }
          
-        if(categoria_actual_obj == "Revit Structural Rebar"){
+        if(categoria_actual_obj == parametro_fierro){
                     
          const color4 = new THREE.Vector4(0, 0, 1, 1);
          viewer.setThemingColor(result.dbId, color4, null,true);
@@ -5863,7 +5726,7 @@ function Pintar_Categorias2( ){
          viewer.setThemingColor(result.dbId, color3, null,true);
         }
          
-        if(categoria_actual_obj == "Revit Structural Rebar"){
+        if(categoria_actual_obj ==parametro_fierro){
                     
          const color4 = new THREE.Vector4(0.1059,0.3804, 0.9059,0.1);
          viewer.setThemingColor(result.dbId, color4, null,true);
@@ -6002,7 +5865,7 @@ function filtro_gantt_inicio( arreglo_filros){
               categoria_actual_obj = result.properties[i].displayValue;
             
               console.log("valor categoria actual3: "+categoria_actual_obj);
-              if(categoria_actual_obj=="Revit Structural Rebar"){
+              if(categoria_actual_obj==parametro_fierro){
                 let peso = parseFloat(result.properties[82].displayValue);
                 peso = peso.toFixed(2);
                 peso = parseFloat(peso);
@@ -6117,23 +5980,7 @@ function filtro_gantt_inicio( arreglo_filros){
                   }
                 }
             }
-            //   console.log("CATEGORIA ACTUAL: "+categoria_actual_obj);
-               
-                /*
-                if(cat_count == 1){ // no hay ningun elemento
-                     indice_actual = 0;
-                     categorias.push(result.properties[i].displayValue);
-                     categoria_actual = result.properties[i].displayValue;
-                     cat_count =cat_count +1;
-                 //    console.log("entre una vez "+ cat_count );
-                 
-                     var taskId = gantt.addTask({
-                      id:cat_count,
-                      text:result.properties[i].displayValue,
-                      start_date:hoy,
-                      duration:1
-                    },11,1);
-                */    
+             
               }
               if(nombre_actual ===filtro_2){
                  valor_aec_piso  = result.properties[i].displayValue;
@@ -6187,511 +6034,7 @@ function filtro_gantt_inicio( arreglo_filros){
              
               }
               if(activo_hormigonado == 1){
-              //    console.log("VALOR CATEGORIA PRE-INSERCIÓN  "+categoria_actual_obj);
-             /*     switch ( valor_aec_piso){
-    
-                    case "00 Base": // 
-    
-              //      console.log("ENTRE PARA CREAR TASK -00 Base");
-              
-                        if(categoria_actual_obj == "Revit Walls"){
-                          var taskId = gantt.addTask({
-                            id: id_tareas_objetos,
-                            text: nombre_actua_objeto,
-                            start_date:fecha_objeto,
-                            duration:1
-                          },1000,1);
-    
-                          id_tareas_objetos++;
-                          activo_hormigonado = 0;
-                          
-    
-                        }
-                        if(categoria_actual_obj == "Revit Floors"){
-                          var taskId = gantt.addTask({
-                            id: id_tareas_objetos,
-                            text: nombre_actua_objeto,
-                            start_date:fecha_objeto,
-                            duration:1
-                          },1001,1);
-                        
-                          id_tareas_objetos++;
-                          activo_hormigonado = 0;
-                        }
-                        if(categoria_actual_obj == "Revit Structural Foundations"){
-                          var taskId = gantt.addTask({
-                            id: id_tareas_objetos,
-                            text: nombre_actua_objeto,
-                            start_date:fecha_objeto,
-                            duration:1
-                          },1002,1);
-                         
-                          id_tareas_objetos++;
-                          activo_hormigonado = 0;
-        
-                        }
-                        if(categoria_actual_obj== "Revit Structural Columns"){
-                          var taskId = gantt.addTask({
-                            id: id_tareas_objetos,
-                            text: nombre_actua_objeto,
-                            start_date:fecha_objeto,
-                            duration:1
-                          },1003,1);
-                       
-                          id_tareas_objetos++;
-                          activo_hormigonado = 0;
-                        } 
-                        if(categoria_actual_obj=="Revit Structural Rebar"){
-                          
-                            console.log('ENTRO A REBAR STRCUT 1');
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1004,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                         
-                        }
-                        break;
-                    
-                    case "00.- Radier EDA":
-                //      console.log("ENTRE PARA CREAR TASK -00.- Radier EDA");
-                          if(categoria_actual_obj == "Revit Walls"){
-                            var taskId = gantt.addTask({
-                              id: id_actual_tarea_1,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1005,1);
-                         
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          }
-                          if(categoria_actual_obj == "Revit Floors"){
-                            var taskId = gantt.addTask({
-                              id: id_actual_tarea_1,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1006,1);
-                          
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          }
-                          if(categoria_actual_obj == "Revit Structural Foundations"){
-                            var taskId = gantt.addTask({
-                              id: id_actual_tarea_1,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1007,1);
-                        
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-        
-                          }
-                          if(categoria_actual_obj== "Revit Structural Columns"){
-                            var taskId = gantt.addTask({
-                              id: id_actual_tarea_1,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1008,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          } 
-                          if(categoria_actual_obj=="Revit Structural Rebar"){
-                          
-                          console.log('ENTRO A REBAR STRCUT');
-                          var taskId = gantt.addTask({
-                            id: id_tareas_objetos,
-                            text: nombre_actua_objeto,
-                            start_date:fecha_objeto,
-                            duration:1
-                          },1009,1);
-                         
-                          id_tareas_objetos++;
-                          activo_hormigonado = 0;
-                       
-                          }
-                        break;
-                    
-                    case "01.- Cielo 1° Piso EDA":
-               //       console.log("ENTRE PARA CREAR TASK -01.- Cielo 1° Piso EDA");
-                
-                          if(categoria_actual_obj == "Revit Walls"){
-                            var taskId = gantt.addTask({
-                              id: id_actual_tarea_1,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1010,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          }
-                          if(categoria_actual_obj == "Revit Floors"){
-                            var taskId = gantt.addTask({
-                              id: id_actual_tarea_1,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1011,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          }
-                          if(categoria_actual_obj == "Revit Structural Foundations"){
-                            var taskId = gantt.addTask({
-                              id: id_actual_tarea_1,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1012,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-        
-                          }
-                          if(categoria_actual_obj== "Revit Structural Columns"){
-                            var taskId = gantt.addTask({
-                              id: id_actual_tarea_1,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1013,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          }
-                          if(categoria_actual_obj=="Revit Structural Rebar"){
-                          
-                          console.log('ENTRO A REBAR STRCUT');
-                          var taskId = gantt.addTask({
-                            id: id_tareas_objetos,
-                            text: nombre_actua_objeto,
-                            start_date:fecha_objeto,
-                            duration:1
-                          },1014,1);
-                         
-                          id_tareas_objetos++;
-                          activo_hormigonado = 0;
-                       
-                          } 
-                        break;
-                    
-                    case "02.- Cielo 2° Piso EDA":
-                          if(categoria_actual_obj == "Revit Walls"){
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1015,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          }
-                          if(categoria_actual_obj == "Revit Floors"){
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1016,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          }
-                          if(categoria_actual_obj == "Revit Structural Foundations"){
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1017,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-        
-                          }
-                          if(categoria_actual_obj== "Revit Structural Columns"){
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1018,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          } 
-                          if(categoria_actual_obj=="Revit Structural Rebar"){
-                          
-                          console.log('ENTRO A REBAR STRCUT');
-                          var taskId = gantt.addTask({
-                            id: id_tareas_objetos,
-                            text: nombre_actua_objeto,
-                            start_date:fecha_objeto,
-                            duration:1
-                          },1019,1);
-                         
-                          id_tareas_objetos++;
-                          activo_hormigonado = 0;
-                       
-                          }
-                        break;
-                    case "03.- Cielo 3° Piso EDA":
-                          if(categoria_actual_obj == "Revit Walls"){
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1020,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                         
-                         
-                          }
-                          if(categoria_actual_obj == "Revit Floors"){
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1021,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          }
-                          if(categoria_actual_obj == "Revit Structural Foundations"){
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1022,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-        
-                          }
-                          if(categoria_actual_obj== "Revit Structural Columns"){
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1023,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                          } 
-                          if(categoria_actual_obj=="Revit Structural Rebar"){
-                          
-                          console.log('ENTRO A REBAR STRCUT');
-                          var taskId = gantt.addTask({
-                            id: id_tareas_objetos,
-                            text: nombre_actua_objeto,
-                            start_date:fecha_objeto,
-                            duration:1
-                          },1024,1);
-                         
-                          id_tareas_objetos++;
-                          activo_hormigonado = 0;
-                       
-                          }
-                        break;
-                    case "04.- Cielo 4° Piso EDA":
-                            if(categoria_actual_obj == "Revit Walls"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1025,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-                            }
-                            if(categoria_actual_obj == "Revit Floors"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1026,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-                            }
-                            if(categoria_actual_obj == "Revit Structural Foundations"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1027,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-        
-                            }
-                            if(categoria_actual_obj== "Revit Structural Columns"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1028,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-                            } 
-                        break;
-                    case "05.- Cielo 5° Piso EDA":
-                            if(categoria_actual_obj == "Revit Walls"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1029,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-                            }
-                            if(categoria_actual_obj == "Revit Floors"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1030,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-                            }
-                            if(categoria_actual_obj == "Revit Structural Foundations"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1031,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-        
-                            }
-                            if(categoria_actual_obj== "Revit Structural Columns"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1032,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-                            } 
-                            if(categoria_actual_obj=="Revit Structural Rebar"){
-                          
-                            console.log('ENTRO A REBAR STRCUT');
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1033,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                         
-                            }
-                        break;
-                    case "06.- Cielo 6° Piso EDA":
-                            if(categoria_actual_obj == "Revit Walls"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1034,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-                            }
-                            if(categoria_actual_obj == "Revit Floors"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1035,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-                            }
-                            if(categoria_actual_obj == "Revit Structural Foundations"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1036,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-        
-                            }
-                            if(categoria_actual_obj== "Revit Structural Columns"){
-                              var taskId = gantt.addTask({
-                                id: id_tareas_objetos,
-                                text: nombre_actua_objeto,
-                                start_date:fecha_objeto,
-                                duration:1
-                              },1037,1);
-                             
-                              id_tareas_objetos++;
-                              activo_hormigonado = 0;
-                            } 
-                            if(categoria_actual_obj=="Revit Structural Rebar"){
-                          
-                            console.log('ENTRO A REBAR STRCUT');
-                            var taskId = gantt.addTask({
-                              id: id_tareas_objetos,
-                              text: nombre_actua_objeto,
-                              start_date:fecha_objeto,
-                              duration:1
-                            },1038,1);
-                           
-                            id_tareas_objetos++;
-                            activo_hormigonado = 0;
-                         
-                            }
-                          break;
-                    default:
-                 //     console.log("PASE POR DEFAUL");
-                      var taskId = gantt.addTask({
-                        id: id_tareas_objetos,
-                        text: 'TAREA OUT',
-                        start_date:fecha_objeto,
-                        duration:1
-                      },1);
-
-                      id_tareas_objetos++;
-                      activo_hormigonado = 0;
-                      break;
-                  }*/
-    
-                //  gantt.render();
+             
               }
             }) 
             id_tareas_objetos++;
@@ -6699,12 +6042,7 @@ function filtro_gantt_inicio( arreglo_filros){
       }
       
        
-  /*   gantt.config.columns = [
-      {name:"text",       label:"Nombre",  width:"*", tree:true },
-      {name:"start_date", label:"Inicio", align:"center" },
-      {name:"duration",   label:"Duracion",   align:"center" },
-      {name:"add",        label:"",           width:44 }
-     ];*/
+
 
      gantt.config.columns = [
       {name: "text", tree: true, width: 180, resize: true},
