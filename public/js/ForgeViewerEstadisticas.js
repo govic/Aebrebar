@@ -2381,6 +2381,7 @@ const jj = await resultados;
                 console.log("BARRA LARGOS");
                 console.log(barraLargos);
                 console.log(barraLargos[0][0]);
+                document.getElementById('PedidoDiametro').innerHTML ="";
                 for(let q=0; q<pedidosDiametros.length;q++){
                   let pesoAc = pedidosDiametros[q][1];
                   let diametroAct = pedidosDiametros[q][0];
@@ -2388,7 +2389,7 @@ const jj = await resultados;
                   diametroAct = Math.round(diametroAct);
                   console.log( "DIAMETRO ACTUAL LISTADO");
                   console.log( diametroAct);
-                  if( (pedidosDiametros[q][1] === undefined) || isNaN(pedidosDiametros[q][1])||pesoAc === undefined){pesoAc=0;}
+                  if( (pedidosDiametros[q][1] === undefined) || isNaN(pedidosDiametros[q][1])){pesoAc=0;}
                   document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'> "+pedidosDiametros[q][2]+"</div>";
                   document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'>Diametro: "+diametroAct+"</div>";
                   document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'>Peso: "+pesoAc+" Kgs</div>";
@@ -2475,7 +2476,8 @@ const jj = await resultados;
       for(let d=0;d<dataPesosDiametros[w].length;d++){
         diametroAct = parseFloat(dataPesosDiametros[w][d][1],1);
         diametroAct = Math.round(diametroAct);
-       
+        console.log( "DIAMETRO ACTUAL LISTADO");
+        console.log( diametroAct);
         
         document.getElementById("PedidosNivel").innerHTML += "<div class='col-4'>Piso: "+dataPesosDiametros[w][d][0]+" </div>";
         document.getElementById("PedidosNivel").innerHTML += "<div class='col-4'>Diametro: "+diametroAct+" </div>";
