@@ -2391,7 +2391,7 @@ const jj = await resultados;
                   if( !(pedidosDiametros[q][1] === undefined) || !isNaN(pedidosDiametros[q][1])){pesoAc=0;}
                   document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'> "+pedidosDiametros[q][2]+"</div>";
                   document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'>Diametro: "+diametroAct+"</div>";
-                  document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'>Peso: "+pedidosDiametros[q][1]+" Kgs</div>";
+                  document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'>Peso: "+pesoAc+" Kgs</div>";
                 }
                 console.log(pedidosDiametros);
                 document.getElementById('morrisBar1').innerHTML ="";
