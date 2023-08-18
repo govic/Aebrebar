@@ -1416,7 +1416,7 @@ function getFecha(id_objeto){
 function generateFile(){
   setTimeout(() => {
     exportToCsv("ReporteEstadisticas.csv",[totalTabla1]);
-  },15000);
+  },19500);
   
 }
 
@@ -2414,7 +2414,7 @@ const jj = await resultados;
          
         }
         
-      },10000);
+      },15000);
       
   })
 
@@ -2552,7 +2552,7 @@ const jj = await resultados;
 
   document.getElementById("precarga").style.display = "none";
 
-  }, 15000);
+  }, 18000);
 
   
 
