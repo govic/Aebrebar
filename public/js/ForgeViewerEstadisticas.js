@@ -1218,15 +1218,8 @@ function getOrdenesTotalPedidos(urnEnvio,sumatoria_pesos){
     }
 
 
-    new Morris.Donut({
-      element: 'morrisDonut2',
-      data: dataPedidos2,
-      colors: ['#FF4C33', '#F3FF33','#5BFF33','#FF33FC','#334FFF','#33FF8A','#FFB833','#33FFAC','#33CEFF'],
-      resize: true,
-      labelColor:"#8c9fc3"
-      
-    });
-    document.getElementById('morrisDonut2').innerHTML ="";
+    
+   // document.getElementById('morrisDonut2').innerHTML ="";
     new Morris.Donut({
       element: 'morrisDonut2',
       data: dataPedidos2,
@@ -2389,8 +2382,15 @@ const jj = await resultados;
                 console.log(barraLargos);
                 console.log(barraLargos[0][0]);
                 for(let q=0; q<pedidosDiametros.length;q++){
+                  let pesoAc = pedidosDiametros[q][1];
+                  let diametroAct = pedidosDiametros[q][0];
+                  diametroAct = parseFloat(diametroAct,1);
+                  diametroAct = Math.round(diametroAct);
+                  console.log( "DIAMETRO ACTUAL LISTADO");
+                  console.log( diametroAct);
+                  if( !(pedidosDiametros[q][1] === undefined) || !isNaN(pedidosDiametros[q][1])){pesoAc=0;}
                   document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'> "+pedidosDiametros[q][2]+"</div>";
-                  document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'>Diametro: "+pedidosDiametros[q][0]+"</div>";
+                  document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'>Diametro: "+diametroAct+"</div>";
                   document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'>Peso: "+pedidosDiametros[q][1]+" Kgs</div>";
                 }
                 console.log(pedidosDiametros);
@@ -2473,8 +2473,12 @@ const jj = await resultados;
     document.getElementById("PedidosNivel").innerHTML = "";
     for(let w=0;w<dataPesosDiametros.length;w++){
       for(let d=0;d<dataPesosDiametros[w].length;d++){
+        diametroAct = parseFloat(dataPesosDiametros[w][d][1],1);
+        diametroAct = Math.round(diametroAct);
+       
+        
         document.getElementById("PedidosNivel").innerHTML += "<div class='col-4'>Piso: "+dataPesosDiametros[w][d][0]+" </div>";
-        document.getElementById("PedidosNivel").innerHTML += "<div class='col-4'>Diametro: "+dataPesosDiametros[w][d][1]+" </div>";
+        document.getElementById("PedidosNivel").innerHTML += "<div class='col-4'>Diametro: "+diametroAct+" </div>";
         document.getElementById("PedidosNivel").innerHTML += "<div class='col-4'>Peso: "+dataPesosDiametros[w][d][2]+" Kgs</div>";
      
       }
@@ -2552,7 +2556,7 @@ const jj = await resultados;
 
   document.getElementById("precarga").style.display = "none";
 
-  }, 18000);
+  }, 25000);
 
   
 
