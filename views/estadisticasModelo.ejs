@@ -24,8 +24,9 @@
 
 		<!-- Icons css -->
 		<link href="assets/css/icons.css" rel="stylesheet">
-
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<!-- Internal Morris Css-->
+		
 		<script language="JavaScript" src="js2/jquery.min.js"></script>
 		<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"></script>-->	
 			
@@ -288,7 +289,7 @@
 				<!-- /main-header -->
 
 				<!-- container -->
-				<div class="container-fluid">
+				<div class="container-fluid" >
 
 					<!-- breadcrumb -->
 					<div class="breadcrumb-header justify-content-between">
@@ -311,61 +312,77 @@
 								  <div class="col-6"> <span  ><div id="precarga">Calculando..<img src="assets/img/cargando_gif.gif" style="width:50px"></div></span>
 								</div> 
 								  
-								  
+								<button id="generateReportButton" onclick='generateFile();'>Generar Reporte</button>
 							   </div>
 						</div>
 					</div>
 					<!-- row -->
-					<div class="row row-sm">
+					<div  >
+						<div class="row row-sm">
 					
-						<div class="col-md-6">
-							<div class="card mg-b-md-20">
-								<div class="card-body">
-									<div class="main-content-label mg-b-5">
-									
+							<div class="col-md-6" id="Estadísticas1">
+								<div class="card mg-b-md-20" style="height: 100%!important;" >
+									<div class="card-body" >
+										<div class="main-content-label mg-b-5">
+											<button id="download-button1" onclick="generatePDF('Estadisticas1');">Descargar PDF</button>
+										</div>
+										<p class="mg-b-20">Pesos Totales / Nivel</p>
+										<div class="morris-wrapper-demo" id="morrisDonut1"></div>
+										<p id="PesosTotales">	</p>
 									</div>
-									<p class="mg-b-20">Pesos Totales / Nivel</p>
-									<div class="morris-wrapper-demo" id="morrisDonut1"></div>
-								
 								</div>
-							</div>
-						</div><!-- col-6 -->
-						<div class="col-md-6">
-							<div class="card mg-b-20">
-								<div class="card-body">
-									<div class="main-content-label mg-b-5">
+							</div><!-- col-6 -->
+							<div class="col-md-6"  id="Estadísticas2">
+								<div class="card mg-b-20" style="height: 100%!important;">
+									<div class="card-body" >
+										<div class="main-content-label mg-b-5">
+											<button id="download-button2">Descargar PDF</button>
+										</div>
+										<p class="mg-b-20">Pesos Diámetro / Nivel</p>
+										<div class="morris-wrapper-demo" id="morrisBar4"></div>
+										<p id=""><div>
+											<div class="row" id="PedidosNivel">
+	
+											</div>
+										</div>	</p>
+									</div>
+								</div>
+							</div><!-- col-6 -->
+						</div>
+						<div class="row row-sm">
+							<div class="col-md-6" >
+								<div class="card mg-b-20" style="height: 100%!important;">
+									<div class="card-body"  id="Estadísticas3">
+										<div class="main-content-label mg-b-5">
+											<button id="download-button3">Descargar PDF</button>
+										</div>
+										<p class="mg-b-20">Pedidos / Total</p>
+										<div class="morris-wrapper-demo" id="morrisDonut2"></div>
+										<p id="Total">	</p>
 										
 									</div>
-									<p class="mg-b-20">Pesos Diámetro / Nivel</p>
-									<div class="morris-wrapper-demo" id="morrisBar4"></div>
 								</div>
-							</div>
-						</div><!-- col-6 -->
+							</div><!-- col-6 -->
+							<div class="col-md-6" >
+								<div class="card mg-b-20" style="height: 100%!important;">
+									<div class="card-body"  id="Estadísticas4" >
+										<div class="main-content-label mg-b-5">
+											<button id="download-button4">Descargar PDF</button>
+										</div>
+										<p class="mg-b-20">Pedidos por Diámetro</p>
+										<div class="morris-wrapper-demo" id="morrisBar1"></div>
+										
+										<div class="row" id="PedidoDiametro">
+											
+										</div>
+									</div>
+								</div>
+							</div><!-- col-6 -->
+						</div>
+
 					</div>
-					<div class="row row-sm">
-						<div class="col-md-6">
-							<div class="card mg-b-20">
-								<div class="card-body">
-									<div class="main-content-label mg-b-5">
-										
-									</div>
-									<p class="mg-b-20">Pedidos / Total</p>
-									<div class="morris-wrapper-demo" id="morrisDonut2"></div>
-								</div>
-							</div>
-						</div><!-- col-6 -->
-						<div class="col-md-6">
-							<div class="card mg-b-20">
-								<div class="card-body">
-									<div class="main-content-label mg-b-5">
-										
-									</div>
-									<p class="mg-b-20">Pedidos por Diámetro</p>
-									<div class="morris-wrapper-demo" id="morrisBar1"></div>
-								</div>
-							</div>
-						</div><!-- col-6 -->
-					</div>
+					
+					
 			
 
 					<!-- row -->
@@ -658,7 +675,114 @@
 </div>
 		</div>
 		<!-- End Page -->
+<script>
+	
+			const button1 = document.getElementById('download-button1');
+			const button2 = document.getElementById('download-button2');
+			const button3 = document.getElementById('download-button3');
+			const button4 = document.getElementById('download-button4');
 
+			function generatePDF1() {
+				// Choose the element that your content will be rendered to.
+				const element1 = document.getElementById('Estadísticas1');
+				// Choose the element and save the PDF for your user.
+				html2pdf()
+				.set({ html2canvas: { scale: 4 } })
+				.from(element1).save();
+			}
+			function generatePDF2() {
+				// Choose the element that your content will be rendered to.
+				const element2 = document.getElementById('Estadísticas2');
+				// Choose the element and save the PDF for your user.
+				html2pdf()
+				.set({ html2canvas: { scale: 4 } })
+				.from(element2).save();
+			}
+			function generatePDF3() {
+				// Choose the element that your content will be rendered to.
+				const element3 = document.getElementById('Estadísticas3');
+				// Choose the element and save the PDF for your user.
+				html2pdf()
+				.set({ html2canvas: { scale:10 } })
+				.from(element3).save();
+			}
+			function generatePDF4() {
+				// Choose the element that your content will be rendered to.
+				const element4 = document.getElementById('Estadísticas4');
+				// Choose the element and save the PDF for your user.
+				html2pdf()
+				.set({ html2canvas: { scale:20 } })
+				.from(element4).save();
+			}
+
+			button1.addEventListener('click', generatePDF1);
+			button2.addEventListener('click', generatePDF2);
+			button3.addEventListener('click', generatePDF3);
+			button4.addEventListener('click', generatePDF4);
+		
+		
+		
+		
+</script>
+<script>
+
+	function generateFile(){
+		exportToCsv("MyFileName.csv",[[1,2],[3,4],[5,6]]);
+	}
+	
+	
+	function exportToCsv(filename, rows) {
+	
+	  var processRow = function (row) {
+		var finalVal = '';
+		for (var j = 0; j < row.length; j++) {
+		  var innerValue = '';
+		  if(row[j] === 0){
+			innerValue = row[j].toString();
+		  }
+		  if(row[j]){
+			innerValue = row[j].toString();
+		  }
+		  if (row[j] instanceof Date) {
+			innerValue = row[j].toLocaleString();
+		  };
+		  var result = innerValue.replace(/"/g, '""');
+		  if (result.search(/("|,|\n)/g) >= 0)
+			result = '"' + result + '"';
+		  if (j > 0)
+			finalVal += ',';
+		  finalVal += result;
+		}
+		return finalVal + '\n';
+	  };
+	
+	  var csvFile = '';
+	  for (var i = 0; i < rows.length; i++) {
+			csvFile += processRow(rows[i]);
+	  }
+	
+	  var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+	  if (navigator.msSaveBlob) { // IE 10+
+		navigator.msSaveBlob(blob, filename);
+	  } else {
+		var link = document.createElement("a");
+		if (link.download !== undefined) { // feature detection
+		  // Browsers that support HTML5 download attribute
+		  var url = URL.createObjectURL(blob);
+		  link.setAttribute("href", url);
+		  link.setAttribute("download", filename);
+		  link.style.visibility = 'hidden';
+		  document.body.appendChild(link);
+		  link.click();
+		  document.body.removeChild(link);
+		}
+	  }
+	
+	  }
+	
+	
+	</script>
+	
 		<!-- Back-to-top -->
 		<a href="#top" id="back-to-top"><i class="las la-angle-double-up"></i></a>
 

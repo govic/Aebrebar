@@ -1,9 +1,16 @@
 var viewer;
 var regex = /(\d+)/g;
 var filtro_a;
+var contador_pedidos = 0;
 var matriz_largos =[];
+var arr_pedidos = [];
+var totalTabla1 =[];
+var matriz_pedidos =[];
+var listado_largosDiametro = [];
 var registro_ultimo_filtro ;
 var resultadoLargodiametrosPedido = Array();
+var resultadoActual = Array();
+var PedidosLargoDiametro = Array();
 var id_pedidos_guardados =[];
 var sumatoria_pesos =0;
 var nombre_add_actual;
@@ -1164,8 +1171,6 @@ function getOrdenesTotalPedidos(urnEnvio,sumatoria_pesos){
       console.log(typeof res);
       console.log(res.length);
       console.log(typeof res[0]);
-    // $('#vistas_previas').innerHTML = "";
-    
 
     $list_pedidos = "";
     $fila = "";
@@ -1173,8 +1178,14 @@ function getOrdenesTotalPedidos(urnEnvio,sumatoria_pesos){
 
     var ListadoPedidos=[];
     let dona2 ={};
+   
+    console.log("PEDIDOS DONA /TOTAL");
+    console.log(dataPedidos2);
+    dataPedidos2 = [];
+    var pedidos=[];
      for(let r = 0; r<res.length; r++){
-      dona2 = {};
+      dona2 ={};
+      let actpedido = [];
         if(res[r].urn_actual== urnEnvio){
        
           let val_peso = parseFloat(res[r].pesos);
@@ -1182,101 +1193,50 @@ function getOrdenesTotalPedidos(urnEnvio,sumatoria_pesos){
          
           //   ids_bd.push(Object.values(res[r]));
              $fila = "";
-           //  console.log("nombre pedido A");
-            // console.log(Object.values(res[r]));
-           //  $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-success btn-block'onclick='filtra_orden("+r+")'>Visualizar</button><button class='btn btn-danger btn-block' onclick=eliminar_orden("+r+")>Borrar</button></td>" + "</tr>";
-           //  $list_pedidos = $list_pedidos +$fila;
+ 
            if(res[r].nombre_pedido !="" && val_peso !="" ){
               console.log("ORDENES PARA GRAFICO 2");  
               console.log(res[r].nombre_pedido);
               console.log(val_peso);
               dona2["label"]=res[r].nombre_pedido;
               dona2["value"]=val_peso;
+              actpedido.push(res[r].nombre_pedido);
+              actpedido.push(val_peso);
+              pedidos.push(actpedido);
            }
-            
-             //id_pedidos_guardados.push(res[r].ids);
-             //nombre_pedidos.push(res[r].nombre_pedido);
-             //fecha_pedidos.push(res[r].fecha);
+
         }
         dataPedidos2.push(dona2);
        
     }
-    var valorResto = sumatoria_pesos-total_acumulado;
-    console.log("VALOR RESTO DONA4");
-    console.log(total_acumulado);
-    console.log(typeof total_acumulado);
-    console.log(sumatoria_pesos);
-    console.log(typeof sumatoria_pesos);
-    console.log("VALOR RESTO DONA5");
-    console.log(valorResto);
-    dona2["label"]="Sin Pedir";
-    dona2["value"]=valorResto;
-    dataPedidos2.push(dona2);
-    console.log("PEDIDOS DONA /TOTAL");
-    console.log(dataPedidos2);
+    var valorResto = total_acumulado;
+    document.getElementById('Total').innerHTML ="Peso Total Pedido : "+valorResto.toFixed(1)+" KgS";
+    document.getElementById('Total').innerHTML +="<br>";
+    for(let e = 0;e<pedidos.length;e++){
+      document.getElementById('Total').innerHTML +="<br>"+"Pedido : "+pedidos[e][0]+" - Peso "+pedidos[e][1] +"KgS";
    
+    }
 
 
     new Morris.Donut({
       element: 'morrisDonut2',
       data: dataPedidos2,
-      colors: ['#285cf7', '#6d6ef3','#6d6ef0','#6d6eg3'],
+      colors: ['#FF4C33', '#F3FF33','#5BFF33','#FF33FC','#334FFF','#33FF8A','#FFB833','#33FFAC','#33CEFF'],
+      resize: true,
+      labelColor:"#8c9fc3"
+      
+    });
+    document.getElementById('morrisDonut2').innerHTML ="";
+    new Morris.Donut({
+      element: 'morrisDonut2',
+      data: dataPedidos2,
+      colors: ['#FF4C33', '#F3FF33','#5BFF33','#FF33FC','#334FFF','#33FF8A','#FFB833','#33FFAC','#33CEFF'],
       resize: true,
       labelColor:"#8c9fc3"
       
     });
 
-
-    var ctx57 = document.getElementById('chartBar57').getContext('2d');
-                          new Chart(ctx57, {
-                              type: 'bar',
-                              data: {
-                                  labels: labels_graf2,
-                                  datasets: [{
-                                      label: '# Kgs',
-                                      data: valores_pesos_pedidos,
-                                      backgroundColor: '#285cf7'
-                                  }]
-                              },
-                              options: {
-                                  maintainAspectRatio: false,
-                                  responsive: true,
-                                  legend: {
-                                      display: false,
-                                      labels: {
-                                          display: false
-                                      }
-                                  },
-                                  scales: {
-                                      yAxes: [{
-                                          ticks: {
-                                              beginAtZero: true,
-                                              fontSize: 10,
-                                              max: valor_maximo,
-                                              fontColor: "rgba(171, 167, 167,0.9)",
-                                          },
-                                          gridLines: {
-                                              display: true,
-                                              color: 'rgba(171, 167, 167,0.2)',
-                                              drawBorder: false
-                                          },
-                                      }],
-                                      xAxes: [{
-                                          barPercentage: 0.6,
-                                          ticks: {
-                                              beginAtZero: true,
-                                              fontSize: 11,
-                                              fontColor: "rgba(171, 167, 167,0.9)",
-                                          },
-                                          gridLines: {
-                                              display: true,
-                                              color: 'rgba(171, 167, 167,0.2)',
-                                              drawBorder: false
-                                          },
-                                      }]
-                                  }
-                              }
-                            });
+    
   
   
     }, error: function (res) {
@@ -1303,9 +1263,7 @@ function getPedidosTotal(urnEnvio){
      console.log(typeof res);
      console.log(res.length);
      console.log(typeof res[0]);
-    // $('#vistas_previas').innerHTML = "";
-    
-
+  
     $list_pedidos = "";
     $fila = "";
     var total_acumulado=0;
@@ -1354,65 +1312,12 @@ function getPedidosTotal(urnEnvio){
     new Morris.Donut({
       element: 'morrisDonut2',
       data: dataPedidos,
-      colors: ['#285cf7', '#6d6ef3','#6d6ef0','#6d6eg3'],
+      colors: ['#FF4C33', '#F3FF33','#5BFF33','#FF33FC','#334FFF','#33FF8A','#FFB833','#33FFAC','#33CEFF'],
       resize: true,
       labelColor:"#8c9fc3"
       
     });
 
-
-    var ctx57 = document.getElementById('chartBar57').getContext('2d');
-                          new Chart(ctx57, {
-                              type: 'bar',
-                              data: {
-                                  labels: labels_graf2,
-                                  datasets: [{
-                                      label: '# Kgs',
-                                      data: valores_pesos_pedidos,
-                                      backgroundColor: '#285cf7'
-                                  }]
-                              },
-                              options: {
-                                  maintainAspectRatio: false,
-                                  responsive: true,
-                                  legend: {
-                                      display: false,
-                                      labels: {
-                                          display: false
-                                      }
-                                  },
-                                  scales: {
-                                      yAxes: [{
-                                          ticks: {
-                                              beginAtZero: true,
-                                              fontSize: 10,
-                                              max: valor_maximo,
-                                              fontColor: "rgba(171, 167, 167,0.9)",
-                                          },
-                                          gridLines: {
-                                              display: true,
-                                              color: 'rgba(171, 167, 167,0.2)',
-                                              drawBorder: false
-                                          },
-                                      }],
-                                      xAxes: [{
-                                          barPercentage: 0.6,
-                                          ticks: {
-                                              beginAtZero: true,
-                                              fontSize: 11,
-                                              fontColor: "rgba(171, 167, 167,0.9)",
-                                          },
-                                          gridLines: {
-                                              display: true,
-                                              color: 'rgba(171, 167, 167,0.2)',
-                                              drawBorder: false
-                                          },
-                                      }]
-                                  }
-                              }
-                            });
-  
-  
     }, error: function (res) {
         console.log("ERROR GET ORDENES");
         console.log(res);
@@ -1507,6 +1412,65 @@ function getFecha(id_objeto){
   })  
 
 }
+
+function generateFile(){
+  setTimeout(() => {
+    exportToCsv("ReporteEstadisticas.csv",[totalTabla1]);
+  },15000);
+  
+}
+
+
+function exportToCsv(filename, rows) {
+
+  var processRow = function (row) {
+  var finalVal = '';
+  for (var j = 0; j < row.length; j++) {
+    var innerValue = '';
+    if(row[j] === 0){
+    innerValue = row[j].toString();
+    }
+    if(row[j]){
+    innerValue = row[j].toString();
+    }
+    if (row[j] instanceof Date) {
+    innerValue = row[j].toLocaleString();
+    };
+    var result = innerValue.replace(/"/g, '""');
+    if (result.search(/("|,|\n)/g) >= 0)
+    result = '"' + result + '"';
+    if (j > 0)
+    finalVal += ',';
+    finalVal += result;
+  }
+  return finalVal + '\n';
+  };
+
+  var csvFile = '';
+  for (var i = 0; i < rows.length; i++) {
+    csvFile += processRow(rows[i]);
+  }
+
+  var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+  if (navigator.msSaveBlob) { // IE 10+
+  navigator.msSaveBlob(blob, filename);
+  } else {
+  var link = document.createElement("a");
+  if (link.download !== undefined) { // feature detection
+    // Browsers that support HTML5 download attribute
+    var url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+  }
+
+  }
+
+
 function set_visor(){
   d = document.getElementById("vistas_previas").value;
    // // // // // // // // // // // alert(d);
@@ -1925,6 +1889,10 @@ function cargarVista(){
   });*/
 }
 
+async function getOrdenes(urn){
+
+  
+}
 async function getValFiltro(filtro_name,urn){
 
   let filtrado = [filtro_name];
@@ -1968,10 +1936,7 @@ async function getValFiltro(filtro_name,urn){
 
      });
 
-    let ordenes = new Promise((resolve,reject)=>{
-
-
-     });
+   
   var valores = await filtros;
   var diametrosTotal = await diametros;
   var resultado_ids = [];
@@ -1984,6 +1949,11 @@ async function getValFiltro(filtro_name,urn){
   var posicion_actual =0;
   let resultados = new Promise((resolve, reject) => {
   var matriz_resultados=[];
+
+
+  
+
+
 
   for(let p = 0; p<valores.length;p++){
       let diametros_barras = [];
@@ -2005,6 +1975,7 @@ async function getValFiltro(filtro_name,urn){
     }
    // a.push(diametros_barras); 
     matriz_largos.push(diametros_barras);
+    
     console.log("VALORES largos resultados 1");
     console.log(matriz_largos);
     console.log(valores);
@@ -2114,8 +2085,8 @@ async function getValFiltro(filtro_name,urn){
                          
                           if(val_actual =="Model Bar Diameter"){
                             let diametroFormato =result.properties[t].displayValue;
-                         //   console.log("Diametro actual");
-                           // console.log(result.properties[t].displayValue);
+                    //        console.log("Diametro actual");
+                   //        console.log(result.properties[t].displayValue);
                           //  console.log(typeof(result.properties[t].displayValue));
                             for(let j =0;j<diametrosTotal.length;j++){
                           //    console.log(diametrosTotal[j]);
@@ -2150,9 +2121,11 @@ async function getValFiltro(filtro_name,urn){
                             resultado_mul.toFixed(0);
                             pesoActual = 0;
                             
-                           // console.log("VALOR ACTUAL MATRIZ LARGOS");
-                           // console.log(matriz_largos[h][pos_diametro]);
-
+                        //    console.log("VALOR ACTUAL MATRIZ LARGOS");
+                         //   console.log(matriz_largos[h][pos_diametro]);
+                        //    console.log(h);
+                       //     console.log(largoActual);
+                           
                             matriz_largos[0][pos_diametro] =  largoActual  + matriz_largos[0][pos_diametro] ;
                             let mult_actual  = parseFloat( matriz_resultados[h][pos_diametro]);
                             largoActual = 0;
@@ -2178,8 +2151,8 @@ async function getValFiltro(filtro_name,urn){
               })
             }
           }
-       //   console.log("finaliza matriz");
-       //   console.log(matriz_resultados);
+          console.log("finaliza matriz");
+          console.log(matriz_resultados);
           resolve(matriz_resultados);},(error) => {
             reject(error);
       });
@@ -2197,35 +2170,314 @@ const jj = await resultados;
 // jj matriz de resutados
 // valores arreglo de nombres-piso
 // diametros arregle de diametros por proyecto
+  let ordenes =  new Promise((resolve, reject) => {
+    jQuery.get({
+      url: '/getOrdenes',
+      contentType: 'application/json',
+      success: function (res) {
+        let resultado =[]; // resultado = {"nombrePedido",{arrayIds}}
+        for(let r = 0; r<res.length; r++){
+          let dona2 = {};
+          if( res[r].urn_actual== urn){
+            let actual = [];
+              actual.push(res[r].nombre_pedido);
+              let actualPedido = res[r].ids.split(',');
+              actual.push(actualPedido);
+              resultado.push(actual);
+            //  dona2["label"]=res[r].nombre_pedido;
+            //  dona2["value"]=val_peso.toFixed(1);
+              //PedidosLargoDiametro.push(res[r].nombre_pedido);
+             
+            }
+        }
+      
+      resolve(resultado);
+        
+      }, error: function (res) {
+            reject(res);
 
+      }
+    });
+  }).then(function(result) { //  result (nombre pedido , {ids}))
+      
+    
+     // console.log(result[0][1]);
+      let arrayPedidos = Array();
+      for(let q=0;q<result.length;q++){
+      
+        for(let q2=0;q2<result[q][1].length;q2++){
+          console.log("id actual");
+          console.log(result[q][1][q2]);
+          viewer.getProperties( parseInt(result[q][1][q2]), (result) => { 
+           
+          
+            for (let i = 0; i < 60; i++) {
+              if (result.properties[i] && result.properties[i].displayName) {
+                let nombre_actual = "" + result.properties[i].displayName;
+                if (nombre_actual === "Category") {
+                  categoria_actual_obj = result.properties[i].displayValue;
+                // console.log("valor categoria actual5: " + categoria_actual_obj);
+    
+                  if (categoria_actual_obj == "Revit Structural Rebar") {
+                    for (t = 0; t < result.properties.length; t++) {
+    
+                      let val_actual = result.properties[t].displayName;
+                      if (val_actual == "RS Peso Lineal (kg/m)") {
+                      //  console.log("ENTRO A PESO LINEAL HA");
+                        let peso = parseFloat(result.properties[t].displayValue);
+    
+                      //  console.log("ANTES PESO BUSCADO HA");
+                      //  console.log(peso);
+                      //  console.log(result.properties[t].displayValue);
+                      //  console.log(result);
+    
+                        peso = parseFloat(peso);
+                        pesoActual = peso;
+                      // console.log("PESO BUSCADO HA");
+                      // console.log(peso);
+    
+                      }
+                    
+                      if(val_actual =="Model Bar Diameter"){
+                        let diametroFormato =result.properties[t].displayValue;
+                      //  console.log("Diametro actual");
+                    //   console.log(result.properties[t].displayValue);
+                      //  console.log(typeof(result.properties[t].displayValue));
+                        for(let j =0;j<diametrosTotal.length;j++){
+                      //    console.log(diametrosTotal[j]);
+                          if(diametrosTotal[j] == diametroFormato){
+                        //   console.log(" es igual");
+                            pos_diametro = j;
+                          }else{
+                          //  console.log("no  es igual");
+                          }
+                        }
+                      }
+                      if (val_actual == "Total Bar Length") {
+                      //  console.log("TOTAL LENGTH BAR HA");
+    
+                        let largo = parseFloat(result.properties[t].displayValue);
+                        largo = largo.toFixed(0);
+                      // console.log(largo);
+    
+                        largo = parseFloat(largo, 0);
+                        largo = largo / 100;
+                        largoActual = largo;
+                      // console.log("convertido HA22 " + largo+" // "+ largoActual);
+                      // console.log("posicion " + pos_diametro);
+                      
+    
+                      // console.log("MATRIZ DE RESULTADOS");
+                      // console.log(matriz_resultados);
+                      
+                      }
+                      if ((t + 1) == result.properties.length) { // termina de recorrer todas las propiedades
+                        //   console.log( resultadoPedido);  
+                          console.log("POSICIONES ACTUALES");
+                          console.log(" Pedido :"+q);
+                          console.log(" diametro :"+pos_diametro);
+                          console.log(" Largo :"+largoActual);
+                        
+                         // let a1 = matrizLargosDiametros[q][1][pos_diametro];
+                       //   a1 = a1 + largoActual;
+                         // matrizLargosDiametros[q][1][pos_diametro]=a1;
+                         // console.log( matrizLargosDiametros[q][1][pos_diametro]);
+                          let arr2 = Array(q,pos_diametro,largoActual);
+                          arrayPedidos.push(arr2);
+                          //  console.log("VALOR ACTUAL MATRIZ PEDIDOS");
+                        // console.log( matriz_pedidos[contador_pedidos][1][pos_diametro]);
+                        //  console.log(matriz_pedidos);
+                        //  console.log(h);
+                      //   console.log(largoActual);
+                        
+                        //  matriz_largos[0][pos_diametro] =  largoActual  + matriz_largos[0][pos_diametro] ;
+                        // let mult_actual  = parseFloat( matriz_resultados[h][pos_diametro]);
+                          largoActual = 0;
+                      //    matriz_resultados[h][pos_diametro] =  mult_actual  +resultado_mul ;
+                      //  console.log("MATRIZ DE RESULTADOS");
+                      //  console.log(matriz_resultados);
+                      // console.log("MATRIZ DE LARGOS");
+                      //  console.log(matriz_largos);
+                        
+    
+                      }
+                    }
+                
+    
+                  }
+    
+                }
+    
+              }
+    
+            }
+    
+          
+            
+          }) 
+        }
+       
+
+      }
+     
+      setTimeout(() => {
+
+        if(!(typeof result=== 'undefined')){
+              
+            console.log("Ordenes solicitadas");
+            console.log(result);
+            console.log(typeof result);
+            let u = arrayPedidos[0].length-1;
+            console.log(u);
+           
+            var matrizLargosDiametros = [];
+            console.log("VALOR D");
+            console.log(d);
+            for(let p =0;p<result.length;p++){
+              var d =Array();
+              for(let w=0; w< u;w++){
+                d.push(0);  
+              } 
+                matrizLargosDiametros.push(d);
+            }
+            console.log("matriz Resultados Preparada");
+            console.log(matrizLargosDiametros);
+            console.log("VALOR ACTUAL MATRIZ PEDIDOS3");
+          console.log( matrizLargosDiametros);
+          console.log(arrayPedidos);
+          console.log(diametrosTotal);
+          console.log(arrayPedidos.length);
+          //matrizLargosDiametros[l][1][o] = matrizLargosDiametros[l][1][o]+
+          var pedidosDiametros =[];
+          for(let l =0; l<arrayPedidos.length;l++){
+          
+              pedidoActual = arrayPedidos[l][0];
+              
+              console.log("Posicion Actual Arreglo resultados");
+              console.log(arrayPedidos[l][0]);
+              console.log(arrayPedidos[l][1]);
+              console.log(arrayPedidos[l][2]);
+              console.log( matrizLargosDiametros[arrayPedidos[l][0]][arrayPedidos[l][1]]);
+          
+            matrizLargosDiametros[arrayPedidos[l][0]][arrayPedidos[l][1]] =  parseInt(matrizLargosDiametros[arrayPedidos[l][0]][arrayPedidos[l][1]])+parseInt(arrayPedidos[l][2]);
+          }
+          console.log("VALOR ACTUAL MATRIZ PEDIDOS4");
+          console.log( matrizLargosDiametros);
+          console.log( result);
+         
+          
+                var barraLargos = [];
+                for(let f=0;f<result.length;f++){
+                  let pedDiametrosLargos = {};
+                
+                  for(var k=0; k< diametrosTotal.length;k++){
+                    let lactual = [];
+                    lactual.push(diametrosTotal[k]);
+                    lactual.push(matrizLargosDiametros[f][k]);
+                    lactual.push(result[f][0]);
+                    pedidosDiametros.push(lactual);
+                    pedDiametrosLargos[diametrosTotal[k]]= matrizLargosDiametros[f][k];
+                  }
+                 
+                 
+                  pedDiametrosLargos["y"]=result[f][0];
+                  console.log( pedDiametrosLargos);
+                  barraLargos.push(pedDiametrosLargos);
+                }
+           
+                console.log("BARRA LARGOS");
+                console.log(barraLargos);
+                console.log(barraLargos[0][0]);
+                for(let q=0; q<pedidosDiametros.length;q++){
+                  document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'> "+pedidosDiametros[q][2]+"</div>";
+                  document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'>Diametro: "+pedidosDiametros[q][0]+"</div>";
+                  document.getElementById('PedidoDiametro').innerHTML +="<div class='col-4'>Peso: "+pedidosDiametros[q][1]+" Kgs</div>";
+                }
+                console.log(pedidosDiametros);
+                document.getElementById('morrisBar1').innerHTML ="";
+      //    console.log("DATOS MORRIS");
+        //   console.log(morrisData3)
+              new Morris.Bar({
+                element: 'morrisBar1',
+                data: barraLargos,
+                xkey: 'y',
+                ykeys: diametrosTotal,
+                labels: diametrosTotal,
+                barColors: ['#334FFF','#33FF8A','#FFB833','#FF4C33', '#F3FF33','#5BFF33','#FF33FC','#33FFAC','#33CEFF'],
+                stacked: true,
+                gridTextSize: 11,
+                hideHover: 'auto',
+                resize: true
+              });
+
+     
+         
+        }
+        
+      },10000);
+      
+  })
+
+  const resultadoOrdenes = await ordenes;
+  
 
   setTimeout(() => {
 
     var morrisData3 = [];
     var donaData = [];
+    sumatoria_pesos=0;
+    var dataPesos = [];
+    var dataPesosDiametros =[];
   // Lista de elementos por valor/filtro
     for(let g=0;g<valores.length;g++){
       let qj = {};
       let dn = {};
+      let dataPesoActual = [];
       if(valores[g] !=""){
         qj['y'] = valores[g];
         dn['label'] = valores[g];
+        dataPesoActual.push(valores[g]);
         let cont = 0;
+        let ww1 = [];
+        
         for(var f=0; f< diametrosTotal.length;f++){
+          let ww = [];
           qj[diametrosTotal[f]]= jj[g][f].toFixed(1);
-         
+          ww.push(valores[g]);
+          ww.push(diametrosTotal[f]);
+          ww.push(jj[g][f].toFixed(1));
+          ww1.push(ww);
      //     console.log("datos pre morris 2");
      //    console.log(jj[g][f]);
           cont =  cont +jj[g][f];
      //     console.log(diametrosTotal[f]);
         }
         dn['value'] = cont.toFixed(1);
+        
+        dataPesosDiametros.push(ww1);
+        dataPesoActual.push(cont.toFixed(1));
+        dataPesos.push( dataPesoActual);
         sumatoria_pesos = sumatoria_pesos+cont;
         morrisData3.push(qj);
         donaData.push(dn);
       }
+
+    
+      console.log("DATOS GRAFICO");
+      console.log( dataPesosDiametros);
+      totalTabla1  = dataPesosDiametros;
   //    console.log("Dona!");
   //    console.log(dn);
+     
+    }
+    document.getElementById("PedidosNivel").innerHTML = "";
+    for(let w=0;w<dataPesosDiametros.length;w++){
+      for(let d=0;d<dataPesosDiametros[w].length;d++){
+        document.getElementById("PedidosNivel").innerHTML += "<div class='col-4'>Piso: "+dataPesosDiametros[w][d][0]+" </div>";
+        document.getElementById("PedidosNivel").innerHTML += "<div class='col-4'>Diametro: "+dataPesosDiametros[w][d][1]+" </div>";
+        document.getElementById("PedidosNivel").innerHTML += "<div class='col-4'>Peso: "+dataPesosDiametros[w][d][2]+" Kgs</div>";
+     
+      }
      
     }
    // console.log("VALORES BASE");
@@ -2251,8 +2503,15 @@ const jj = await resultados;
     }
   //  console.log("sumatoria total de pesos Diametros");
   //  console.log(arr_diametrosTotales);
+    
+  
+    document.getElementById("PesosTotales").innerHTML = "Peso Total Proyecto :"+sumatoria_pesos.toFixed(1)+" Kgs";
+    for(let w=0;w<dataPesos.length;w++){
+      document.getElementById("PesosTotales").innerHTML += "<br>"+dataPesos[w][0]+" :"+dataPesos[w][1]+" Kgs";
+   
+    }
     document.getElementById("morrisDonut2").innerHTML = "";
-   // getOrdenesTotalPedidos(urn,sumatoria_pesos);
+    getOrdenesTotalPedidos(urn,sumatoria_pesos);
 
     id_pedidos_guardados = [];
     nombre_pedidos = [];
@@ -2261,283 +2520,8 @@ const jj = await resultados;
     valores_pesos_pedidos.length = 0;
     var dataPedidos2 = [];
     var largoTotalPedido=0;
-    jQuery.get({
-      url: '/getOrdenes',
-      contentType: 'application/json',
-      success: function (res) {
-      
-     //   console.log("RESULTADO Get server GeT oRDENES");
-      //  console.log(res);
-      //  console.log(typeof res);
-      ////  console.log(res.length);
-      //  console.log(typeof res[0]);
-      // $('#vistas_previas').innerHTML = "";
-      
-
-        $list_pedidos = "";
-        $fila = "";
-       
-        var total_acumulado=0;
-        var ListadoIdsPedidos=[];
-        var totalPorDiametro = [diametrosTotal.length];
-       
-        for(let w=0; w< diametrosTotal.length;w++){
-            resultadoLargodiametrosPedido.push(0);
-        }
-        
-        var largoTotal = 0;
-           console.log("opciones de diametros : "+diametrosTotal.length);       
-        for(let r = 0; r<res.length; r++){
-            let dona2 = {};
-            if(res[r].urn_actual== urn){
-          
-              let val_peso = parseFloat(res[r].pesos);
-              total_acumulado =val_peso+ total_acumulado;
-                $fila = "";
-              if(res[r].nombre_pedido !="" && val_peso !="" ){
-               //    console.log("ORDENES PARA GRAFICO 2");  
-               //    console.log(res[r].nombre_pedido);
-               //    console.log(val_peso);
-                  dona2["label"]=res[r].nombre_pedido;
-                  dona2["value"]=val_peso.toFixed(1);
-                  if(!isNaN(res[r].largos ) && res[r].largos != null){
-                //      console.log("Largos pedidos totales");
-               //      console.log(res[r].largos);
-                     let LargosPedidos = parseInt(res[r].largos);
-                     largoTotalPedido = LargosPedidos+ largoTotalPedido;
-                     let actualPedido = res[r].ids.split(',');
-                     var peso =0;
-                     var xTotal,actual
-                     var actuales   = 0;
-                     var posj = 0;
-                     
-                     for(let r =0; r<actualPedido.length;r++){
-
-                      viewer.getProperties( parseInt(actualPedido[r]), (result) => { 
-                        var pos_diametro =0;
-                        for(i=0 ;i< 60;i++){
-                          let nombre_actual = ""+result.properties[i].displayName;
-                          if(nombre_actual ==="Category"){
-                            categoria_actual_obj = result.properties[i].displayValue;
-                          //  console.log("CATEGORIA BUSCADA barra diametro");
-                          //  console.log(categoria_actual_obj);
-                            //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
-                              if(categoria_actual_obj=="Revit Structural Rebar"){
-                            //  console.log("ENTRAR REBAR barra diametro");
-                            
-                              for(t=0;t<result.properties.length;t++){
-                                let val_actual = result.properties[t].displayName;
-                                if( val_actual == "RS Peso Lineal (kg/m)"){
-                               //   console.log("ENTRO A PESO LINEAL HA");
-                                  let peso = parseFloat(result.properties[t].displayValue);
-                                  
-                              //    console.log("ANTES PESO BUSCADO HA");
-                              //    console.log(peso);
-                            //      console.log(result.properties[t].displayValue);
-                            //      console.log(result);
-                                
-                                  peso = parseFloat(peso);
-                                  pesoActual = peso;
-                             //     console.log("PESO BUSCADO HA");
-                           //       console.log(peso);
-                              
-                           
-                      
-                                }
-                                if(val_actual == "Total Bar Length" ){
-                               //   console.log("TOTAL LENGTH BAR diametros");
-                                  
-                                  let largo = parseFloat(result.properties[t].displayValue);
-                                  if(!isNaN(largo)&& largo >0 && largo !=""){
-                             //       console.log("LARGO OBTENIDO DIAMETRO" );
-                              //      console.log(largo );
-                                 //   largo = largo.toFixed(1);
-                                    largo = parseFloat(largo,1);
-                                    
-                                    largo = largo /100;
-
-                                    largoActual = largo.toFixed(1);
-                                    largoActual = parseFloat(largoActual);
-                               //     console.log("convertido "+largo);
-                                    largoTotal = 
-                                    largoTotal = largoTotal+ largo;
-                                    
-                                //    console.log( "largo actual diametro");
-                                //    console.log( largoActual);
-                                //    console.log( typeof largoActual);
-                                    }
-                                 
-                                  //largoTotal  = parseFloat(largoTotal).toFixed(1);
-                            
-                                
-                                }
-                                if(val_actual =="Model Bar Diameter"){
-                                  let diametroFormato =result.properties[t].displayValue;
-                               //   console.log("Diametro actual Barra Largo");
-                               //   console.log(diametroFormato);
-                               //   console.log(typeof(result.properties[t].displayValue));
-                                  for(let j =0;j<diametrosTotal.length;j++){
-                                //    console.log(diametrosTotal[j]);
-                                    if(diametrosTotal[j] == diametroFormato){
-                                 //     console.log(" es igual");
-                                 //     console.log("posición pos diametro: "+pos_diametro);
-                                 //     console.log("posición j: "+j);
-                                      pos_diametro = j;
-                                    }else{
-                                     
-                                     // console.log("no  es igual");
-                                    }
-                                  }
-                                }
-                                if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
-                                 if(!isNaN(largoActual)){
-                                 
-                               //   console.log("sumas diametros");
-                              //    console.log(resultadoLargodiametrosPedido[pos_diametro]);
-                              //    console.log(largoActual);
-                                  resultadoLargodiametrosPedido[pos_diametro] = resultadoLargodiametrosPedido[pos_diametro]+largoActual;
-                             //     console.log("Arreglo Diametro Resultante");
-                             //     console.log(resultadoLargodiametrosPedido);
-
-                                 }
-                                 
-                                  
-                                  
-                                     //console.log( "Resultado Multiplicación");
-                                  // console.log( resultado_mul);
-                                
-                                  
-                              
-                                  
-                                }
-                              }
-                              
-                             
-                  
-                              actual =   actual+","+actuales;
-                             
-                             
-                              let name = result.name;
-                          
-                             
-                             }
-                            
-                          }
-                         
-                        }
-                        
-                      }) 
-                  
-                     } 
-                  
-
-
-                  }
-                  
-              }
-              dataPedidos2.push(dona2);
-            }
-          
-            
-        
-        }
-
-      
-        setTimeout(() => {
-       //   console.log("TOTAL DIAMETROS por PEDIDO largos");
-       //   console.log(resultadoLargodiametrosPedido);
-      //    console.log("Largos Totales");
-      //    console.log(matriz_largos);
-      //    console.log("Nombres diametros");
-    //      console.log(diametrosTotal);
-         
-          var resultado_largos =[diametrosTotal.length] ;
-          var diametrosLargoData=[];
-         for(let e = 0; e<matriz_largos[0].length;e++){
-            let bloque = {};
-     //       console.log("MATRIZ RESULTADOS TOTALES");  
-    //        console.log(matriz_largos[0][e]);
-
-            var b = parseFloat(matriz_largos[0][e],1);
-            var c = (parseFloat(resultadoLargodiametrosPedido[e],1)/b)*100;
-          
-         //   bloque['total']= Math.round(b*100)/100;
-         //   bloque['pedido'] =Math.round(c*100)/100;
-          
-           bloque['total']= 100;
-           bloque['pedido'] =Math.round(c*100)/100;
-         
-            bloque['y'] = diametrosTotal[e];
-           // let porcentaje =(diametrosTotal[e]/matriz_largos[0][e])*100;
-         
-            diametrosLargoData.push(bloque);
-          }
-     //     console.log("Resultante");
-     //     console.log(diametrosLargoData);
-     
-         document.getElementById('morrisBar1').innerHTML ="";
-         new Morris.Bar({
-          element: 'morrisBar1',
-          data: diametrosLargoData,
-          xkey: 'y',
-          ykeys: ['pedido','total'],
-          labels: ['pedido','total'],
-          barColors: ['#6d6ef3', '#285cf7', '#285cf7'],
-          gridTextSize: 11,
-          hideHover: 'auto',
-          resize: true
-        });
-     //   console.log("VALOR AGREGADO TOTAL LARGO");
-     //   console.log(resultado_largos);
-     if(sumatoria_pesos ==0){
-      alert();
-      $("#modaldemo15").modal("toggle");
-     }
-       var valorResto = sumatoria_pesos-total_acumulado;
-     
-    //  console.log("VALOR RESTO DONA4");
-   //   console.log( dataPedidos2);
-    //  console.log(typeof total_acumulado);
-   //   console.log(sumatoria_pesos);
-   //   console.log(typeof sumatoria_pesos);
-   //   console.log("VALOR RESTO DONA5");
-      valorResto = Math.round(valorResto*100)/100;
-  //    console.log(valorResto);
-       let dona2 = {};
-       dona2["label"]="Sin Pedir";
-       dona2["value"]=valorResto;
-       dataPedidos2.push(dona2);
- //     console.log("PEDIDOS DONA /TOTAL");
-  //    console.log(dataPedidos2);
-     
-     
-   document.getElementById('morrisDonut2').innerHTML ="";
-       new Morris.Donut({
-         element: 'morrisDonut2',
-         data: dataPedidos2,
-         colors: ['#285cf7', '#6d6ef3','#6d6ef0','#74DE00','#04B431','#D7DF01','#FE9A2E','#2EFEF7'],
-         resize: true,
-         labelColor:"#8c9fc3"
-         
-       });
-       document.getElementById("precarga").style.display = "none";
-
-        }, 25000);
-       
-       
-
-     
-
-
-
-    
-    
-      }, error: function (res) {
-          // console.log("ERROR GET ORDENES");
-          // console.log(res);
-      
-      }
-    });
+    matriz_pedidos = Array();
+  
     document.getElementById('morrisBar4').innerHTML ="";
  //    console.log("DATOS MORRIS");
   //   console.log(morrisData3)
@@ -2547,7 +2531,7 @@ const jj = await resultados;
       xkey: 'y',
       ykeys: diametrosTotal,
       labels: diametrosTotal,
-      barColors: ['#285cf7', '#6d6ef3','#6d6ef0','#74DE00','#04B431','#D7DF01','#FE9A2E','#2EFEF7'],
+      barColors: ['#FF4C33', '#F3FF33','#5BFF33','#FF33FC','#334FFF','#33FF8A','#FFB833','#33FFAC','#33CEFF'],
       stacked: true,
       gridTextSize: 11,
       hideHover: 'auto',
@@ -2560,15 +2544,15 @@ const jj = await resultados;
   new Morris.Donut({
 		element: 'morrisDonut1',
 		data: donaData,
-		colors: ['#285cf7', '#6d6ef3','#6d6ef0','#74DE00','#04B431','#D7DF01','#FE9A2E','#2EFEF7'],
+		colors: ['#FF4C33', '#F3FF33','#5BFF33','#FF33FC','#334FFF','#33FF8A','#FFB833','#33FFAC','#33CEFF'],
 		resize: true,
 		labelColor:"#8c9fc3"
 	});
 
 
-  
+  document.getElementById("precarga").style.display = "none";
 
-  }, 25000);
+  }, 15000);
 
   
 
@@ -2584,7 +2568,7 @@ function generaGrafico(pisos){
   
 }
 
-async function launchViewer(urn) {
+ function launchViewer(urn) {
   var options = {
     env: 'AutodeskProduction',
     getAccessToken: getForgeToken
@@ -2597,7 +2581,7 @@ async function launchViewer(urn) {
     //cargarProyecto();
     
     var documentId = 'urn:' + urn;
-    getOrdenesURN(urn);
+   // getOrdenesURN(urn);
    
     Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
    
@@ -2609,8 +2593,10 @@ async function launchViewer(urn) {
      // loadPrevisualizaciones();
    //   getDBIds();
  //     getPlanObj();
- getValFiltro(parametro_nivel,urn);
- //  getOrdenesTotalPedidos(urn);
+ console.log("Entro 1 vez");
+        getValFiltro(parametro_nivel,urn);
+        getOrdenes(urn)
+   //getOrdenesTotalPedidos(urn);
  
  //AEC Piso
     
@@ -5511,7 +5497,7 @@ function Pintar_Categorias( ){
          
         }
      }
-     viewer.start();
+    // viewer.start();
     });
 }
 
@@ -5612,7 +5598,7 @@ function Pintar_Categorias_reflow( ){
          
         }
      }
-     viewer.start();
+    // viewer.start();
     });
 }
 
@@ -5748,7 +5734,7 @@ function Pintar_Categorias2( ){
          
         }
      }
-     viewer.start();
+    // viewer.start();
     });
 }
 /////////******************************** */
@@ -6208,7 +6194,7 @@ function onDocumentLoadSuccess(doc) {
             
             select.addEventListener('change',(event)=>{
               viewer.tearDown();
-              viewer.start();
+           //   viewer.start();
               let view = doc.getRoot().findByGuid(select.value);
                viewer.loadDocumentNode(doc,view).then(i=>{});
             });
