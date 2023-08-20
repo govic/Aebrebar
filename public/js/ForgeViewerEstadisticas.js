@@ -852,6 +852,7 @@ function getOrdenes(){
     console.log("VALORES PARA GRAFICO PEDIDOS");
     console.log( labels_graf);
     console.log(valores_pesos_pedidos);
+    /*
     var ctx56 = document.getElementById('chartBar56').getContext('2d');
                           new Chart(ctx56, {
                               type: 'bar',
@@ -902,7 +903,7 @@ function getOrdenes(){
                                   }
                               }
                             });
-  
+  */
   
     }, error: function (res) {
         console.log("ERROR GET ORDENES");
@@ -1154,7 +1155,7 @@ async function getPedidosLago(urnEnvio){
   });
 
 }
-function getOrdenesTotalPedidos(urnEnvio,sumatoria_pesos){
+function getOrdenesTotalPedidos(urnEnvio){
   id_pedidos_guardados = [];
   nombre_pedidos = [];
   fecha_pedidos =[];
@@ -1204,11 +1205,14 @@ function getOrdenesTotalPedidos(urnEnvio,sumatoria_pesos){
               actpedido.push(val_peso);
               pedidos.push(actpedido);
            }
-
+           dataPedidos2.push(dona2);
         }
-        dataPedidos2.push(dona2);
+        
+        
        
     }
+    console.log("PEDIDOS DONA /TOTAL2");
+    console.log(dataPedidos2);
     var valorResto = total_acumulado;
     document.getElementById('Total').innerHTML ="Peso Total Pedido : "+valorResto.toFixed(1)+" KgS";
     document.getElementById('Total').innerHTML +="<br>";
@@ -1219,7 +1223,7 @@ function getOrdenesTotalPedidos(urnEnvio,sumatoria_pesos){
 
 
     
-   // document.getElementById('morrisDonut2').innerHTML ="";
+    document.getElementById('morrisDonut2').innerHTML ="";
     new Morris.Donut({
       element: 'morrisDonut2',
       data: dataPedidos2,
@@ -1301,7 +1305,7 @@ function getPedidosTotal(urnEnvio){
     valor_maximo = parseInt(valor_maximo);
     console.log("VALOR MAXIMO "+valor_maximo);
 
-
+    document.getElementById("morrisDonut2").innerHTML = "";
     new Morris.Donut({
       element: 'morrisDonut2',
       data: dataPedidos,
@@ -1922,7 +1926,10 @@ async function getValFiltro(filtro_name,urn){
       console.log("Diametros");
       console.log(datos);
       let d = datos;
-    
+      for(let t =0; t<d.length;t++){
+        let r3 = parseFloat(d[t]);
+        d[t] = Math.round(r3);
+      }
         resolve(d);},(error) => {
           reject(error);
      });
@@ -2365,11 +2372,13 @@ const jj = await resultados;
                 
                   for(var k=0; k< diametrosTotal.length;k++){
                     let lactual = [];
-                    lactual.push(diametrosTotal[k]);
+                    let hw = parseFloat(diametrosTotal[k]);
+                    hw = Math.round(diametrosTotal[k]);
+                    lactual.push(hw);
                     lactual.push(matrizLargosDiametros[f][k]);
                     lactual.push(result[f][0]);
                     pedidosDiametros.push(lactual);
-                    pedDiametrosLargos[diametrosTotal[k]]= matrizLargosDiametros[f][k];
+                    pedDiametrosLargos[hw]= matrizLargosDiametros[f][k];
                   }
                  
                  
@@ -2517,15 +2526,15 @@ const jj = await resultados;
    
     }
     document.getElementById("morrisDonut2").innerHTML = "";
-    getOrdenesTotalPedidos(urn,sumatoria_pesos);
+    getOrdenesTotalPedidos(urn);
 
     id_pedidos_guardados = [];
     nombre_pedidos = [];
     fecha_pedidos =[];
     labels_graf.length = 0;
     valores_pesos_pedidos.length = 0;
-    var dataPedidos2 = [];
-    var largoTotalPedido=0;
+    //var dataPedidos2 = [];
+    //var largoTotalPedido=0;
     matriz_pedidos = Array();
   
     document.getElementById('morrisBar4').innerHTML ="";
@@ -2558,7 +2567,7 @@ const jj = await resultados;
 
   document.getElementById("precarga").style.display = "none";
 
-  }, 25000);
+  }, 35000);
 
   
 
@@ -2601,7 +2610,7 @@ function generaGrafico(pisos){
  //     getPlanObj();
  console.log("Entro 1 vez");
         getValFiltro(parametro_nivel,urn);
-        getOrdenes(urn)
+       // getOrdenes(urn)
    //getOrdenesTotalPedidos(urn);
  
  //AEC Piso
