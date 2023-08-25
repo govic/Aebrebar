@@ -1,8 +1,12 @@
 var viewer;
 var regex = /(\d+)/g;
 var filtro_a;
+var pedidosTotalarr =[];
+var resultadoCVS = [];
+var resultadoPesosDiametros =[];
 var contador_pedidos = 0;
 var matriz_largos =[];
+var  largosDiametro =[];
 var arr_pedidos = [];
 var totalTabla1 =[];
 var matriz_pedidos =[];
@@ -50,6 +54,67 @@ var ids_db_insert =[];
 var listado_pesos = "";
 var listado_largos = "";
 var red = new THREE.Vector4(1, 0, 0, 0.5);
+
+
+function generarCVS(ar,nombre) {
+	//comprobamos compatibilidad
+	if (window.Blob && (window.URL || window.webkitURL)) {
+		var contenido = "",
+			d = new Date(),
+			blob,
+			reader,
+			save,
+			clicEvent;
+		//creamos contenido del archivo
+		for (var i = 0; i < ar.length; i++) {
+			//construimos cabecera del csv
+			if (i == 0) contenido += Object.keys(ar[i]).join(";") + "\n";
+			//resto del contenido
+			contenido +=
+				Object.keys(ar[i])
+					.map(function (key) {
+						return ar[i][key];
+					})
+					.join(";") + "\n";
+		}
+		//creamos el blob
+		blob = new Blob(["\ufeff", contenido], { type: "text/csv" });
+		//creamos el reader
+		var reader = new FileReader();
+		reader.onload = function (event) {
+			//escuchamos su evento load y creamos un enlace en dom
+			save = document.createElement("a");
+			save.href = event.target.result;
+			save.target = "_blank";
+			//aquí le damos nombre al archivo
+			save.download =
+      nombre +
+				".csv";
+			try {
+				//creamos un evento click
+				clicEvent = new MouseEvent("click", {
+					view: window,
+					bubbles: true,
+					cancelable: true
+				});
+			} catch (e) {
+				//si llega aquí es que probablemente implemente la forma antigua de crear un enlace
+				clicEvent = document.createEvent("MouseEvent");
+				clicEvent.initEvent("click", true, true);
+			}
+			//disparamos el evento
+			save.dispatchEvent(clicEvent);
+			//liberamos el objeto window.URL
+			(window.URL || window.webkitURL).revokeObjectURL(save.href);
+		};
+		//leemos como url
+		reader.readAsDataURL(blob);
+	} else {
+		//el navegador no admite esta opción
+		alert("Su navegador no permite esta acción");
+	}
+}
+
 function savePlan(){
   let valores = document.getElementById("id_seleccionados2").value;
   console.log('IDS SELECCIONADOS PLAN SAVE()');
@@ -1215,14 +1280,14 @@ function getOrdenesTotalPedidos(urnEnvio){
     console.log(dataPedidos2);
     var valorResto = total_acumulado;
     document.getElementById('Total').innerHTML ="Peso Total Pedido : "+valorResto.toFixed(1)+" KgS";
-    document.getElementById('Total').innerHTML +="<br>";
+   
     for(let e = 0;e<pedidos.length;e++){
       document.getElementById('Total').innerHTML +="<br>"+"Pedido : "+pedidos[e][0]+" - Peso "+pedidos[e][1] +"KgS";
    
     }
 
 
-    
+    pedidosTotalarr = dataPedidos2;
     document.getElementById('morrisDonut2').innerHTML ="";
     new Morris.Donut({
       element: 'morrisDonut2',
@@ -1890,6 +1955,9 @@ async function getOrdenes(urn){
 
   
 }
+function comparar(a, b) {
+  return a - b;
+}
 async function getValFiltro(filtro_name,urn){
 
   let filtrado = [filtro_name];
@@ -1926,6 +1994,7 @@ async function getValFiltro(filtro_name,urn){
       console.log("Diametros");
       console.log(datos);
       let d = datos;
+      
       for(let t =0; t<d.length;t++){
         let r3 = parseFloat(d[t]);
         d[t] = Math.round(r3);
@@ -1939,6 +2008,7 @@ async function getValFiltro(filtro_name,urn){
    
   var valores = await filtros;
   var diametrosTotal = await diametros;
+  diametrosTotal.sort(comparar);
   var resultado_ids = [];
   console.log("Diametros 1");
   console.log(diametrosTotal);
@@ -2407,6 +2477,7 @@ const jj = await resultados;
                 document.getElementById('morrisBar1').innerHTML ="";
       //    console.log("DATOS MORRIS");
         //   console.log(morrisData3)
+              largosDiametro = barraLargos;
               new Morris.Bar({
                 element: 'morrisBar1',
                 data: barraLargos,
@@ -2435,6 +2506,8 @@ const jj = await resultados;
 
     var morrisData3 = [];
     var donaData = [];
+    
+    var barraPesosNivel =[];
     sumatoria_pesos=0;
     var dataPesos = [];
     var dataPesosDiametros =[];
@@ -2443,7 +2516,11 @@ const jj = await resultados;
       let qj = {};
       let dn = {};
       let dataPesoActual = [];
+      let pesoNivelActual ={};
+
       if(valores[g] !=""){
+        pesoNivelActual['y'] = valores[g];
+       
         qj['y'] = valores[g];
         dn['label'] = valores[g];
         dataPesoActual.push(valores[g]);
@@ -2453,6 +2530,8 @@ const jj = await resultados;
         for(var f=0; f< diametrosTotal.length;f++){
           let ww = [];
           qj[diametrosTotal[f]]= jj[g][f].toFixed(1);
+
+
           ww.push(valores[g]);
           ww.push(diametrosTotal[f]);
           ww.push(jj[g][f].toFixed(1));
@@ -2463,13 +2542,19 @@ const jj = await resultados;
      //     console.log(diametrosTotal[f]);
         }
         dn['value'] = cont.toFixed(1);
-        
+        pesoNivelActual[valores[g]] = cont.toFixed(1);
+
         dataPesosDiametros.push(ww1);
         dataPesoActual.push(cont.toFixed(1));
         dataPesos.push( dataPesoActual);
         sumatoria_pesos = sumatoria_pesos+cont;
         morrisData3.push(qj);
+        barraPesosNivel.push( pesoNivelActual);
         donaData.push(dn);
+        console.log("graficos construidos");
+        console.log(morrisData3);
+        console.log(donaData);
+        console.log(barraPesosNivel);
       }
 
     
@@ -2519,10 +2604,10 @@ const jj = await resultados;
   //  console.log("sumatoria total de pesos Diametros");
   //  console.log(arr_diametrosTotales);
     
-  
-    document.getElementById("PesosTotales").innerHTML = "Peso Total Proyecto :"+sumatoria_pesos.toFixed(1)+" Kgs";
+  //  PesosTotales
+    document.getElementById("dataPisoTotalNivel").innerHTML = "Peso Total Proyecto :"+sumatoria_pesos.toFixed(1)+" Kgs";
     for(let w=0;w<dataPesos.length;w++){
-      document.getElementById("PesosTotales").innerHTML += "<br>"+dataPesos[w][0]+" :"+dataPesos[w][1]+" Kgs";
+      document.getElementById("dataPisoTotalNivel").innerHTML += "<br>"+dataPesos[w][0]+" :"+dataPesos[w][1]+" Kgs";
    
     }
     document.getElementById("morrisDonut2").innerHTML = "";
@@ -2546,7 +2631,7 @@ const jj = await resultados;
       xkey: 'y',
       ykeys: diametrosTotal,
       labels: diametrosTotal,
-      barColors: ['#FF4C33', '#F3FF33','#5BFF33','#FF33FC','#334FFF','#33FF8A','#FFB833','#33FFAC','#33CEFF'],
+      barColors: ['#338AFF','#5833FF','#382F61', '#0D7CF3','#36107D','#041BFC','#33FFAC','#33CEFF','#FF4C33'],
       stacked: true,
       gridTextSize: 11,
       hideHover: 'auto',
@@ -2556,6 +2641,20 @@ const jj = await resultados;
     // console.log(donaData);
     document.getElementById("morrisDonut1").innerHTML = "";
 
+
+    new Morris.Bar({
+      element: 'morrisDonut1',
+      data: barraPesosNivel,
+      xkey: 'y',
+      ykeys: valores,
+      labels: valores,
+      barColors: ['#338AFF','#5833FF','#382F61', '#0D7CF3','#36107D','#041BFC','#33FFAC','#33CEFF','#FF4C33'],
+      stacked: true,
+      gridTextSize: 11,
+      hideHover: 'auto',
+      resize: true
+    });
+    /*
   new Morris.Donut({
 		element: 'morrisDonut1',
 		data: donaData,
@@ -2563,6 +2662,11 @@ const jj = await resultados;
 		resize: true,
 		labelColor:"#8c9fc3"
 	});
+
+*/
+resultadoCVS =barraPesosNivel;
+resultadoPesosDiametros = morrisData3;
+
 
 
   document.getElementById("precarga").style.display = "none";
@@ -2573,6 +2677,27 @@ const jj = await resultados;
 
 }
 
+function dwCVS(){
+    resultadoCVS.unshift({Nombre:"BarraPesosPorNivel"});
+    resultadoCVS.push({"  ":""});
+    resultadoCVS.push({Nombre:"Pesos Diámtro/Nivel"});
+    
+    for(let q=0;q<resultadoPesosDiametros.length;q++){
+      resultadoCVS.push(resultadoPesosDiametros[q]);
+    }
+    resultadoCVS.push({"":""});
+    resultadoCVS.push({Nombre:"Total Pedidos"});
+    for(let q=0;q<pedidosTotalarr.length;q++){
+      resultadoCVS.push(pedidosTotalarr[q]);
+    } 
+    resultadoCVS.push({"":""});
+    resultadoCVS.push({Nombre:"Largos Pedido / Diámetro"});
+    for(let q=0;q<largosDiametro.length;q++){
+      resultadoCVS.push(largosDiametro[q]);
+    }
+
+    generarCVS(resultadoCVS,"ResultadosEstadisticas&Datos");
+}
 
 function getDiametros(){
    

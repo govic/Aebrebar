@@ -338,9 +338,7 @@
 														   </div>
 														   <div class="col-sm-7">
 															 
-															 <div class="row">
-															   
-															 </div>
+														
 														   </div>                
 														 </div>
 													   </div>
@@ -373,16 +371,127 @@
 					
 													   </div>
 												   </div>
+												   <div class="row" id="listaUsuariosAsignación">
+													<div class="col-sm-4">
+														<label class="main-content-label">Usuarios Para Asignación</label>
+														<p></p>
+														<select id="usuariosAsignacion"><option value="">Opciones</option></select>
+													</div>
+													<div class="col-sm-4">
+														<label class="main-content-label">Proyectos Disponibles Asignación</label>
+														<p></p>
+														<select id="proyectosAsignacion"></select>
+													</div>
+													<div class="col-sm-4">
+														<p></p>
+														<button class="btn ripple btn-primary" data-dismiss="modal" type="button" onclick="guardarAsignación();">Asignar Proyecto</button>
+													</div>
 												
+												 </div>
 												   <br><br><br><br><br>
 												   <div class="row">
 												   
-													   <div class="col-sm-4">
-														<!--   <select id="proyectos_disponibles"></select>-->
-													   </div>
-													   <div class="col-sm-4">
-														 <!--  <button class="btn btn-success btn-block"  onclick="cargarProyecto();" >Activar como proyecto Principal</button>
-													   -->
+													<div class="col-xl-8 col-md-8  bg-white">
+														<div class="container-fluid">
+															<!-- <script type="text/javascript">
+																(function (document) {
+																	'use strict';
+						
+																	var LightTableFilter = (function (Arr) {
+						
+																		var _input;
+						
+																		function _onInputEvent(e) {
+																			_input = e.target;
+																			var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+																			Arr.forEach.call(tables, function (table) {
+																				Arr.forEach.call(table.tBodies, function (tbody) {
+																					Arr.forEach.call(tbody.rows, _filter);
+																				});
+																			});
+																		}
+						
+																		function _filter(row) {
+																			var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
+																			row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+																		}
+						
+																		return {
+																			init: function () {
+																				var inputs = document.getElementsByClassName('light-table-filter');
+																				Arr.forEach.call(inputs, function (input) {
+																					input.oninput = _onInputEvent;
+																				});
+																			}
+																		};
+																	})(Array.prototype);
+						
+																	document.addEventListener('readystatechange', function () {
+																		if (document.readyState === 'complete') {
+																			LightTableFilter.init();
+																		}
+																	});
+						
+																})(document);
+															</script> -->
+						
+															<!-- <div class="row">
+																<div class="col-sm-6 col-xl-9">
+																	<div id="example_filter" class="dataTables_filter"><label>Search:<input
+																				type="search"
+																				class="form-control input-sm col-xl-12 light-table-filter"
+																				placeholder="Busque aquí" data-table="order-table"></label>
+																	</div>
+																</div>
+															</div>-->
+						
+						
+						
+															<!--<button class="btn btn-success" ><i class="fas fa-user-plus"></i></button>-->
+															<br>
+															<br>
+						
+															<table class="table table-striped  order-table" id="tablax">
+																<thead>
+																	<tr>
+																		<td>n°</td>
+																		<td class="">Usuario</td>
+																		<td>Proyecto</td>
+																		<td>accion</td>
+																	</tr>
+																</thead>
+																<tbody>
+																	<% if (data) { %>
+																		<% for(var i=0; i < data.length; i++) { %>
+																			<tr>
+																				<td>
+																					<%= (i + 1) %>
+																				</td>
+																				<td>
+																					<%= data[i].nameusuario %>
+																				</td>
+																				<td>
+																					<%= data[i].namep %>
+																				</td>
+																				<td>
+																					<button type="button" class="btn btn-danger btn-sm" onclick="eliminarAsociacion('<%= data[i].namep %>','<%= data[i].nameusuario %>');"><i class="glyphicon glyphicon-remove"></i> Eliminar</button>
+																					
+																				</td>
+						
+						
+						
+																			</tr>
+																			<% } %>
+																				<% } %>
+																</tbody>
+															</table>
+						
+						
+						
+														</div>
+						
+						
+													</div>
 														</div>
 												   </div>
 													   <div class="modal fade" id="createBucketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -409,6 +518,7 @@
 							   </div>
 						</div>
 					</div>
+					
 					<!-- row opened -->
 		
 					<!-- /row -->

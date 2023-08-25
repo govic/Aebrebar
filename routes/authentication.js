@@ -422,6 +422,29 @@ router.get('/signup', isLoggedIn, async (req, res) => {
   }
 });
 
+
+///////GET DATA USUARIO / PROYECTOS //
+
+router.get('/getAsignaciones', isLoggedIn, async (req, res) => {
+  idUsua = req.session.passport.user.idUsu;
+  var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
+  console.log(rows2[0].fullname);
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
+    console.log("pasó por la authen")
+    const data = await pool.query('SELECT * FROM proyectos_usuario');
+    res.send( { data });
+
+  }
+  if (req.session.passport.user.tipoUsuario == "Editor") {
+    res.redirect('index');
+
+  } if (req.session.passport.user.tipoUsuario == "Visualizador") {
+    res.redirect('index');
+  }
+});
+
 router.post('/signup', isLoggedIn, async (req, res) => {
   idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
@@ -767,7 +790,20 @@ router.get('/listaDBIDS', isLoggedIn, async (req, res, next) => {
 
 });
 
-
+router.get('/getUsers',isLoggedIn,async (req,res,next)=>{
+  idUsua = req.session.passport.user.idUsu;
+  var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
+    var rows3 = await pool.query('SELECT username, idUsu FROM users');
+    console.log("Lista de Usuarios");
+    console.log(rows3);
+    res.send(rows3);
+    // console.log( "GET IDS PLAN" );
+    // console.log( datavista );
+  }
+})
 router.get('/listaDBIDSPlan', isLoggedIn, async (req, res, next) => {
   idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
@@ -1021,11 +1057,22 @@ router.post('/prueba', isLoggedIn, async (req, res) => {
   }
 });
 
+// buscar seleccionado
+router.post('/getModeloSeleccionado', isLoggedIn, async (req, res) => {
+  const idUsu = req.session.passport.user.idUsu;
+ 
+  
+  var rows = await pool.query('SELECT nombre FROM modelo WHERE modelo = "'+ idUsu+'"');
+  console.log("RESULTADO PROYECRTOS ASIGNADOS");
+  console.log(rows);
+  res.send(rows);
+});
 //guardar modelo activo
 router.post('/vista', isLoggedIn, async (req, res) => {
   console.log("Entro en el guardar22222")
   //esto es para el nombre e iniciales
   console.log(req.body);
+  const { nombre } = req.body;
   //aquí traigo el id de la sesión activa
   console.log("REQ")
   idUsua = req.session.passport.user.idUsu;
@@ -1037,111 +1084,47 @@ router.post('/vista', isLoggedIn, async (req, res) => {
   req.session.passport.user.username = rows2[0].username;
   var nom = req.session.passport.user.fullname;
   var nom2 = req.session.passport.user.username;
+  
   //id de la sesión
   const idUsu = req.session.passport.user.idUsu;
+  var modelo =  idUsu;
+ const insercion = {nombre,modelo}
+  const buscaAsignacion = await pool.query('SELECT * FROM modelo  WHERE modelo = ?', [idUsu]);
+  if(buscaAsignacion.length == 0){
 
-  //ahora empieza la función
-  if (req.session.passport.user.tipoUsuario == "Administrador") {
-    const datavista = await pool.query('SELECT * FROM modelo');
-
-    //aquí le paso los datos de los inputs (Los capto a través del "name")
-    const { nombre, ids } = req.body;
-    console.log("body");
-    console.log(req.body);
-    console.log(req.body.nombre);
-    //entonces en la variable newDatos pongo los datos a insertar
-    const newDatos = {
-      nombre
-    };
-    // aquí le digo que cambie la tabla usuario con los datos del nuevo usuario que tiene la id de isUsu, o sea la de la sesión
-    await pool.query('UPDATE modelo  set ? WHERE id = ?', [newDatos, 1], async (error, results) => {
+    await pool.query('INSERT INTO   modelo set ?', [insercion], async (error, results) => {
       if (error) {
         console.log(error);
-      }
-      //si todo sale bien muestra el siguiente mensaje pasandole las variables para las iniciales  
-      else {
+      } else {
+        console.log("Inserto");
 
-        res.render('prueba', {
-          datavista,
-          alert: true,
-          alertTitle: "¡Correcto!",
-          alertMessage: "¡Datos correctamente agregados!",
-          alertIcon: 'success',
-          showConfirmButton: false,
-          ruta: 'prueba',
-          nom,
-          nom2
-
-        })
+        res.send('ok');
       }
     });
-    console.log("nom: " + nom);
-    console.log("nom2: " + nom2);
-    console.log("datos: " + newDatos);
-
 
   }
-  if (req.session.passport.user.tipoUsuario == "Editor") {
-    const datavista = await pool.query('SELECT * FROM modelo');
-
-    //aquí le paso los datos de los inputs (Los capto a través del "name")
-    const { nombre, ids } = req.body;
-    console.log("body");
-    console.log(req.body);
-    console.log(req.body.nombre);
-    //entonces en la variable newDatos pongo los datos a insertar
-    const newDatos = {
-      nombre
-    };
-    // aquí le digo que cambie la tabla usuario con los datos del nuevo usuario que tiene la id de isUsu, o sea la de la sesión
-    await pool.query('UPDATE modelo  set ? WHERE id = ?', [newDatos, 1], async (error, results) => {
-      if (error) {
-        console.log(error);
+  else{ // existe una asignacion
+    const actualiza = await pool.query('UPDATE modelo  set nombre =  ?  WHERE modelo = ? ',[nombre,idUsu], async (error, results) => {
+      console.log(results);
+      console.log(error);
+      console.log("updatea modelo");
+      console.log(nombre);
+      console.log(idUsu);
+      if (req.session.passport.user.tipoUsuario == "Administrador") {
+        res.send('ok');
+     
+    
+    
       }
-      //si todo sale bien muestra el siguiente mensaje pasandole las variables para las iniciales  
-      else {
-
-        res.render('pruebaV3', {
-          datavista,
-          alert: true,
-          alertTitle: "¡Correcto!",
-          alertMessage: "¡Datos correctamente agregados!",
-          alertIcon: 'success',
-          showConfirmButton: false,
-          ruta: 'pruebaV3',
-          nom,
-          nom2
-
-        })
+      if (req.session.passport.user.tipoUsuario == "Editor") {
+       
+        res.send('ok');
+    
+    
       }
-    });
-    console.log("nom: " + nom);
-    console.log("nom2: " + nom2);
-    console.log("datos: " + newDatos);
-
-
-  }
-  //rev
-  if (req.session.passport.user.tipoUsuario == "Visualizador") {
-    const datavista = await pool.query('SELECT * FROM modelo');
-
-    //aquí le paso los datos de los inputs (Los capto a través del "name")
-    const { nombre, ids } = req.body;
-    console.log("body");
-    console.log(req.body);
-    console.log(req.body.nombre);
-    //entonces en la variable newDatos pongo los datos a insertar
-    const newDatos = {
-      nombre
-    };
-    // aquí le digo que cambie la tabla usuario con los datos del nuevo usuario que tiene la id de isUsu, o sea la de la sesión
-    await pool.query('UPDATE modelo  set ? WHERE id = ?', [newDatos, 1], async (error, results) => {
-      if (error) {
-        console.log(error);
-      }
-      //si todo sale bien muestra el siguiente mensaje pasandole las variables para las iniciales  
-      else {
-
+      //rev
+      if (req.session.passport.user.tipoUsuario == "Visualizador") {
+       
         res.render('pruebaV2', {
           datavista,
           alert: true,
@@ -1152,16 +1135,18 @@ router.post('/vista', isLoggedIn, async (req, res) => {
           ruta: 'pruebaV2',
           nom,
           nom2
-
-        })
+    
+        });
+    
+    
       }
     });
-    console.log("nom: " + nom);
-    console.log("nom2: " + nom2);
-    console.log("datos: " + newDatos);
-
 
   }
+  
+  
+  //ahora empieza la función
+ 
 });
 /*router.post('/signup', passport.authenticate('local.signup', {
   successRedirect: '#',
@@ -1751,6 +1736,79 @@ router.post('/peso_nivel_1', isLoggedIn, async (req, res) => {
   });
 })
 
+////// ELIMINAR ASIGNACION DE PROYECTO eliminarAsignacion
+router.post('/eliminarAsignacion', isLoggedIn, async (req, res) => {
+  const consulta= { nameusuario,namep } = req.body;
+  
+  //newUser.password = await helpers.encryptPassword(password);
+
+  await pool.query('DELETE FROM  proyectos_usuario WHERE  nameusuario = "'+consulta.nameusuario+'" AND namep = "'+consulta.namep+'"', async (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(" PEDIDO eliminado");
+      console.log(consulta);
+      res.redirect('/proyectos');
+    }
+  });
+})
+
+
+////// BUSQUEDA DE PROYECTOS ASIGNADOS //
+
+router.post('/getProyectosAsignados',isLoggedIn,async(req,res)=>{
+  console.log("consulto proyectos asignados IN");
+ console.log(req.session.passport.user);
+
+  if (req.session.passport.user.tipoUsuario == "Administrador" ||req.session.passport.user.tipoUsuario == "Editor" || req.session.passport.user.tipoUsuario =="Visualizador") {
+   const nombreusuario = req.session.passport.user.username;
+   console.log("NOMBRE USUARIO LOGUEADOD");
+   console.log(nombreusuario);
+   
+   var rows = await pool.query('SELECT * FROM proyectos_usuario WHERE nameusuario = "'+ nombreusuario+'"');
+   console.log("RESULTADO PROYECRTOS ASIGNADOS");
+console.log(rows);
+   res.send(rows);
+  }
+  
+
+});
+
+
+//data: JSON.stringify({ 'nombreUsuario': nombreUsuAsig,'idAsignado':usuarioAsig,
+//   'urnAsignado':proyectoAsig,'nombreProyecto':nombreProyAsig}),
+///////////////insercion de asignacion usuario proyecto///////////////////////////////////////
+router.post('/CargarAsignacion', isLoggedIn, async (req, res) => {
+  const { nameusuario, usuario, urn, namep } = req.body;
+  const newSelect = {
+    nameusuario,
+    usuario,
+    urn,
+    namep
+  };
+  const consulta ={nameusuario,namep};
+  //newUser.password = await helpers.encryptPassword(password);
+  console.log("ENVIADO ADD ORDENES");
+
+  var rows = await pool.query('SELECT * FROM proyectos_usuario WHERE nameusuario = "'+consulta.nameusuario+'" AND namep = "'+consulta.namep+'"');
+  if (rows.length==0) {
+    await pool.query('INSERT INTO  proyectos_usuario set ?', [newSelect], async (error, results) => {
+      console.log("Inserto - No existe");
+      console.log(consulta);
+      if (error) {
+        console.log("error ADD ORDENES");
+        console.log(error);
+      } else {
+        res.redirect('/proyectos');
+  
+      }
+    });
+  }else{
+    console.log(rows);
+    console.log("EXISTE E");
+  }
+ 
+})
 
 //***************************************************** */
 
@@ -2312,7 +2370,12 @@ router.get('/proyectos', isLoggedIn, async (req, res, next) => {
   */
 
   if (req.session.passport.user.tipoUsuario == "Administrador") {
-    res.render('proyectos', { nom });
+
+
+    const data = await pool.query('SELECT * FROM proyectos_usuario');
+
+    res.render('proyectos',  { data, nom });
+
   }
   if (req.session.passport.user.tipoUsuario == "Editor") {
     res.render('proyectosV3', { nom });

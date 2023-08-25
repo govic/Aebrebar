@@ -8,8 +8,8 @@ $(document).ready(function () {
     //prepareAppBucketTree();
 
   }, 3000);
-
-  callProyectosSeleccion();
+  callProyectosAsignados();
+  //callProyectosSeleccion();
   // callProyectos2();
   $('#refreshBuckets').click(function () {
     $('#appBuckets').jstree(true).refresh();
@@ -142,13 +142,40 @@ function gotoProyecto(urn){
      contentType: 'application/json',
      data: JSON.stringify({ 'nombre': urn }),
      success: function (res) {
-        location.href = "/index"
+       // location.href = "/index"
        
      },
    });
 }
-function callProyectosSeleccion() {
 
+function callProyectosAsignados(){
+  jQuery.post({
+    url: '/getProyectosAsignados',
+    contentType: 'application/json',
+    data: JSON.stringify({ 'nombre': ''}),
+    success: function (res) {
+      console.log("RESULTADO DE PROYECTOS");
+      console.log(res);
+      if (res.length == 0) {
+        document.getElementById("listaProyectos").innerHTML ="No hay proyectos Asignados . Diríjase a la sección de administración y añada los proyctos que desee visualizar";
+      } else {
+        console.log(res);
+        console.log(res);
+        let dropdown = "";
+        for (i = 0; i < res.length; i++) {
+
+         // dropdown = dropdown + "<option class='slide-item' href='#' value='" + res[i].urn + "'>" + res[i].objectKey + "</option>";
+          // dropdown = dropdown+ "<a href='#' class='dropdown-item' onclick='openViewer("+"\""+res[i].urn+"\""+")'>"+res[i].objectKey+"</a>"
+          dropdown =    dropdown+ "<div class='media'><div class='media-icon bg-primary-transparent text-primary'> <a href='' onclick='gotoProyecto(\""+res[i].urn+"\");'><i class='icon ion-md-link'></i></a> </div><div class='media-body'><span><label for='FullName'>"+ res[i].namep +"</label></span> "+""+"</div></div></div>";
+        }
+        document.getElementById("listaProyectos").innerHTML = dropdown;
+      }
+    },
+  });
+  //
+}
+function callProyectosSeleccion() {
+  callProyectosAsignados();
   console.log("Llamo a proyectos");
   $("#forgeViewer").empty();
   getForgeToken(function (access_token) {

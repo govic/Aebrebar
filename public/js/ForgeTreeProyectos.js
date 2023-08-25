@@ -130,8 +130,82 @@ function cargarProyecto() {
 
 }
 
-function callProyectosSeleccion() {
+function cargarUsuarios() {
+ console.log("ENTRO A BUSCAR USUARIOS");
+  
+  jQuery.get({
+    url: '/getUsers',
+    contentType: 'application/json',
+    success: function (res) {
+      console.log("LISTADO DE USUARIOS");
+      console.log(res);
+      var opciones = "";
+      for(let y =0; y <res.length;y++){
+        opciones += "<option value='"+res[y].idUsu+"'>"+res[y].username+"</option>";
+      }
+      document.getElementById("usuariosAsignacion").innerHTML = "";
+      document.getElementById("usuariosAsignacion").innerHTML = opciones;
+      
+    },
+  });
 
+}
+
+function eliminarAsociacion(proyecto,usuario){
+console.log("INGRESO A ELIMINACION")
+  jQuery.post({
+    url: '/eliminarAsignacion',
+    contentType: 'application/json',
+    data: JSON.stringify({ 'nameusuario': usuario,'namep':proyecto}),
+    success: function (res) {
+      console.log("Eliminado con Exito");
+      console.log(res);
+      window.location.href = window.location.href;
+    },
+  });
+}
+function guardarAsignación(){
+
+  let proyectoAsig = $('#proyectosAsignacion').find(":selected").val();
+  let nombreProyAsig =  $('#proyectosAsignacion').find(":selected").text();
+
+
+  
+  let usuarioAsig = $('#usuariosAsignacion').find(":selected").val();
+  let nombreUsuAsig = $('#usuariosAsignacion').find(":selected").text();
+
+  console.log("Asignaciones proyecto Uusuarios");
+  console.log(usuarioAsig);
+  console.log(proyectoAsig);
+  console.log(nombreUsuAsig);
+  console.log(nombreProyAsig);
+  jQuery.post({
+    url: '/CargarAsignacion',
+    contentType: 'application/json',
+    data: JSON.stringify({ 'nameusuario': nombreUsuAsig,'usuario':usuarioAsig,'urn':proyectoAsig,'namep':nombreProyAsig}),
+    success: function (res) {
+     console.log("okok");
+     window.location.href = window.location.href;
+    },
+  });
+
+
+}
+function cargaProyectosOpt(resultado) {
+  console.log("ENTRO A BUSCAR USUARIOS");
+   
+  var opciones = "";
+  for(let y =0; y <resultado.length;y++){
+    opciones += "<option value='"+resultado[y].urn+"'>"+resultado[y].objectKey+"</option>";
+  }
+  document.getElementById("proyectosAsignacion").innerHTML = "";
+  document.getElementById("proyectosAsignacion").innerHTML = opciones;
+
+ 
+ }
+
+function callProyectosSeleccion() {
+  cargarUsuarios();
   console.log("Llamo a proyectos");
   $("#forgeViewer").empty();
   getForgeToken(function (access_token) {
@@ -142,7 +216,9 @@ function callProyectosSeleccion() {
         console.log("Llamo a proyectos2");
         if (res.length == 0) {
           callProyectosSeleccion();
+         
         } else {
+          cargaProyectosOpt(res)
           console.log(res);
           console.log(res);
           let dropdown = "";
@@ -152,7 +228,7 @@ function callProyectosSeleccion() {
             // dropdown = dropdown+ "<a href='#' class='dropdown-item' onclick='openViewer("+"\""+res[i].urn+"\""+")'>"+res[i].objectKey+"</a>"
 
           }
-          document.getElementById("proyectos_disponibles").innerHTML = dropdown;
+        //  document.getElementById("proyectos_disponibles").innerHTML = dropdown;
         }
 
       },
@@ -369,6 +445,8 @@ function autodeskCustomMenu(autodeskNode) {
           action: function () {
             // BUSCA OBJETO SELECCIONADO
             var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
+            console.log("nodo seleccionado");
+            console.log(treeNode);
             translateObject(treeNode);
           },
           icon: 'glyphicon glyphicon-eye-open'

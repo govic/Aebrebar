@@ -3174,6 +3174,22 @@ function drawBox(min, max) {
 }
 
 
+
+function getModifiedWorldBoundingBox (fragIds) {
+
+  //fragments list array
+  var fragList = NOP_VIEWER.model.getFragmentList();
+  const fragbBox = new THREE.Box3()
+  const nodebBox = new THREE.Box3()
+
+  fragIds.forEach(function(fragId) { 
+     fragList.getWorldBounds(fragId, fragbBox) 
+     nodebBox.union(fragbBox)
+  })
+
+return nodebBox
+}
+
 function launchViewer(urn) {
   var options = {
     env: 'AutodeskProduction',
@@ -3239,21 +3255,7 @@ function launchViewer(urn) {
     //////////////////////////////////////////////////////
     ///  SELECCION DE ELEMENTOS
     //////////////////////////////////////////////////
-    function getModifiedWorldBoundingBox (fragIds) {
-
-      //fragments list array
-     // var fragList = NOP_VIEWER.model.getFragmentList();
-     // const fragbBox = new THREE.Box3()
-     // const nodebBox = new THREE.Box3()
-
-    //  fragIds.forEach(function(fragId) { 
-   //      fragList.getWorldBounds(fragId, fragbBox) 
-   //      nodebBox.union(fragbBox)
-  //    })
-
-///  return nodebBox
-}
-  
+   
 
   //////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
@@ -3263,8 +3265,9 @@ function launchViewer(urn) {
         const tree = viewer.model.getInstanceTree();
         if (tree) { // Could be null if the tree hasn't been loaded yet
           const selectedIds = viewer.getSelection();
+          const fragIds = [];
           for (const dbId of selectedIds) {
-            const fragIds = [];
+           
             tree.enumNodeFragments(
               dbId,
               function (fragId) { fragIds.push(fragId); },
@@ -3272,7 +3275,12 @@ function launchViewer(urn) {
             );
             console.log("Seleccion TEST");
             console.log('dbId:', dbId, 'fragIds:', fragIds);
+          
+
           }
+        //  var wa = getModifiedWorldBoundingBox(fragIds);
+         // console.log("TEST DE SELECCION");
+         // console.log(wa);
         }
       
       
@@ -3292,10 +3300,12 @@ function launchViewer(urn) {
         console.log(event.fragIdsArray);
         console.log("frag list");
         console.log(viewer.model.getFragmentList());
+
+        /*
         var bBox = getModifiedWorldBoundingBox(
           event.fragIdsArray,
           viewer.model.getFragmentList()
-        );
+        );*/
 
      //   drawBox(bBox.min, bBox.max);
      //   var box = viewer.utilities.getBoundingBox();

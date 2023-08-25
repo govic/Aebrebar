@@ -48,7 +48,7 @@ $(document).ready(function () {
 
 
 
-
+/*
  function callProyectos2(){
     $("#forgeViewer").empty();
       getForgeToken(function (access_token) {
@@ -85,10 +85,30 @@ $(document).ready(function () {
              console.log("error");
              console.log(err);
            }
-         });*/
+         });
        })
   }
-  
+ */ 
+  function callProyectos2(){
+    $("#forgeViewer").empty();
+    
+    //getModeloSeleccionado
+     
+       getForgeToken(function (access_token) {
+        jQuery.post({
+          url: '/getModeloSeleccionado',
+          contentType: 'application/json',
+          success: function (res) {
+            // location.href = "/index"
+            console.log("VISTA SELECCIONADA URN");
+            console.log(res[0].nombre);
+            callProyectosBusqueda(res[0].nombre);
+            console.log(res);
+            openViewer(res[0].nombre);
+          },
+        });
+       });
+      }  
  function cargarProyecto(){
    
    var q =  document.getElementById("proyectos_disponibles").value;
