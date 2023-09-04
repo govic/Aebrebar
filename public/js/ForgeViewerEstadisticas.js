@@ -25,6 +25,7 @@ var pesos_ha3 =0 ;
 var pesos_ha4=0 ;
 var pesos_ha5=0 ;
 var pesos_ha6 =0 ;
+var MaestroFierros = [];
 var labels_graf = Array();
   var valores_pesos_pedidos = Array();
 var pesoTotal = 0;
@@ -2127,6 +2128,7 @@ async function getValFiltro(filtro_name,urn){
         //        contador_lg = contador_lg + 1;
                 let pos_diametro =0;
                 for (let i = 0; i < 60; i++) {
+                  let dataActual  =[];
                   if (result.properties[i] && result.properties[i].displayName) {
                     let nombre_actual = "" + result.properties[i].displayName;
                     if (nombre_actual === "Category") {
@@ -2134,8 +2136,12 @@ async function getValFiltro(filtro_name,urn){
                      // console.log("valor categoria actual5: " + categoria_actual_obj);
     
                       if (categoria_actual_obj == "Revit Structural Rebar") {
+                      
                         for (t = 0; t < result.properties.length; t++) {
-    
+                          if(t==0){
+                            dataActual.push(result.dbId);
+                            dataActual.push(result.name);
+                          }
                           let val_actual = result.properties[t].displayName;
                           if (val_actual == "RS Peso Lineal (kg/m)") {
                           //  console.log("ENTRO A PESO LINEAL HA");
@@ -2163,6 +2169,7 @@ async function getValFiltro(filtro_name,urn){
                               if(diametrosTotal[j] == diametroFormato){
                              //   console.log(" es igual");
                                 pos_diametro = j;
+                                dataActual.push(diametrosTotal[j]);
                               }else{
                               //  console.log("no  es igual");
                               }
@@ -2180,7 +2187,7 @@ async function getValFiltro(filtro_name,urn){
                             largoActual = largo;
                            // console.log("convertido HA22 " + largo+" // "+ largoActual);
                            // console.log("posicion " + pos_diametro);
-                           
+                           dataActual.push(largoActual);
 
                            // console.log("MATRIZ DE RESULTADOS");
                            // console.log(matriz_resultados);
@@ -2188,9 +2195,14 @@ async function getValFiltro(filtro_name,urn){
                           }
                           if ((t + 1) == result.properties.length) { // termina de recorrer todas las propiedades
                             let resultado_mul = pesoActual * largoActual;
-                            resultado_mul.toFixed(0);
-                            pesoActual = 0;
+                            console.log("RESULTADO DE MULTIPLICACIÓN");
                             
+                            console.log(resultado_mul);
+                            resultado_mul = parseFloat(resultado_mul, 1);
+                           
+                            dataActual.push(pesoActual);
+                            MaestroFierros.push(dataActual);
+                            pesoActual = 0;
                         //    console.log("VALOR ACTUAL MATRIZ LARGOS");
                          //   console.log(matriz_largos[h][pos_diametro]);
                         //    console.log(h);
@@ -2215,9 +2227,10 @@ async function getValFiltro(filtro_name,urn){
                     }
     
                   }
-    
+                
+                 
                 }
-    
+               
               })
             }
           }
@@ -6299,6 +6312,22 @@ function selecciona2(clave){
 
 }*/
 
+
+function maestroFierros(){
+  console.log("Maestro de Fierros");
+  console.log(MaestroFierros);
+ // console.log(urnAsg);
+
+  
+  resultadoCVS.unshift({Nombre:"Maestro de Fierros"});
+  resultadoCVS.push({"  ":""});
+  resultadoCVS.push({Idbs:"Idbs",Nombre:"Nombre",Largo:"Largo",Diametro:"Diametro",Peso:"Peso"});
+  
+  for(let a =0;a<MaestroFierros.length;a++){
+    resultadoCVS.push(MaestroFierros[a]);
+  }
+  generarCVS(resultadoCVS,"Maestro Fierros");
+}
 function onDocumentLoadSuccess(doc) {
   var geometryItems = doc
         .getRoot()
