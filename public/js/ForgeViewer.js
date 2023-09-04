@@ -2,7 +2,7 @@ var viewer;
 var registro_ultimo_filtro ;
 var id_pedidos_guardados =[];
 var nombre_add_actual;
-
+var urnAsignado;
 //var datos;
 var filtro1 = false;
 var filtro2 = false;
@@ -2901,6 +2901,7 @@ function revisaPrevisualizaciones(buscada){
   resultado = false;
   var q =  document.getElementById("id_seleccionados").value;
   var a = document.getElementById("nombre_objeto").value;
+  console.log("Buscando Previsualizaciones 2");
   jQuery.get({
     url: '/prueba',
     contentType: 'application/json',
@@ -2934,7 +2935,7 @@ function revisaPrevisualizaciones(buscada){
         jQuery.post({
           url: '/prueba',
           contentType: 'application/json',
-          data:  JSON.stringify({ 'nombre': a, 'ids': q }),
+          data:  JSON.stringify({ 'nombre': a, 'ids': q ,'urn':urnAsignado}),
           success: function (res) {
               loadPrevisualizaciones();
           },
@@ -2953,16 +2954,20 @@ function revisaPrevisualizaciones(buscada){
 function loadPrevisualizaciones(){
   $('#vistas_previas').empty();
   $('#resultado_borrado_vista').empty();
-  jQuery.get({
-    url: '/prueba',
+  console.log("URN BUSCA VISTAS");
+  console.log(urnAsignado);
+  jQuery.post({
+    url: '/buscaVistas',
     contentType: 'application/json',
+    data:  JSON.stringify({ 'urn': ''+urnAsignado+'' }),
     success: function (res) {
-      console.log("RESULTADO GET VISTASasssss");
+      console.log("RESULTADO GET VISTASasssss1");
      console.log(res);
     // console.log(typeof res);
     // console.log(res.length);
     // console.log(res[0]);
     $('#vistas_previas').empty();
+    $('#vistas_previas').append($('<option>', {value:'', text:'Seleccione'}));
    // $('#tabla_vistas').empty();
      for(let i =0 ; i<res.length;i++){
       
@@ -2977,7 +2982,10 @@ function loadPrevisualizaciones(){
      
   
   
-    },
+    }, error: function (err) {
+      console.log("Error llamado vistas");
+      console.log(err);
+    }
   });
 }
 function callProyectos(){
@@ -3195,7 +3203,7 @@ function launchViewer(urn) {
     env: 'AutodeskProduction',
     getAccessToken: getForgeToken
   };
-  
+  urnAsignado = urn;
   Autodesk.Viewing.Initializer(options, () => {
     viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser', 'HandleSelectionExtension'] });
     viewer.start();
@@ -3228,7 +3236,7 @@ function launchViewer(urn) {
      
           // document.getElementById("selectores").innerHTML = "<a class=\"dropdown-item\" >Seleccione Filtro</a>";
            getFiltros();
-           getDiametros();
+          // getDiametros();
           // Pintar_Categorias();
     });
     viewer.addEventListener(Autodesk.Viewing.HIDE_EVENT, (nodes, model)=> {   

@@ -507,12 +507,17 @@ router.post('/signup', isLoggedIn, async (req, res) => {
 });
 router.get('/prueba', isLoggedIn, async (req, res, next) => {
   idUsua = req.session.passport.user.idUsu;
+  
+  const { urn } = req.body;
+  console.log("URN BUSCA VISTAS");
+  console.log(urn);
+  console.log(req.body)
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
   req.session.passport.user.fullname = rows2[0].fullname;
   var nom = req.session.passport.user.fullname;
   //guardo los datos de la tabla en datavista
-  const datavista = await pool.query('SELECT * FROM vistas_save');
+  const datavista = await pool.query('SELECT * FROM vistas_save WHERE urn LIKE "'+urn+'"');
   if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.send(datavista);
     console.log(datavista);
@@ -525,6 +530,40 @@ router.get('/prueba', isLoggedIn, async (req, res, next) => {
   if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.send(datavista);
     console.log(datavista);
+  }
+
+});
+
+router.post('/buscaVistas', isLoggedIn, async (req, res, next) => {
+  idUsua = req.session.passport.user.idUsu;
+  
+  const { urn } = req.body;
+  console.log("URN BUSCA VISTAS2");
+  console.log(urn);
+  console.log("todo");
+
+  var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
+  console.log(rows2[0].fullname);
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  //guardo los datos de la tabla en datavista
+  const datavista = await pool.query('SELECT * FROM vistas_save WHERE urn LIKE "'+urn+'"');
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
+   
+    console.log("Resultado Ids");
+    console.log(datavista);
+    res.send(datavista);
+  }
+  if (req.session.passport.user.tipoUsuario == "Editor") {
+   
+    console.log(datavista);
+    res.send(datavista);
+  }
+  //rev
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
+   
+    console.log(datavista);
+    res.send(datavista);
   }
 
 });
@@ -940,14 +979,15 @@ router.post('/prueba', isLoggedIn, async (req, res) => {
     const datavista = await pool.query('SELECT * FROM vistas_save');
 
     //aquí le paso los datos de los inputs (Los capto a través del "name")
-    const { nombre, ids } = req.body;
+    const { nombre, ids,urn } = req.body;
     console.log("body");
     console.log(req.body);
     console.log(req.body.nombre);
     //entonces en la variable newDatos pongo los datos a insertar
     const newDatos = {
       nombre,
-      ids
+      ids,
+      urn
     };
     // aquí le digo que cambie la tabla usuario con los datos del nuevo usuario que tiene la id de isUsu, o sea la de la sesión
     await pool.query('INSERT vistas_save set ?', [newDatos], async (error, results) => {
