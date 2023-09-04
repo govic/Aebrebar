@@ -521,21 +521,38 @@ function ocultarNodoPorData() {
     }
   });
 }
+
+function borradoInterno(nombreProyecto){
+  jQuery.post({
+    url: '/eliminarAsignacionInterna',
+    contentType: 'application/json',
+    data: JSON.stringify({ 'namep':nombreProyecto}),
+    success: function (res) {
+       window.location.href = window.location.href;
+    },error:function(err){   window.location.href = window.location.href;}
+  });
+}
 function deleteObject(node) {
   $("#forgeViewer").empty();
   if (node == null) node = $('#appBuckets').jstree(true).get_selected(true)[0];
   var bucketKey = node.parents[0];
   var objectKey = node.id;
+
+
   jQuery.post({
     url: '/api/forge/oss/deleteObject',
     contentType: 'application/json',
     data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectKey }),
     success: function (res) {
+
+     
       $("#forgeViewer").html('Por favor vuelva a intentarlo en unos minutos..');
     }, error: function (err) {
       console.log(err);
     }
   });
+  
+
 }
 function deleteFile(node) {
   var objectKey = node.text;
@@ -544,7 +561,9 @@ function deleteFile(node) {
 
   console.log("data pre borrado");
   console.log(objectKey);
-  console.log(objectID);
+  console.log(objectID); // URN PROYECTO
+
+  
 
   $("#notificaciones").html(" Se ha iniciado el proceso de  borrado para " + objectKey);
 
@@ -559,15 +578,17 @@ function deleteFile(node) {
 
         $("#notificaciones").empty();
         $("#notificaciones").html(objectKey + " Ha sido borrado exitosamente");
-
+        borradoInterno(objectKey);
+        window.location.href = window.location.href;
       }, error: function (err) {
         console.log(err);
         $("#notificaciones").empty();
         $("#notificaciones").html(objectKey + " Ha sido borrado exitosamente");
         $('#appBuckets').jstree(true).destroy();
         prepareAppBucketTree();
-
+        borradoInterno(objectKey);
         $("#forgeViewer").empty();
+        window.location.href = window.location.href;
       }
     });
 

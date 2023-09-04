@@ -34,7 +34,10 @@ router.get('/buckets', async (req, res, next) => {
                 };
             }));
         } catch(err) {
+            console.log("2");
+            console.log(err);
             next(err);
+
         }
     } else {
         try {
@@ -49,6 +52,8 @@ router.get('/buckets', async (req, res, next) => {
                 };
             }));
         } catch(err) {
+            console.log("1");
+            console.log(err);
             next(err);
         }
     }
@@ -123,13 +128,18 @@ router.get('/bucketsProyectos', async(req,res,next)=>{
 router.post('/objects', multer({ dest: 'uploads/' }).single('fileToUpload'), async (req, res, next) => {
     fs.readFile(req.file.path, async (err, data) => {
         if (err) {
+            console.log("3");
+            console.log(err);
             next(err);
+            
         }
         try {
             // Upload an object to bucket using [ObjectsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/ObjectsApi.md#uploadObject).
             await new ObjectsApi().uploadObject(req.body.bucketKey, req.file.originalname, data.length, data, {}, req.oauth_client, req.oauth_token);
             res.status(200).end();
         } catch(err) {
+              console.log("3");
+            console.log(err);
             next(err);
         }
     });
@@ -151,22 +161,19 @@ router.delete('/files/:id', function (req, res) {
 })
 router.post('/deleteObject', async (req, res, next) => {
     console.log("LLEGA");
-    console.log(req.body
-        );
+    console.log(req.body);
+    
     const bucket_name = req.body.bucketKey;
     const object_name = req.body.objectName;
 
         try {
             // Retrieve objects from Forge using the [ObjectsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/ObjectsApi.md#getObjects)
             const objects = await new ObjectsApi().deleteObject(bucket_name, object_name, req.oauth_client, req.oauth_token);
-            res.json(objects.body.items.map((object) => {
-                return {
-                    id: Buffer.from(object.objectId).toString('base64'),
-                    text: object.objectKey,
-                    type: 'object',
-                    children: false
-                };
-            }));
+            console.log("Borro llama objs");
+            console.log(objects);
+            res.json({ status: "success" })
+            res.redirect('/proyectos');
+           
         } catch(err) {
             next(err);
         }

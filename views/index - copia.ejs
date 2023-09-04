@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<style>
+			 .fc-datepicker{ z-index:99999 !important; }
+		</style>
+		<script>
+		
+		var filtro_1 = "<%=filtro_1%>";
+		var filtro_2 = "<%=filtro_2%>";
+		var parametro_nivel = "<%=parametro_nivel%>";
+		var parametro_fecha = "<%=parametro_fecha%>";
+		var parametro_fierro = "<%=filtro_3%>";
+		console.log("PARAMETRO FIERRO !!"+parametro_fierro);
+		console.log("PARAMETRO filt 1 !!"+filtro_1)
+		</script>
+		<meta charset="UTF-8">
+		<meta http-equiv='cache-control' content='no-cache'>
+		<meta http-equiv='expires' content='0'>
+		<meta http-equiv='pragma' content='no-cache'>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="X-UA-Compatible" content="IE=9" />
+		<meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
+	
+		<!-- Title -->
+		<title> ARBIM CONSTRUCCIÓN </title>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		 <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"></script>
+		 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css" />
+
+ 		<link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
+  		<script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+  	    <link rel="stylesheet" href="css/frappe-gantt.css">
+
+  	    <script src="js/Dashboard/Dashboard.js"></script>
+		<script src="js/Dashboard/DashboardPanel.js"></script>
+	    <script src="js/Dashboard/PanelBarChart.js"></script>
+	    <script src="js/Dashboard/PanelPieChart.js"></script>
+	    <script src="js/Dashboard/PanelGanttChart.js"></script>
+
+		<link href="assets/plugins/select2/css/select2.min.css" rel="stylesheet">
+
+
+		<!-- Favicon -->
+		<link rel="icon" href="assets/img/brand/logo.png" type="image/x-icon"/>
+
+		<!-- Icons css -->
+		<link href="assets/css/icons.css" rel="stylesheet">
+
+		<!--  Owl-carousel css-->
+		<link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet" />
+
+		<!-- P-scroll bar css-->
+		<link href="assets/plugins/perfect-scrollbar/p-scrollbar.css" rel="stylesheet" />
+
+		<!--  Right-sidemenu css -->
+		<link href="assets/plugins/sidebar/sidebar.css" rel="stylesheet">
+
+		<!-- Sidemenu css -->
+		<link rel="stylesheet" href="assets/css/sidemenu.css">
+        <style>  .handleSelectionExtensionIcon {
+			background-image: url(https://github.com/encharm/Font-Awesome-SVG-PNG/raw/master/white/png/24/eye.png);
+			background-size: 24px;
+			background-repeat: no-repeat;
+			background-position: center;
+		  }</style>
+
+<style>
+	#mydiv {
+		position: absolute;
+		z-index: 9;
+		max-width: 450px;
+		max-height:900px ;
+		background-color: #ffffff;
+		border: 1px solid #d3d3d3;
+		text-align: justify;
+		bottom:100px;
+		left:255px;
+		}
+
+		#mydivheader {
+		padding: 10px;
+		cursor: move;
+		z-index: 10;
+		background-color: #f4b40c;
+		color: #fff;
+		}
+ </style>
+ <script>
+
+window.onload = function(){ 
+dragElement(document.getElementById("mydiv"));
+
+apagarDiv();
+function dragElement(elmnt) {
+	var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+	if (document.getElementById("mydivheader")) {
+		// if present, the header is where you move the DIV from:
+		document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+	} else {
+		// otherwise, move the DIV from anywhere inside the DIV:
+		elmnt.onmousedown = dragMouseDown;
+	}
+
+	function dragMouseDown(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// get the mouse cursor position at startup:
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		document.onmouseup = closeDragElement;
+		// call a function whenever the cursor moves:
+		document.onmousemove = elementDrag;
+	}
+
+	function elementDrag(e) {
+		e = e || window.event;
+		e.preventDefault();
+		// calculate the new cursor position:
+		pos1 = pos3 - e.clientX;
+		pos2 = pos4 - e.clientY;
+		pos3 = e.clientX;
+		pos4 = e.clientY;
+		// set the element's new position:
+		elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+		elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+	}
+
+		function closeDragElement() {
+		// stop moving when mouse button is released:
+			document.onmouseup = null;
+			document.onmousemove = null;
+		}
+	}		
+};
+
+
+function apagarDiv(){
+	document.getElementById("mydiv").style.visibility = 'hidden';
+	
+}
+function prenderDiv(){
+	console.log("VISIBLE");
+	document.getElementById("mydiv").style.visibility = 'visible';
+}
+
+ </script>
+		<!-- Maps css -->
+		<link href="assets/plugins/jqvmap/jqvmap.min.css" rel="stylesheet">
+
+		<!-- style css -->
+		<link href="assets/css/style.css" rel="stylesheet">
+		<link href="assets/css/style-dark.css" rel="stylesheet">
+
+		<!---Skinmodes css-->
+		<link href="assets/css/skin-modes.css" rel="stylesheet" />
+      <!--  <script src="js/codebase/dhtmlxgantt.js?v=7.1.3"></script>-->
+	  <!--  <link rel="stylesheet" href="js/codebase/dhtmlxgantt.css?v=7.1.3">-->
+		<link href="assets/css/animate.css" rel="stylesheet">
+
+		<link href="assets/plugins/amazeui-datetimepicker/css/amazeui.datetimepicker.css" rel="stylesheet">
+		<link href="assets/plugins/jquery-simple-datetimepicker/jquery.simple-dtpicker.css" rel="stylesheet">
+		<link href="assets/plugins/pickerjs/picker.min.css" rel="stylesheet">
+		<link href="assets/css/animate.css" rel="stylesheet">
+	</head>
+
+	<body class="main-body app sidebar-mini sidenav-toggled">
+
+		<!-- Loader -->
+		<div id="global-loader">
+			<img src="assets/img/loader.svg" class="loader-img" alt="Loader">
+		</div>
+		<!-- /Loader -->
+
+		<!-- Page -->
+		<div class="page">
+
+			<!-- main-sidebar -->
+			<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+			<aside class="app-sidebar sidebar-scroll">
+				<div class="main-sidebar-header active">
+					<a class="desktop-logo logo-light active" href="index"><img src="assets/img/brand/logo.png" class="main-logo" alt="logo"></a>
+					<a class="desktop-logo logo-dark active" href="index"><img src="assets/img/brand/logo.png" class="main-logo dark-theme" alt="logo"></a>
+					<a class="logo-icon mobile-logo icon-light active" href="index"><img src="assets/img/brand/logo.png" class="logo-icon" alt="logo"></a>
+					<a class="logo-icon mobile-logo icon-dark active" href="index"><img src="assets/img/brand/logo.png" class="logo-icon dark-theme" alt="logo"></a>
+				
+				</div>
+				<div class="main-sidemenu">
+					
+					
+					<ul class="side-menu">
+						<li class="side-item side-item-category">Principal</li>
+						<li class="slide">
+							<a class="side-menu__item" href="index"><svg xmlns="http://www.w3.org/2000/svg"
+									class="side-menu__icon" viewBox="0 0 24 24">
+									<path d="M0 0h24v24H0V0z" fill="none" />
+									<path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3" />
+									<path
+										d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z" />
+								</svg><span class="side-menu__label">Visualizador</span></a>
+								
+						</li>
+						<li class="slide">
+							<a class="side-menu__item"   href="estadisticasModelo"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3"/><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z"/></svg><span class="side-menu__label">Estadísticas</span></a>
+						</li>
+						<!--
+						<li class="slide">
+							<a class="side-menu__item" href="index2"><svg xmlns="http://www.w3.org/2000/svg"
+									class="side-menu__icon" viewBox="0 0 24 24">
+									<path d="M0 0h24v24H0V0z" fill="none" />
+									<path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3" />
+									<path
+										d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z" />
+								</svg>
+								
+								<span class="side-menu__label">Maestro de Fierros</span></a>
+								
+						</li>-->
+						<li class="slide">
+							<a class="side-menu__item" href="config"><svg xmlns="http://www.w3.org/2000/svg"
+									class="side-menu__icon" viewBox="0 0 24 24">
+									<path d="M0 0h24v24H0V0z" fill="none" />
+									<path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3" />
+									<path
+										d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z" />
+								</svg><span class="side-menu__label">Configuración Visualizador</span></a>
+						</li>
+						
+
+
+				
+						<li class="side-item side-item-category">Administración</li>
+						<li class="slide">
+							<a class="side-menu__item" data-toggle="slide" href="proyectos"><svg
+									xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
+									<path d="M0 0h24v24H0V0z" fill="none" />
+									<path d="M6.26 9L12 13.47 17.74 9 12 4.53z" opacity=".3" />
+									<path
+										d="M19.37 12.8l-7.38 5.74-7.37-5.73L3 14.07l9 7 9-7zM12 2L3 9l1.63 1.27L12 16l7.36-5.73L21 9l-9-7zm0 11.47L6.26 9 12 4.53 17.74 9 12 13.47z" />
+								</svg><span class="side-menu__label">Proyectos</span></a>
+						</li>
+						<li class="slide">
+							<a class="side-menu__item" data-toggle="slide" href="profile"><svg
+									xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
+									<path d="M0 0h24v24H0V0z" fill="none" />
+									<path
+										d="M10.9 19.91c.36.05.72.09 1.1.09 2.18 0 4.16-.88 5.61-2.3L14.89 13l-3.99 6.91zm-1.04-.21l2.71-4.7H4.59c.93 2.28 2.87 4.03 5.27 4.7zM8.54 12L5.7 7.09C4.64 8.45 4 10.15 4 12c0 .69.1 1.36.26 2h5.43l-1.15-2zm9.76 4.91C19.36 15.55 20 13.85 20 12c0-.69-.1-1.36-.26-2h-5.43l3.99 6.91zM13.73 9h5.68c-.93-2.28-2.88-4.04-5.28-4.7L11.42 9h2.31zm-3.46 0l2.83-4.92C12.74 4.03 12.37 4 12 4c-2.18 0-4.16.88-5.6 2.3L9.12 11l1.15-2z"
+										opacity=".3" />
+									<path
+										d="M12 22c5.52 0 10-4.48 10-10 0-4.75-3.31-8.72-7.75-9.74l-.08-.04-.01.02C13.46 2.09 12.74 2 12 2 6.48 2 2 6.48 2 12s4.48 10 10 10zm0-2c-.38 0-.74-.04-1.1-.09L14.89 13l2.72 4.7C16.16 19.12 14.18 20 12 20zm8-8c0 1.85-.64 3.55-1.7 4.91l-4-6.91h5.43c.17.64.27 1.31.27 2zm-.59-3h-7.99l2.71-4.7c2.4.66 4.35 2.42 5.28 4.7zM12 4c.37 0 .74.03 1.1.08L10.27 9l-1.15 2L6.4 6.3C7.84 4.88 9.82 4 12 4zm-8 8c0-1.85.64-3.55 1.7-4.91L8.54 12l1.15 2H4.26C4.1 13.36 4 12.69 4 12zm6.27 3h2.3l-2.71 4.7c-2.4-.67-4.35-2.42-5.28-4.7h5.69z" />
+								</svg><span class="side-menu__label">Mi Cuenta</span></a>
+						</li>
+						
+	
+			
+						<li class="slide">
+							<a class="side-menu__item" data-toggle="slide" href="signup"><svg
+									xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
+	
+									<path d="M0 0h24v24H0V0z" fill="none" />
+									<path d="M5 5h15v3H5zm12 5h3v9h-3zm-7 0h5v9h-5zm-5 
+								 0h3v9H5z" opacity=".3" />
+									<path d="M20 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h15c1.1 0 
+								 2-.9 2-2V5c0-1.1-.9-2-2-2zM8 19H5v-9h3v9zm7 0h-5v-9h5v9zm5 0h-3v-9h3v9zm0-11H5V5h15v3
+								 z" />
+								</svg><span class="side-menu__label">Administración de cuentas</span><i
+									class="angle fe fe-chevron-down"></i></a>
+							<ul class="slide-menu">
+								<li><a class="slide-item" href="signup">Crear usuarios</a></li>
+								<li><a class="slide-item" href="delete">Eliminar usuarios</a></li>
+								<li><a class="slide-item" href="edit">Editar usuarios</a></li>
+	
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</aside>
+			<!-- main-sidebar -->
+
+			<!-- main-content -->
+			<div class="main-content app-content">
+
+				<!-- main-header -->
+				<div class="main-header sticky side-header nav nav-item">
+					<div class="container-fluid">
+						<div class="main-header-left ">
+							
+							
+							<div class="responsive-logo">
+								<a href="index.html"><img src="assets/img/brand/logo.png" class="logo-1" alt="logo"></a>
+								<a href="index.html"><img src="assets/img/brand/logo-white.png" class="dark-logo-1" alt="logo"></a>
+								<a href="index.html"><img src="assets/img/brand/favicon.png" class="logo-2" alt="logo"></a>
+								<a href="index.html"><img src="assets/img/brand/favicon.png" class="dark-logo-2" alt="logo"></a>
+							</div>
+							<div class="app-sidebar__toggle" data-toggle="sidebar">
+								<a class="open-toggle" href="#"><i class="header-icon fe fe-align-left" ></i></a>
+							
+								<a class="close-toggle" href="#"><i class="header-icons fe fe-x"></i></a>
+									
+							</div>
+							
+						</div>
+					
+						<div class="main-header-right">
+						
+							<div class="nav nav-item  navbar-nav-right ml-auto">
+								<div class="nav-link" id="bs-example-navbar-collapse-1">
+									<form class="navbar-form" role="search">
+										<div class="input-group">
+											<input type="text" class="form-control" placeholder="Search">
+											<span class="input-group-btn">
+												<button type="reset" class="btn btn-default">
+													<i class="fas fa-times"></i>
+												</button>
+												<button type="reset" class="btn btn-default">
+													<i class="fas fa-times">asdas</i>
+												</button>
+												<button type="submit" class="btn btn-default nav-link resp-btn">
+													<svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+												</button>
+												
+											</span>
+										</div>
+									</form>
+								</div>
+								
+								<div class="dropdown nav-item main-header-notification">
+									<a class="new nav-link" href="#">
+									<svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class=" pulse"></span></a>
+									<div class="dropdown-menu">
+										<div class="menu-header-content bg-primary text-left">
+											<div class="d-flex">
+												<h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">Notificiaciones</h6>
+												
+											</div>
+											
+										</div>
+										<div class="main-notification-list Notification-scroll">
+											<a class="d-flex p-3 border-bottom" href="#">
+												<div class="notifyimg bg-pink">
+													<i class="la la-file-alt text-white"></i>
+												</div>
+												<div class="ml-3">
+													<h5 class="notification-label mb-1">Notificación</h5>
+													<div class="notification-subtext">tiempo transcurrido</div>
+												</div>
+												<div class="ml-auto" >
+													<i class="las la-angle-right text-right text-muted"></i>
+												</div>
+											</a>
+											<a class="d-flex p-3" href="#">
+												<div class="notifyimg bg-purple">
+												<i class="la la-file-alt text-white"></i>
+												</div>
+												<div class="ml-3">
+													<h5 class="notification-label mb-1">Notificación</h5>
+													<div class="notification-subtext">tiempo transcurrido</div>
+												</div>
+												<div class="ml-auto" >
+													<i class="las la-angle-right text-right text-muted"></i>
+												</div>
+											</a>
+											<a class="d-flex p-3 border-bottom" href="#">
+												<div class="notifyimg bg-success">
+												<i class="la la-file-alt text-white"></i>
+												</div>
+												<div class="ml-3">
+													<h5 class="notification-label mb-1">Notificación</h5>
+													<div class="notification-subtext">tiempo transcurrido</div>
+												</div>
+												<div class="ml-auto" >
+													<i class="las la-angle-right text-right text-muted"></i>
+												</div>
+											</a>
+											
+										</div>
+										<div class="dropdown-footer">
+											<a href="">Ver Todo</a>
+										</div>
+									</div>
+								</div>
+								<div class="nav-item full-screen fullscreen-button">
+									<a class="new nav-link full-screen-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a>
+								</div>
+								<div class="dropdown main-profile-menu nav nav-item nav-link">
+									<a class="profile-user d-flex" href="">
+										<div class="avatar avatar-md bg-warning rounded-circle">
+											<script>
+												var cadena = "<%=nom%>",
+													separador = " ", // un espacio en blanco
+													arregloDeSubCadenas = cadena.split(separador); // SEPARA EL NOMBRE EN CADENAS INDIVIDUALES
+												Iniciales = "";
+	
+												// IMPRIME LA PRIMERA LETRA DE CADA CADENA 
+												for (i = 0; i < arregloDeSubCadenas.length; i++) {
+													subCadena = arregloDeSubCadenas[i].substring(0, 1);
+													document.write(subCadena + "");
+												}
+											</script>
+										</div>
+									</a>
+									<div class="dropdown-menu">
+										<div class="main-header-profile bg-primary p-3">
+											<div class="d-flex wd-100p">
+												<div class="avatar avatar-md bg-warning rounded-circle">
+													<script>
+														var cadena = "<%=nom%>",
+															separador = " ", // un espacio en blanco
+															arregloDeSubCadenas = cadena.split(separador); // SEPARA EL NOMBRE EN CADENAS INDIVIDUALES
+														Iniciales = "";
+			
+														// IMPRIME LA PRIMERA LETRA DE CADA CADENA 
+														for (i = 0; i < arregloDeSubCadenas.length; i++) {
+															subCadena = arregloDeSubCadenas[i].substring(0, 1);
+															document.write(subCadena + "");
+														}
+													</script>
+												</div>
+												<div class="ml-3 my-auto">
+													<h6>
+														<%=nom%>
+													</h6><span>Empresa</span>
+												</div>
+											</div>
+										</div>
+	
+										<a class="dropdown-item" href="profile"><i class="bx bx-slider-alt"></i> Cuenta</a>
+										<a class="dropdown-item" href="/logout"><i class="bx bx-log-out"></i> Salir</a>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /main-header -->
+
+				<!-- container -->
+				<div class="container-fluid">
+					<div id="mydiv">
+						<!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+						<div id="mydivheader">
+							<div class="row">
+								<div class="col-3">Propiedades  </div>
+								<div class="col-3">  </div><div class="col-3">  </div>
+								<div class="col-3"><button class="btn btn-primary " style="right:0px !important;" onclick="apagarDiv();" ><i class="si si-close"></i></button></div></div>
+							</div>
+							
+						<div class="row">
+							<div class="col-12">
+								<div class="d-flex justify-content-between" style="height:600px !important;" >
+		
+									<div class="listgroup-example " style="width:900px !important;">
+										<ul class="list-group" id="propiedades_id">
+											
+										</ul>
+										
+									</div>
+								</div>
+							</div>
+					
+							<br><br><br>
+						
+						</div>
+					  </div>
+				
+			
+					<!-- /breadcrumb -->
+
+		
+					
+	                <div class="row-sm">
+	                	<div class="col-sm-6"></div>
+	                	<div class="col-sm-6">
+	                		
+	                	</div>
+	                </div>
+
+	            </div>
+	               
+					<div class="row row-sm">
+						<div class="col-sm-4">
+					    
+					   </div>
+
+
+					   	
+					   <div class="col-sm-4">
+					
+					   </div>
+
+					     <div class="col-sm-4">
+					    <div class="btn-group">
+	                                 <div class="main-star">
+										
+												
+									</div>
+	            		</div>
+					   </div>
+					</div>
+					<!-- row closed -->
+
+					<!-- row opened -->
+					<div class="row row-sm">
+						<div class="col-md-12 col-lg-12 col-xl-12">
+							<div class="card">
+
+								<div class="row">
+									<div class="col-8">
+										<div class="row">
+											<div class="col-12">
+												<div id="forgeViewer"  style="width: 80px !important; height: 750px;padding-right:  20px !important;"></div>
+										<div class="card-header bg-transparent pd-b-0 pd-t-20 bd-b-0">
+											<div class="d-flex justify-content-between">
+												<h4 class="card-title mb-0">Visualizador</h4>
+												<i class="mdi mdi-dots-horizontal text-gray"></i>
+											</div>
+											
+										</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12">
+												
+											</div>
+										</div>
+										
+
+									</div>
+									<div class="col-4" id="tabs-style4">
+										<P></P><P></P>
+									<div class="card-body">
+										<div>
+											<P></P>
+											<h6 class="card-title mb-1">Menú Operación</h6>
+											<p class="text-muted card-sub-title">Encontrará las herramientas disponibles para cada apartado.</p>
+										</div>
+										<div class="text-wrap">
+											<div class="example">
+												<div class="panel panel-primary tabs-style-1">
+													<div class=" tab-menu-heading">
+														<div class="tabs-menu1">
+															<!-- Tabs -->
+															<ul class="nav panel-tabs main-nav-line">
+															
+																<li class="">
+																	<a href="#tab1" class="nav-link" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">Visual</span> </a>
+															   </li>
+																<li class="">
+																		<a href="#tab2" class="nav-link" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">Fierros&Pedidos</span> </a>
+																</li>
+																		
+															</ul>
+														</div>
+													</div>
+													<div
+														class="panel-body tabs-menu-body main-content-body-right border-top-0 border">
+														<div class="tab-content">
+															<div class="tab-pane active" id="tab1">
+																<h6 class="mb-12 tx-12 ">Valores Para <%= filtro_1 %></h6>
+																<div class="row row-sm">
+																	<div class="col-lg-12 ">
+																		<p class="mg-b-10"></p><select class="form-control select2" multiple="multiple" id="ha_option">
+																			<option value="sinValor">
+																				Sin Valor
+																			</option>
+																			<option value="0">
+																				Sin Valor
+																			</option>
+																		</select>
+																	</div>
+															  </div>
+																<p></p>
+																<h6 class="mb-3 tx-12 ">Valores Para  <%= filtro_2 %></h6>
+																<div class="row row-sm">
+																	<div class="col-lg-12 ">
+																		<p class="mg-b-10"></p><select class="form-control select2" multiple="multiple" id="piso_option">
+																			<option value="sinValor">
+																				Sin Valor
+																			</option>
+																			<option value="0">
+																				Sin Valor
+																			</option>
+																			
+																		</select>
+																	</div>
+				
+														 </div>
+																<p></p>
+																<div class="row row-xs ">
+					
+				
+																	<div class="col-sm-4 col-md-4 mg-t-4 mg-md-t-0">
+																		<button class="btn btn-warning  btn-block" onclick="filtro_visual();"  data-toggle="tooltip" data-placement="right" title="" data-original-title="Aplicar Filtros"><i class="si si-control-play"></i></button>
+																	</div>
+																	
+																	<div class="col-sm-4 col-md-4 mg-t-4 mg-md-t-0">
+																		<button class="btn btn-warning btn-block" onclick="marcar_visual();" data-toggle="tooltip" data-placement="right" title="" data-original-title="Revisar Vencimientos de selección"><i class="si si-magnifier"></i></button>
+																	</div>
+																	
+																	<div class="col-sm-4 col-md-4 mg-t-4 mg-md-t-0">
+																		<button class="btn btn-warning btn-block" onclick="quitar_filtros();" data-toggle="tooltip" data-placement="right" title="" data-original-title="Quitar Filtros"><i class="si si-action-undo"></i></button>
+																	</div>
+																</div><p></p>
+																<div class="row row-xs ">
+
+																	<h6>&nbsp;&nbsp;Administración de Vistas</h6><br>
+																
+																	<div class="col-sm-12 col-md-12 mg-t-12 mg-md-t-0">
+																		
+																		&nbsp;&nbsp;<h6 class="mb-3 tx-12 ">Vistas Disponibles</h6>
+																		<div class="form-group" >
+																		
+																			<select class="form-control" onchange="set_visor()" id="vistas_previas">
+																				<option value="sinValor">
+																					Sin Valor
+																				</option>
+																				
+																			</select>
+																			<button  data-toggle="tooltip" data-placement="right" title="" data-original-title="Eliminar Vista Seleccionada" class="btn btn-warning btn-block" onclick="eliminar_vista();" >Eliminar <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
+																		</div>
+																	
+																	<p></p>
+																		
+																	</div>
+																	
+																		<div class="col-sm-3 col-md-3 mg-t-3 "  id="elementos_seleccionados">
+																			</div>
+																		<div class="col-sm-3 col-md-3 mg-t-3 ">
+																			<button class="btn btn-warning btn-block" onclick="set_clave(2);" data-toggle="tooltip" data-placement="right" title="" data-original-title="Pintar Fechas de Instalacion"><i class="ti-timer"></i></button>
+																		</div>
+																		<div class="col-sm-3 col-md-3 mg-t-3 ">
+																			<button class="btn btn-warning btn-block" onclick="set_clave(3);" data-toggle="tooltip" data-placement="right" title="" data-original-title="Recargar"><i class="ti-reload"></i></button>
+																		</div>
+																		<div class="col-sm-3 col-md-3 mg-t-3 ">
+																			<button class="btn btn-warning btn-block "  onclick="prenderDiv();"  href="" ><i class="ti-eye" data-toggle="tooltip" data-placement="left" title="" data-original-title="Ver Propiedades de Objeto Seleccionado"></i></button>
+																		</div>
+																	
+																	
+																	<p></p>
+																	<div class="col-sm-12 col-md-12 mg-t-12 mg-md-t-0">
+																		
+																	</div>
+																	<div class="col-sm-12 col-md-12 mg-t-12 mg-md-t-0">
+																		
+																	</div>
+																	
+																</div>
+																<div class="row row-xs ">
+																	<div class="col-sm-12 col-md-12 mg-t-12 mg-md-t-0">
+																		
+																		
+															 
+																	</div>
+																</div>
+															</div>
+															<div class="tab-pane" id="tab2">
+																<div class="table-responsive">
+																	<table style="background-color:#FFFFE0;" class="table mg-b-0 text-md-nowrap" id="tabla_total"> 
+																		<thead>
+																			<tr style="background-color:#BDB76B;color:#ffffff;">
+																				
+																				<th>Largo Acumulado</th>
+																				<th>Peso Acumulado</th>
+																				
+																				<th>Acción</th>
+																			</tr>
+																		 </thead>
+																		 <tbody><tr>
+																			 
+																			 <td id="largo"></td>
+																			 <td id="peso"></td>
+																			 
+																			 <td id="btn"><button class="btn btn-warning btn-block" data-target="#modaldemo6" data-toggle="modal" "=""><i class="si si-plus"></i></button></td>
+																		 </tr>
+																	
+																</tbody></table>
+																<p></p>
+																<div class="table-responsive">
+																	<table class="table mg-b-0 text-md-nowrap">
+																		<thead>
+																			<tr>
+																				<th>Fecha</th>
+																				
+																				<th>Total(Kgs)</th>
+																				<th>Pedido</th>
+																				<th>Acciones</th>
+																			</tr>
+																		</thead>
+																		<tbody id="body_pedidos">
+																			<tr><th scope="row">11/05/2023</th>
+																				<td>419</td><td>P02</td>
+																				<td>
+																					<div class="row">
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="filtra_orden(0)"><i class="ti-eye"></i></button>
+																					
+																						</div>
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="eliminar_orden(0)"><i class="ti-close"></i></button>
+																					
+																						</div>
+																					</div>
+																					</td>
+																			</tr>
+																			<tr><th scope="row">11/05/2023</th>
+																				<td>419</td><td>P02</td>
+																				<td>
+																					<div class="row">
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="filtra_orden(0)"><i class="ti-eye"></i></button>
+																					
+																						</div>
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="eliminar_orden(0)"><i class="ti-close"></i></button>
+																					
+																						</div>
+																					</div>
+																					</td>
+																			</tr>
+																			<tr><th scope="row">11/05/2023</th>
+																				<td>419</td><td>P02</td>
+																				<td>
+																					<div class="row">
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="filtra_orden(0)"><i class="ti-eye"></i></button>
+																					
+																						</div>
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="eliminar_orden(0)"><i class="ti-close"></i></button>
+																					
+																						</div>
+																					</div>
+																					</td>
+																			</tr>
+																			<tr><th scope="row">11/05/2023</th>
+																				<td>419</td><td>P02</td>
+																				<td>
+																					<div class="row">
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="filtra_orden(0)"><i class="ti-eye"></i></button>
+																					
+																						</div>
+																						<div class="col-6">
+																							<button class="btn btn-warning " onclick="eliminar_orden(0)"><i class="ti-close"></i></button>
+																					
+																						</div>
+																					</div>
+																					</td>
+																			</tr>
+																			</tbody>
+																	</table>
+																	<p></p>
+																	<!--
+																	<div class="table-responsive">
+																		<h4 class="tx-15 text-uppercase mb-3">Resumen de Pedido</h4>
+																		
+																		<div id="#resumen_pedido">
+																			<table class="table mg-b-0 text-md-nowrap">
+																				<tbody>
+																				<tr>
+																					<td>Fecha</td>
+																					<td id="fecha_pedido_resumen"></td>
+																					
+																				</tr>
+																				<tr>
+																					<td>Nombre</td>
+																					<td id="nombre_pedido_resumen"></td>
+																				</tr>
+																				
+																				<tr>
+																					<td>Agregar Elementos</td>
+																					<td><button class="btn btn-warning btn-block" data-target="#modaldemo7" data-toggle="modal">Agregar Elemento a Orden</button>
+																					</td>
+																				</tr>
+																			</tbody>
+																			</table>
+																		</div>
+																	</div>-->
+																</div>
+															</div>
+															</div>
+															
+															
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								</div>
+								
+								
+
+								<br>
+							</div>
+						</div>
+						
+					
+				
+
+                    
+				</div>
+			
+              
+				<!-- /Container -->
+   
+			</div>
+			<!-- /main-content -->
+     
+			<!-- Sidebar-right-->
+			<div id="menu_derecha" class="sidebar sidebar-right sidebar-animate sidebar-close"  style= ' margin:4px, 4px; 
+			padding:4px; 
+			 
+			width: 500px; 
+			height: 100%; 
+			overflow-x: hidden; 
+			overflow-x: auto; 
+			text-align:justify; '>
+				<div class="panel panel-primary card mb-0 box-shadow">
+					<div class="tab-menu-heading border-0 p-3">
+						<div class="card-title mb-0" >Menu Visualizador</div>
+						<div class="card-options ml-auto">
+							<a href="#" class="sidebar-remove"><i class="fe fe-x"></i></a> 
+						</div>
+					</div>
+					
+					<div class="panel-body tabs-menu-body latest-tasks p-0 border-0">
+						<div class="row">
+							<div class="card">
+								<div class="card-body">
+									<div class="tabs-menu ">
+										<!-- Tabs -->
+										<ul class="nav nav-tabs profile navtab-custom panel-tabs">
+											<li class="active">
+												<a href="#settings" data-toggle="tab" aria-expanded="true" class="active"> <span class="visible-xs"><i class="fa fa-laptop"></i></span> <span class="hidden-xs">Menu Visualizador</span> </a>
+											</li>
+										<!--	<li class="">
+												<a href="#home" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">Maestro de Fierros</span> </a>
+											</li>-->
+											<li class="">
+												<a href="#vistas" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">Adm Vistas</span> </a>
+											</li>
+											<li class="">
+												<a href="#pedidos" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">Pedidos</span> </a>
+											</li>
+										<!--	<li class="">
+												<a href="#pintado" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">Filtros Visuales</span> </a>
+											</li>-->
+										</ul>
+									</div>
+									<div class="tab-content border-left border-bottom border-right border-top-0 p-4">
+										
+			
+										<div class="tab-pane active" id="settings">
+											
+										  <div class="row row-sm">
+												<div class="col-lg-12 ">
+												</div>
+										  </div>
+										 
+										 <BR>
+										 <div class="row row-sm">
+										
+											<div class="col-lg-4 ">
+												<button data-toggle="dropdown" class="btn btn-success btn-block" onclick="filtro_visual();">FILTRAR MODELO <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
+												</div>
+												<div class="col-lg-4 ">
+													<button data-toggle="dropdown" class="btn btn-success btn-block" onclick="marcar_visual();">MARCAR SELECCION <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
+													</div>
+											<div class="col-lg-4 ">
+												<button data-toggle="dropdown" class="btn btn-success btn-block" onclick="quitar_filtros();">QUITAR FILTROS <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
+											
+											</div>
+											
+										</div>	
+										<br>
+										
+										<div class="row row-sm">
+											<div class="col-lg-12 ">
+												<p class="mg-b-10"><h5>Vistas Disponibles</h5></p>
+												
+											</div>
+									    </div>
+										<br>
+										asdasdasd
+										<div class="row row-sm">
+											<h4 class="tx-15 text-uppercase mb-3">Administrador de Vistas</h4>
+											
+										<!--
+											<button data-toggle="dropdown" class="btn btn-success btn-block" onclick="set_clave(1);">Visualizar Elementos sin Fecha o Formato <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
+										-->	
+											<button data-toggle="dropdown" class="btn btn-success btn-block" onclick="set_clave(2);">Visualizar Elementos Vencidos&Sin Formato <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
+											<button data-toggle="dropdown" class="btn btn-primary btn-block" onclick="set_clave(3);">Reestablecer <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
+										
+										</div>
+										<br><br>
+										<div class="row row-sm">
+											<div class="col-lg-12 ">
+												
+												<div id="elementos_seleccionados"></div>
+											</div>
+										</div>
+									    <h4 class="tx-15 text-uppercase mb-3">Maestro de Fierros</h4>
+											
+											
+											<div class="row row-sm">
+												<div class="col-lg-12 " >
+													<a href="#tablaMaestroFierros" data-toggle="collapse">Desplegar</a>
+													<div id="tablaMaestroFierros" class="collapse">
+                                                    <div class="table-responsive">
+                                                        <table class="table mg-b-0 text-md-nowrap" id="tabla_fierro"> 
+                                                        	<thead>
+                                                                <tr>
+                                                                    <th>Nombre</th>
+                                                                    <th>Largo</th>
+                                                                    <th>Peso</th>
+                                                                    <th>X</th>
+                                                                </tr>
+                                                             </thead>
+                                                        
+                                                    </table>
+												</div>
+                                                  </div>
+												</div>
+											</div>
+											<br><br>
+										<div class="row row-sm">
+											
+											<div class="col-lg-12 ">
+												<h5>Edición de Fechas</h5>
+												
+												<div class="row">
+													<div class="col-lg-6"><div id="edicion_data"></div></div>
+													<div class="col-lg-6"><div id="edicion_data2"></div></div>
+													
+												</div>
+												
+												<br><br>
+												<div class=""><h5>PROPIEDADES</h5> <a href="#demo" data-toggle="collapse">Desplegar</a></div>
+												
+												<br>
+												
+												<div id="guardar_vista"></div>
+												<div id="proyectos_visor"></div>
+												<br>
+												<div id="demo" class="collapse">
+													<div class="listgroup-example ">
+														<!--<ul class="list-group" id="propiedades_id">-->
+															
+														<!--</ul>-->
+													</div>
+				
+				
+														
+												</div>
+											</div>
+											
+										</div>	
+									
+										</div>
+										<div class="tab-pane " id="home">
+											
+										</div>
+										<div class="tab-pane " id="vistas"><h4 class="tx-15 text-uppercase mb-3">Administrador de Vistas</h4>
+											
+											<p class="m-b-5">En esta sección ud podrá eliminar las vistas guardadas</p>
+											<p class="m-b-5" id="resultado_borrado_vista"></p>
+												
+													
+													<select class="form-control"  id="tabla_vistas">
+														<option value="sinValor">
+															Sin Valor
+														</option>
+														
+													</select>
+													<button data-toggle="dropdown" class="btn btn-success btn-block" onclick="eliminar_vista();">Eliminar <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
+										 
+										</div>
+										<div class="tab-pane " id="pedidos">
+											<h4 class="tx-15 text-uppercase mb-3">Administrador de Pedidos</h4>
+											<p class="m-b-5">En esta sección ud podrá Gestionar y visualizar Pedidos realizados</p>
+											<button class='btn btn-success btn-block'onclick='filtrar_all_orden()'>Visualizar Todos los pedidos</button>
+											<button class='btn btn-success btn-block'onclick='pintar_all_orden()'>Pintar Todos los pedidos</button>
+											<button data-toggle="dropdown" class="btn btn-success btn-block" onclick="quitar_filtros();">Quitar Filtros <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>
+												<p class="m-b-5" id="resultado_borrado_vista"></p>
+												
+													
+											<div class="card-body">
+												<div class="table-responsive">
+													<table class="table mg-b-0 text-md-nowrap">
+														<thead>
+															<tr>
+																<th>Fecha</th>
+																
+																<th>Peso Total</th>
+																<th>Nombre Pedido</th>
+																<th>Acciones</th>
+															</tr>
+														</thead>
+														<tbody id="body_pedidos">
+															
+															
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<div class="card-body">
+												<div class="table-responsive">
+													<h4 class="tx-15 text-uppercase mb-3">Resumen de Pedido</h4>
+													
+													<div id="#resumen_pedido">
+														<table class="table mg-b-0 text-md-nowrap">
+															<tbody>
+															<tr>
+																<td>Fecha</td>
+																<td id="fecha_pedido_resumen"></td>
+																
+															</tr>
+															<tr>
+																<td>Nombre</td>
+																<td  id="nombre_pedido_resumen"></td>
+															</tr>
+															
+															<tr>
+																<td>Agregar Elementos</td>
+																<td><button class='btn btn-success btn-block' data-target="#modaldemo7" data-toggle="modal">Agregar Elemento a Orden</button>
+																</td>
+															</tr>
+														</tbody>
+														</table>
+													</div>
+												</div>
+											</div>	
+											<div class="card-body">
+												<div class="table-responsive">
+													<h4 class="tx-15 text-uppercase mb-3">Elementos Adicionales</h4>
+													
+													<div id="#resumen_pedido">
+														<table class="table mg-b-0 text-md-nowrap">
+															<tbody id="body_adicionales">
+															
+															
+														</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane " id="pintado">
+											</div>
+											
+									</div>
+								</div>
+							</div>
+						</div>
+						
+							<div class="row">
+					
+						
+								<div class="col-md-12 col-xl-12 col-xs-12 col-sm-12">
+									<div class="card">
+										<div class="card-body">
+											
+											
+										  
+									  
+							       </div>		
+										
+											</div>
+											<p></p>
+											<script>
+
+											
+												//	  gantt.init("gantt_here");
+													  
+												/*
+													  gantt.parse({
+																"data": [
+																	{"id": 11, "text": "PROYECTO", type: gantt.config.types.project, "progress": 0.6, "open": true},
+																	{"id": 13, "text": "Walls", "start_date": "01-04-2021",  type: gantt.config.types.project,"parent": "11", "progress": 1, "open": true},
+																	{"id": 14, "text": "Columns", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
+																	{"id": 15, "text": "Framing", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
+																	{"id": 20, "text": "Foundation - Wall", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
+																	{"id": 21, "text": "Foundation - Aislada", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
+																	{"id": 22, "text": "Foundation - Slab", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
+																	{"id": 23, "text": "Floors", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
+																	{"id": 24, "text": "Rebar", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
+
+																]
+															});
+
+															
+														gantt.render();*/
+											</script>
+												
+										</div>
+							</div>
+					</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<!--/Sidebar-right-->
+
+			<!-- Message Modal -->
+			
+            <div class="modal" id="modaldemo4" >
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content modal-content-demo">
+						<div class="modal-header">
+							<h6 class="modal-title">Guardar Seleccion</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+						</div>
+						<div class="modal-body">
+							<h6>Nombre</h6>
+							<div class="row row-sm">
+								
+								<div class="col-lg mg-t-12 mg-lg-t-12">
+									<input class="form-control" placeholder="" id="nombre_objeto"  type="text" value="">
+								</div>
+							
+							</div>
+							
+						</div>
+						<div class="modal-body">
+							<h6>Elementos Seleccionados</h6>
+							<div class="row row-sm">
+								
+								<div class="col-lg mg-t-12 mg-lg-t-12">
+									<input class="form-control" placeholder="" id="id_seleccionados3" readonly type="text" value="">
+								</div>
+							
+							</div>
+							
+						</div>
+						<div class="modal-footer">
+							<button class="btn ripple btn-primary" data-dismiss="modal" type="button" onclick="cargarVista();">Guardar Cambios</button>
+							<button class="btn ripple btn-secondary" data-dismiss="modal" type="button">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--Video Modal -->
+			<div class="modal" id="modaldemo3">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content modal-content-demo">
+						<div class="modal-header">
+							<h6 class="modal-title">Edición de Parámetros</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+						</div>
+						<div class="modal-body">
+							<h6>Datos</h6>
+							<div class="row row-sm">
+								
+								
+							
+							</div>
+					
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Fecha Actualizada:
+											</div>
+										</div><input class="form-control" id="plan1" placeholder="MM/DD/YYYY" type="text">
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												ELEMENTOS SELECCIONADOS
+											</div>
+										</div>	
+									</div><input class="form-control" placeholder="" id="id_seleccionados2" readonly type="text" value="">
+								</div><!-- col-4 -->
+							
+							</div>
+							
+						</div>
+						<div class="modal-footer">
+							<button class="btn ripple btn-primary" data-dismiss="modal" type="button" onclick="saveHormigonado()">Guardar Cambios</button>
+							<button class="btn ripple btn-secondary" data-dismiss="modal" type="button">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal" id="modaldemo5">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content modal-content-demo">
+						<div class="modal-header">
+							<h6 class="modal-title">Edición de Parámetros</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+						</div>
+						<div class="modal-body">
+							<h6>Datos</h6>
+							<div class="row row-sm">
+								
+								
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Fecha Plan:
+											</div>
+										</div><input class="form-control" id="dateMask2" placeholder="MM/DD/YYYY" type="text" readonly>
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Fecha Instalación:
+											</div>
+										</div><input class="form-control" id="plan2" placeholder="MM/DD/YYYY" type="text" readonly>
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												ELEMENTOS SELECCIONADOS
+											</div>
+										</div>	<input class="form-control" placeholder="" id="id_seleccionados" readonly type="text" value="">
+								
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn ripple btn-primary" data-dismiss="modal" type="button" >Guardar Cambios</button><!--onclick="savePlan();"-->
+							<button class="btn ripple btn-secondary" data-dismiss="modal" type="button">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal" id="modaldemo6">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content modal-content-demo">
+						<div class="modal-header">
+							<h6 class="modal-title">Creación de Orden</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+						</div>
+						<div class="modal-body">
+							<h6>Información del Pedido</h6>
+							<div class="row row-sm">
+								
+								
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Nombre Referencia Pedido:
+											</div>
+										</div><input class="form-control" id="nombre_pedido" placeholder="ingrese nombre de referencia" type="text">
+										<input class="form-control" id="urn_actual"  type="hidden">
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Fecha Pedido:
+											</div>
+										</div><input class="form-control" id="fecha_pedido_fierro" placeholder="MM/DD/YYYY" type="text" >
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Largo Total:
+											</div>
+										</div><input class="form-control" id="largo_total_pedido" type="text" readonly>
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Peso Total:
+											</div>
+										</div><input class="form-control" id="peso_total_pedido" type="text" readonly>
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Resultado Total (peso x largo):
+											</div>
+										</div><input class="form-control" id="resultado_total_pedido" type="text" readonly>
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												ELEMENTOS SELECCIONADOS
+											</div>
+										</div>	<input class="form-control" placeholder="" id="id_seleccionados4" readonly type="text" value="">
+										<input class="form-control" placeholder="" id="listado_pesos"   value="">
+										<input class="form-control" placeholder="" id="listado_largo"   value="">
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+						
+							<br><br>
+						</div>
+						<div class="modal-footer">
+							<button class="btn ripple btn-primary" data-dismiss="modal" type="button" onclick="savePedido();">Guardar Cambios</button>
+							<button class="btn ripple btn-secondary" data-dismiss="modal" type="button">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal" id="modaldemo15">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content tx-size-sm">
+						<div class="modal-body tx-center pd-y-20 pd-x-20">
+							<button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span
+									aria-hidden="true">&times;</span></button> <i
+								class="icon icon ion-ios-close-circle-outline tx-100 tx-danger lh-1 mg-t-20 d-inline-block"></i>
+							<h4 class="tx-danger mg-b-20">Solicitud Duplicada</h4>
+							<p class="mg-b-20 mg-x-20">Está intentando solicitar dos veces un elemento. Puede seguir adelante o cancelar este pedido</p>
+							<button aria-label="Close"
+								class="btn ripple btn-danger pd-x-25" data-bs-dismiss="modal"
+								type="button"  onclick="guardarPostRevision();">Continuar</button>
+								<button class="btn ripple btn-secondary" data-dismiss="modal" type="button"  onclick="closeNegacionOrden();">Cancelar</button>
+								
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal" id="modaldemo7">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content modal-content-demo">
+						<div class="modal-header">
+							<h6 class="modal-title">Agregar Objeto a Orden</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+						</div>
+						<div class="modal-body">
+							<h6>Información del Pedido</h6>
+							<div class="row row-sm">
+								
+								
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Nombre Referencia Pedido:
+											</div>
+										</div><input class="form-control" id="nombre_pedido_resumen2"  type="text" readonly>
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Cantidad:
+											</div>
+										</div><input class="form-control" id="cantidad_pedido_add" type="number" >
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Diametro:
+											</div>
+										</div><input class="form-control" id="diametro_pedido_add" type="number" >
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Largo:
+											</div>
+										</div><input class="form-control" id="largo_pedido_add"  type="number" >
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+		
+				
+	
+						
+							<br><br>
+						</div>
+						<div class="modal-footer">
+							<button class="btn ripple btn-primary" data-dismiss="modal" type="button" onclick="saveAddPedido();">Agregar</button>
+							<button class="btn ripple btn-secondary" data-dismiss="modal" type="button">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Audio Modal -->
+		    <div class="modal" id="modaldemo20">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content tx-size-sm">
+						<div class="modal-body tx-center pd-y-20 pd-x-20">
+							<button aria-label="Close" class="close" data-bs-dismiss="modal" type="button"><span
+									aria-hidden="true">&times;</span></button> <i
+								class="icon icon ion-ios-close-circle-outline tx-100 tx-danger lh-1 mg-t-20 d-inline-block"></i>
+							<h4 class="tx-danger mg-b-20">Solicitud Duplicada</h4>
+							<p class="mg-b-20 mg-x-20">Está intentando guardar un selección de elementos con un nombre que ya está en nuestros registros. Modifique y vuelva a intentarlo</p>
+							
+								<button class="btn ripple btn-secondary" data-dismiss="modal" type="button"  onclick="closeNegacionVista();">Cancelar</button>
+								
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal" id="modaldemo5">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content modal-content-demo">
+						<div class="modal-header">
+							<h6 class="modal-title">Edición de Parámetros</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+						</div>
+						<div class="modal-body">
+							<h6>Datos</h6>
+							<div class="row row-sm">
+								
+								
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Fecha Plan:
+											</div>
+										</div><input class="form-control" id="dateMask2" placeholder="MM/DD/YYYY" type="text" >
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												Fecha Instalación:
+											</div>
+										</div><input class="form-control" id="plan2" placeholder="MM/DD/YYYY" type="text" readonly>
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												ELEMENTOS SELECCIONADOS
+											</div>
+										</div>	<input class="form-control" placeholder="" id="id_seleccionados" readonly type="text" value="">
+								
+									</div><!-- input-group -->
+								</div><!-- col-4 -->
+							
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn ripple btn-primary" data-dismiss="modal" type="button" onclick="savePlan();">Guardar Cambios</button>
+							<button class="btn ripple btn-secondary" data-dismiss="modal" type="button">Cerrar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+         
+			<!-- Footer opened -->
+			<div class="main-footer ht-40">
+				<div class="container-fluid pd-t-0-f ht-100p">
+					<span>Copyright © 2021 <a href="#">ARBIM CONSTRUCCIÓN</a>.</span>
+				</div>
+			</div>
+			<!-- Footer closed -->
+            
+		</div>
+		<!-- End Page -->
+
+		<!-- Back-to-top -->
+		
+		<script src="assets/js/modal.js"></script>
+		<a href="#top" id="back-to-top"><i class="las la-angle-double-up"></i></a>
+
+		<!-- JQuery min js -->
+	
+
+		<!--Internal  Datepicker js -->
+		<script src="assets/plugins/jquery-ui/ui/widgets/datepicker.js"></script>
+
+		<!-- Bootstrap Bundle js -->
+		<script src="assets/plugins/bootstrap/js/popper.min.js"></script>
+		<script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		
+		<!--Internal  jquery.maskedinput js -->
+		<script src="assets/plugins/jquery.maskedinput/jquery.maskedinput.js"></script>
+
+		<!--Internal  spectrum-colorpicker js -->
+		<script src="assets/plugins/spectrum-colorpicker/spectrum.js"></script>
+
+		<!-- Internal Select2.min js -->
+		<script src="assets/plugins/select2/js/select2.min.js"></script>
+
+		
+		<!--Internal  jquery-simple-datetimepicker js -->
+		<script src="assets/plugins/amazeui-datetimepicker/js/amazeui.datetimepicker.min.js"></script>
+
+		<!-- Ionicons js -->
+		<script src="assets/plugins/jquery-simple-datetimepicker/jquery.simple-dtpicker.js"></script>
+		<script src="assets/plugins/tabs/jquery.multipurpose_tabcontent.js"></script>
+		<script src="assets/js/tabs.js"></script>
+		<!--Internal  pickerjs js -->
+		
+
+		<!-- Rating js-->
+		
+	
+
+		<!-- P-scroll js -->
+	<!--	<script src="assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>-->
+	<!--	<script src="assets/plugins/perfect-scrollbar/p-scroll.js"></script>-->
+
+		<!-- Sidebar js -->
+		<script src="assets/plugins/side-menu/sidemenu.js"></script>
+
+		<!-- Right-sidebar js -->
+		<script src="assets/plugins/sidebar/sidebar.js"></script>
+		<script src="assets/plugins/sidebar/sidebar-custom.js"></script>
+
+		<!-- eva-icons js -->
+		<script src="assets/js/eva-icons.min.js"></script>
+		<script src="assets/plugins/notify/js/notifIt.js"></script>
+		<script src="assets/plugins/notify/js/notifit-custom.js"></script>
+		<!-- Sticky js -->
+		<script src="assets/js/sticky.js"></script>
+
+		<!-- custom js -->
+		<script src="assets/js/custom.js"></script>
+
+		<!-- Internal form-elements js -->
+		<script src="assets/js/form-elements.js"></script>
+
+	
+		<script src="js/ForgeTree.js"></script>
+	    <script src="js/ForgeViewer.js"></script>
+	    <script src="/js/handleselectionextension.js"></script>
+		<script src="/js/DrawToolExtension.js"></script>
+	    <script src="js/frappe-gantt.min.js"></script>
+	    <script src="js/atbim.js"></script>
+
+
+		<script src='js/gistfile1.js'></script>
+
+ <!--selection window extension-->
+      <!-- <script src='js/SelectExtensión.js'></script>-->
+<!-- copy from  https://gist.github.com/yomotsu/d845f21e2e1eb49f647f -->
+<script src='AABBCollision.js'></script>
+
+<!--selection window extension-->
+<script src='MySelectionWindow.js'></script>
+
+	<!--Internal  Datepicker js -->
+	<script src="assets/plugins/jquery-ui/ui/widgets/datepicker.js"></script>
+
+	  <!--  <script src="js/atbimDocking.js"></script>-->
+	  <script>
+
+		function toggleMode(toggle) {
+			gantt.$zoomToFit = !gantt.$zoomToFit;
+			if (gantt.$zoomToFit) {
+				toggle.innerHTML = "Escala por Defecto";
+				//Saving previous scale state for future restore
+				saveConfig();
+				zoomToFit();
+			} else {
+	
+				toggle.innerHTML = "Ajustar al Proyecto";
+				//Restore previous scale state
+				restoreConfig();
+				gantt.render();
+			}
+		}
+	
+		var cachedSettings = {};
+	/*
+		function saveConfig() {
+			var config = gantt.config;
+			cachedSettings = {};
+			cachedSettings.scales = config.scales;
+			cachedSettings.start_date = config.start_date;
+			cachedSettings.end_date = config.end_date;
+			cachedSettings.scroll_position = gantt.getScrollState();
+		}
+	
+		function restoreConfig() {
+			applyConfig(cachedSettings);
+		}
+	
+		function applyConfig(config, dates) {
+	
+			gantt.config.scales = config.scales;
+	
+			// restore the previous scroll position
+			if (config.scroll_position) {
+				setTimeout(function(){
+					gantt.scrollTo(config.scroll_position.x, config.scroll_position.y)
+				},4)
+			}
+		}
+	
+	
+		function zoomToFit() {
+			var project = gantt.getSubtaskDates(),
+				areaWidth = gantt.$task.offsetWidth,
+				scaleConfigs = zoomConfig.levels;
+	
+			for (var i = 0; i < scaleConfigs.length; i++) {
+				var columnCount = getUnitsBetween(project.start_date, project.end_date, scaleConfigs[i].scales[scaleConfigs[i].scales.length-1].unit, scaleConfigs[i].scales[0].step);
+				if ((columnCount + 2) * gantt.config.min_column_width <= areaWidth) {
+					break;
+				}
+			}
+	
+	
+			if (i == scaleConfigs.length) {
+				i--;
+			}
+	
+			gantt.ext.zoom.setLevel(scaleConfigs[i].name);
+			applyConfig(scaleConfigs[i], project);
+		}
+	
+		// get number of columns in timeline
+		function getUnitsBetween(from, to, unit, step) {
+			var start = new Date(from),
+				end = new Date(to);
+			var units = 0;
+			while (start.valueOf() < end.valueOf()) {
+				units++;
+				start = gantt.date.add(start, step, unit);
+			}
+			return units;
+		}
+	
+		function zoom_in(){
+			gantt.ext.zoom.zoomIn();
+			gantt.$zoomToFit = false;
+			document.querySelector(".zoom_toggle").innerHTML = "Ajustar al Proyecto";
+		}
+		function zoom_out(){
+			gantt.ext.zoom.zoomOut();
+			gantt.$zoomToFit = false;
+			document.querySelector(".zoom_toggle").innerHTML = "Ajustar al Proyecto";
+		}
+	*/
+	/*
+		var zoomConfig = {
+			levels: [
+				// hours
+				{
+					name:"hour",
+					scale_height: 50,
+					scales:[
+						{unit:"day", step: 1, format:"%d %M"},
+						{unit:"hour", step: 1, format:"%H:%i"},
+					]
+				},
+				// days
+				{
+					name:"day",
+					scale_height: 27,
+					scales:[
+						{unit: "day", step: 1, format: "%d %M"}
+					]
+				},
+				// weeks
+				{
+					name:"week",
+					scale_height: 27,
+					scales:[
+						{unit: "week", step: 1, format: function (date) {
+							var dateToStr = gantt.date.date_to_str("%d %M");
+							var endDate = gantt.date.add(date, -6, "day");
+							var weekNum = gantt.date.date_to_str("%W")(date);
+							return "#" + weekNum + ", " + dateToStr(date) + " - " + dateToStr(endDate);
+						}},
+						{unit: "day", step: 1, format: "%j %D"}
+					]
+				},
+				// months
+				{
+					name:"month",
+					scale_height: 50,
+					scales:[
+						{unit: "month", step: 1, format: "%F, %Y"},
+						{unit: "week", step: 1, format: function (date) {
+							var dateToStr = gantt.date.date_to_str("%d %M");
+							var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
+							return dateToStr(date) + " - " + dateToStr(endDate);
+						}}
+					]
+				},
+				// quarters
+				{
+					name:"quarter",
+					height: 50,
+					scales:[
+						{
+							unit: "quarter", step: 3, format: function (date) {
+								var dateToStr = gantt.date.date_to_str("%M %y");
+								var endDate = gantt.date.add(gantt.date.add(date, 3, "month"), -1, "day");
+								return dateToStr(date) + " - " + dateToStr(endDate);
+							}
+						},
+						{unit: "month", step: 1, format: "%M"},
+					]
+				},
+				// years
+				{
+					name:"year",
+					scale_height: 50,
+					scales:[
+						{unit: "year", step: 5, format: function (date) {
+							var dateToStr = gantt.date.date_to_str("%Y");
+							var endDate = gantt.date.add(gantt.date.add(date, 5, "year"), -1, "day");
+							return dateToStr(date) + " - " + dateToStr(endDate);
+						}}
+					]
+				},
+				// decades
+				{
+					name:"year",
+					scale_height: 50,
+					scales:[
+						{unit: "year", step: 100, format: function (date) {
+							var dateToStr = gantt.date.date_to_str("%Y");
+							var endDate = gantt.date.add(gantt.date.add(date, 100, "year"), -1, "day");
+							return dateToStr(date) + " - " + dateToStr(endDate);
+						}},
+						{unit: "year", step: 10, format: function (date) {
+							var dateToStr = gantt.date.date_to_str("%Y");
+							var endDate = gantt.date.add(gantt.date.add(date, 10, "year"), -1, "day");
+							return dateToStr(date) + " - " + dateToStr(endDate);
+						}},
+					]
+				},
+			],
+			element: function(){
+				return gantt.$root.querySelector(".gantt_task");
+			}
+		};
+		
+		gantt.config.fit_tasks = true;
+	
+		gantt.config.cascade_delete = true;
+		gantt.ext.zoom.init(zoomConfig);
+	
+		gantt.ext.zoom.setLevel("day");
+	
+		gantt.$zoomToFit = false;
+	
+			gantt.init("gantt_here");
+		//gantt.parse(demo_tasks);
+	
+	*/
+	
+	
+	</script>
+       <script>
+		   var z = 0;
+
+		   // sidebar sidebar-right sidebar-animate sidebar-close
+		   // sidebar sidebar-right sidebar-animate sidebar-open
+			function setDerMenu(){
+			 // 	var v = document.getElementById("menu_derecha");
+			 // 	var v2 = document.getElementById("ver_menu");
+			 $("#td_id").attr('class', 'dropdown main-header-message right-toggle show');
+                if(z==0){
+					z=1;
+					$("#td_id").attr('class', 'dropdown main-header-message right-toggle show');
+			//	v.classList.add("sidebar-open");
+			//		v2.classList.add("show");
+				}
+				if(z==1){
+					z=0;
+					$("#td_id").attr('class', 'dropdown main-header-message right-toggle');
+			//		v.removeClass("sidebar-open");
+			//		v2.removeClass("show");
+				}
+				
+				
+			}
+			$('#vistas_previas').on('change', function() {
+  				let valores = this.value;
+				let arr = valores.split(',');  
+				let arr_int =[];
+				const color = new THREE.Vector4(1.0, 0.0, 0.0, 0.5);
+				for(let y=0; y<arr.length;y++){
+					let j = parseInt(''+arr[y]);
+					arr_int.push(j);
+				
+				}
+				
+  				
+				viewer.isolate(arr_int);
+				console.log(arr_int);
+        		viewer.fitToView(arr_int, viewer.model);
+});
+	   </script>
+
+	</body>
+	<style>
+		.sidebar .tabs-menu ul li {
+			width: 200px !important;
+			display: block;
+		}
+		.card-body {
+			flex: 1 1 auto !important;;
+			padding: -2.75rem !important;
+		
+		
+		}
+	</style>
+</html>

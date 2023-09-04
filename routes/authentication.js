@@ -626,6 +626,11 @@ router.get('/cambiar_password', isNotLoggedIn, async (req, res, next) => {
   res.render('cambiar_password');
 });
 
+
+router.post('/getOrdenesMaestroFierros', isNotLoggedIn, async (req, res, done) => {
+  const { password, password2, tokenId } = req.body;
+});
+
 router.post('/cambio_de_pass', isNotLoggedIn, async (req, res, done) => {
   const { password, password2, tokenId } = req.body;
   console.log("tokennuevo : " + tokenId);
@@ -1732,6 +1737,25 @@ router.post('/peso_nivel_1', isLoggedIn, async (req, res) => {
       console.log(error);
     } else {
       console.log("Registro peso nivel 1 Exitoso " + categorias.pesos_nivel);
+    }
+  });
+})
+
+
+
+//eliminarAsignacionInterna
+router.post('/eliminarAsignacionInterna', isLoggedIn, async (req, res) => {
+  const consulta= { namep } = req.body;
+  
+  //newUser.password = await helpers.encryptPassword(password);
+
+  await pool.query('DELETE FROM  proyectos_usuario WHERE  namep = "'+consulta.namep+'"', async (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(" PEDIDO eliminado");
+      console.log(consulta);
+     // res.redirect('/proyectos');
     }
   });
 })
