@@ -2203,6 +2203,7 @@ async function getValFiltro(filtro_name,urn){
                             dataActual.push(pesoActual);
                             MaestroFierros.push(dataActual);
                             pesoActual = 0;
+                            
                         //    console.log("VALOR ACTUAL MATRIZ LARGOS");
                          //   console.log(matriz_largos[h][pos_diametro]);
                         //    console.log(h);
