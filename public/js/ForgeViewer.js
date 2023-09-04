@@ -6,7 +6,7 @@ var urnAsignado;
 //var datos;
 var filtro1 = false;
 var filtro2 = false;
-
+var lista_vistas =[];
 
 var referencia2 = Array();
 var valor_fil1;
@@ -2902,27 +2902,37 @@ function revisaPrevisualizaciones(buscada){
   var q =  document.getElementById("id_seleccionados").value;
   var a = document.getElementById("nombre_objeto").value;
   console.log("Buscando Previsualizaciones 2");
-  jQuery.get({
-    url: '/prueba',
-    contentType: 'application/json',
-    success: function (res) {
-      console.log("RESULTADO GET VISTASasssss");
-      console.log(res);
-      
-    // console.log(typeof res);
-    // console.log(res.length);
-    // console.log(res[0]);
-   
-     for(let i =0 ; i<res.length;i++){
-      console.log(res[i].nombre);
+
+  if(lista_vistas.length ==0){
+    var formData = new FormData();
+      formData.append('nombre', a);
+      formData.append('ids', q);
+    
+      console.log("DATA NOMBRE");
+      console.log(a);
+      console.log("DATA IDS");
+      console.log(q);
+     
+      jQuery.post({
+        url: '/prueba',
+        contentType: 'application/json',
+        data:  JSON.stringify({ 'nombre': a, 'ids': q ,'urn':urnAsignado}),
+        success: function (res) {
+            loadPrevisualizaciones();
+        },
+      });
+
+  }else{
+    for(let i =0 ; i<lista_vistas.length;i++){
+      console.log(lista_vistas[i].nombre);
       console.log(buscada);
       console.log("///");
-       if(res[i].nombre == buscada){
+       if(lista_vistas[i].nombre == buscada){
         openNegacionVista();
        
        }
      // newCell2.appendChild(newText2);
-       if((i+1)==res.length && (res[i].nombre != buscada) ){
+       if((i+1)==lista_vistas.length && (lista_vistas[i].nombre != buscada) ){
         var formData = new FormData();
         formData.append('nombre', a);
         formData.append('ids', q);
@@ -2941,14 +2951,12 @@ function revisaPrevisualizaciones(buscada){
           },
         });
        }
- 
+  
      }
-    
-     
+  }
+ 
   
-  
-    },
-  });
+ 
 
 }
 function loadPrevisualizaciones(){
@@ -2962,14 +2970,15 @@ function loadPrevisualizaciones(){
     data:  JSON.stringify({ 'urn': ''+urnAsignado+'' }),
     success: function (res) {
       console.log("RESULTADO GET VISTASasssss1");
-     console.log(res);
+      lista_vistas = res;
+      console.log(res);
     // console.log(typeof res);
     // console.log(res.length);
     // console.log(res[0]);
     $('#vistas_previas').empty();
     $('#vistas_previas').append($('<option>', {value:'', text:'Seleccione'}));
    // $('#tabla_vistas').empty();
-     for(let i =0 ; i<res.length;i++){
+      for(let i =0 ; i<res.length;i++){
       
       $('#vistas_previas').append($('<option>', {value:res[i].ids, text:res[i].nombre}));
      
@@ -3036,31 +3045,16 @@ function openViewer(urn){
 
 }
 function cargarVista(){
-  
 
-  
   var q =  document.getElementById("id_seleccionados").value;
   var a = document.getElementById("nombre_objeto").value;
   
   setTimeout(() => {
-    revisaPrevisualizaciones(a)
-  }, 1000);
+    revisaPrevisualizaciones(a);
+  }, 2000);
  
  
-/*  $.ajax({
-    url: '/prueba',
-    data: JSON.stringify({ 'nombre': a, 'ids': q }),
-    dataType: 'application/json',
-    processData: true,
-   
-    type: 'POST',
-    success: function (data) {
-      console.log("RRESULTADO");
-      console.log(data);
-      $('#appBuckets').jstree(true).refresh_node(node);
-      _this.value = '';
-    }
-  });*/
+
 }
 
 function getModifiedWorldBoundingBox(fragIds, fragList) {
