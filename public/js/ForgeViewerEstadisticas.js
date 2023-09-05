@@ -2462,13 +2462,28 @@ const jj = await resultados;
                     lactual.push(matrizLargosDiametros[f][k]);
                     lactual.push(result[f][0]);
                     pedidosDiametros.push(lactual);
-                    pedDiametrosLargos[hw]= matrizLargosDiametros[f][k];
+                    console.log("Valor Actual Barra  4to");
+                    console.log(matrizLargosDiametros[f][k]);
+                    if(!( matrizLargosDiametros[f][k]=== undefined) && !(isNaN(matrizLargosDiametros[f][k]))){
+                      pedDiametrosLargos[hw]= matrizLargosDiametros[f][k];
+                    }else{
+                      pedDiametrosLargos[hw]= 0;
+                    }
+                    
+                  }
+                 
+                  if(!( result[f][0]=== undefined) && !( result[f][0] === NaN)){
+                    pedDiametrosLargos["y"]=result[f][0];
+                    console.log( pedDiametrosLargos);
+                    barraLargos.push(pedDiametrosLargos);
+                  }else{
+                    pedDiametrosLargos["y"]=0;
+                    console.log( pedDiametrosLargos);
+                    barraLargos.push(pedDiametrosLargos);
+
                   }
                  
                  
-                  pedDiametrosLargos["y"]=result[f][0];
-                  console.log( pedDiametrosLargos);
-                  barraLargos.push(pedDiametrosLargos);
                 }
            
                 console.log("BARRA LARGOS");
