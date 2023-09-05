@@ -2509,7 +2509,7 @@ const jj = await resultados;
          
         }
         
-      },15000);
+      },25000);
       
   })
 
