@@ -2489,8 +2489,8 @@ const jj = await resultados;
                 }
                 console.log(pedidosDiametros);
                 document.getElementById('morrisBar1').innerHTML ="";
-      //    console.log("DATOS MORRIS");
-        //   console.log(morrisData3)
+          console.log("CUARTO GRAFICO");
+         console.log(barraLargos);
               largosDiametro = barraLargos;
               new Morris.Bar({
                 element: 'morrisBar1',
@@ -2509,7 +2509,7 @@ const jj = await resultados;
          
         }
         
-      },85000);
+      },35000);
       
   })
 
