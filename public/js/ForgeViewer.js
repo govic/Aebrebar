@@ -429,8 +429,8 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
                 console.log("valor categoria actual: "+categoria_actual_obj); 
                 if(categoria_actual_obj==""+parametro_fierro+""){
                   console.log("CONTANDO PESOS VALOR DE LG "+contador_lg+ "VALOR LGB "+a);
-                  let peso = parseFloat(result.properties[82].displayValue);
-                  peso = peso.toFixed(2);
+                  let peso = parseFloat(result.properties[82].displayValue,1);
+                 
                       peso = Number.parseFloat(peso,2);
                   //peso = parseFloat(peso);
                   console.log("PESO BUSCADO");
@@ -694,7 +694,7 @@ if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
                 if(categoria_actual_obj==""+parametro_fierro+""){
                   console.log("CONTANDO PESOS VALOR DE LG "+contador_lg+ "VALOR LGB "+a);
                   let peso = parseFloat(result.properties[82].displayValue);
-                  peso = peso.toFixed(2);
+                 // peso = peso.toFixed(2);
                       peso = Number.parseFloat(peso,2);
                  // peso = parseFloat(peso);
                   console.log("PESO BUSCADO");
@@ -1579,9 +1579,9 @@ function filtro_visual(){
                   if( val_actual == "RS Peso Lineal (kg/m)"){
                  
                     console.log("ENTRO A PESO LINEAL");
-                    let peso = parseFloat(result.properties[t].displayValue);
-                    peso = peso.toFixed(2);
-                    peso = Number.parseFloat(peso,2);
+                    let peso = parseFloat(result.properties[t].displayValue,2);
+                   
+                   // peso = Number.parseFloat(peso,2);
                     console.log("ANTES PESO BUSCADO");
                     console.log(peso);
                     console.log(result.properties[t].displayValue);
@@ -1613,6 +1613,8 @@ function filtro_visual(){
                     console.log("convertido "+largo);
                     listado_largos = listado_largos+","+largo;
                     listado_pesos = listado_pesos + ","+peso;
+                    //console.log("listado pesos");
+                    //console.log(listado_pesos);
                     largoTotal = largoTotal+ largo;
                     largoTotal = largoTotal;
                     console.log( "SUMATORIA LARGO");
@@ -1637,7 +1639,7 @@ function filtro_visual(){
                       $("#largo_total_pedido").val(largoTotal.toFixed(0));
                       $("#peso_total_pedido").val(pesoTotal.toFixed(0));
                       $("#resultado_total_pedido").val(pesoTotal);
-                      document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
+                      document.getElementById('peso').innerHTML = '' +pesoTotal+ ' Kgs';
 
                       $("#listado_largo").val(listado_largos);
                       $("#listado_pesos").val(listado_pesos);
@@ -4605,9 +4607,9 @@ function launchViewer(urn) {
                             if( val_actual == "RS Peso Lineal (kg/m)"){
                            
                               console.log("ENTRO A PESO LINEAL");
-                              let peso = parseFloat(result2.properties[t].displayValue);
-                              peso = peso.toFixed(2);
-                              peso = Number.parseFloat(peso,2);
+                              let peso = parseFloat(result2.properties[t].displayValue,1);
+                            //  peso = peso.toFixed(2);
+                             // peso = Number.parseFloat(peso,2);
                               console.log("ANTES PESO BUSCADO");
                               console.log(peso);
                               console.log(result2.properties[t].displayValue);
@@ -4619,7 +4621,7 @@ function launchViewer(urn) {
                               console.log(peso);
                              
                           
-                          
+                               pesoTotal = pesoTotal+ peso;
                                pesoTotal  = parseFloat(pesoTotal,1);
                               
                                console.log( "SUMATORIA PESO");
@@ -5762,7 +5764,7 @@ function filtro_gantt_inicio( arreglo_filros){
               console.log("valor categoria actual: "+categoria_actual_obj);
               if(categoria_actual_obj==""+parametro_fierro+""){
                 let peso = parseFloat(result.properties[82].displayValue);
-                peso = peso.toFixed(2);
+                //peso = peso.toFixed(2);
                 peso = Number.parseFloat(peso,2);
                // peso = parseFloat(peso);
                 console.log("PESO BUSCADO");
@@ -6638,9 +6640,9 @@ function onDocumentLoadSuccess(doc) {
       var rowCount = tableRef.rows.length;
       var rowCountTotales = tableTotales.rows.length;
       var tableHeaderRowCount = 1;
-     
-      
-      
+      listado_pesos ="";
+      console.log("Listado Pesos antes");
+      console.log(listado_pesos);
       for (var i = tableHeaderRowCount; i < rowCount; i++) {
         tableRef.deleteRow(tableHeaderRowCount);
       }
@@ -6664,9 +6666,9 @@ function onDocumentLoadSuccess(doc) {
                   if( val_actual == "RS Peso Lineal (kg/m)"){
                  
                     console.log("ENTRO A PESO LINEAL");
-                    let peso = parseFloat(result.properties[t].displayValue);
-                    peso = peso.toFixed(2);
-                    peso = Number.parseFloat(peso,2);
+                    let peso = parseFloat(result.properties[t].displayValue,1);
+                //    peso = peso.toFixed(2);
+                    //peso = Number.parseFloat(peso,2);
                     console.log("ANTES PESO BUSCADO");
                     console.log(peso);
                     console.log(result.properties[t].displayValue);
@@ -6676,9 +6678,9 @@ function onDocumentLoadSuccess(doc) {
                     pesoActual = peso;
                     console.log("PESO BUSCADO");
                     console.log(peso);
+                    listado_pesos = listado_pesos+","+peso;
                    
-                
-                
+                     pesoTotal = peso + pesoTotal;
                      pesoTotal  = parseFloat(pesoTotal,1);
                     
                      console.log( "SUMATORIA PESO");
@@ -6697,7 +6699,9 @@ function onDocumentLoadSuccess(doc) {
                     largoActual = largo;
                     console.log("convertido "+largo);
                     listado_largos = listado_largos+","+largo;
-                    listado_pesos = listado_pesos + ","+peso;
+                   
+                    console.log("Listado pesos");
+                    console.log( listado_pesos);
                     largoTotal = largoTotal+ largo;
                     largoTotal = largoTotal;
                     console.log( "SUMATORIA LARGO");
@@ -6705,7 +6709,7 @@ function onDocumentLoadSuccess(doc) {
                     console.log( "Listado largos");
                     console.log(listado_largos);
                     //largoTotal  = parseFloat(largoTotal).toFixed(1);
-                    listado_pesos = listado_pesos +","+peso;
+                   // listado_pesos = listado_pesos +","+peso;
                     listado_largos = listado_largos +","+largo;
                     $("#listado_largo").val(listado_largos);
                     $("#listado_pesos").val(listado_pesos);
