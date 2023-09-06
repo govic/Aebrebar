@@ -1795,7 +1795,7 @@ router.post('/eliminarAsignacionInterna', isLoggedIn, async (req, res) => {
     } else {
       console.log(" PEDIDO eliminado");
       console.log(consulta);
-     // res.redirect('/proyectos');
+      res.redirect('/proyectos');
     }
   });
 })
@@ -1959,7 +1959,7 @@ router.post('/deleteOrdenes', isLoggedIn, async (req, res) => {
     } else {
       console.log(" PEDIDO eliminado");
       console.log(newSelect);
-
+      res.send("Ok Pedido Eliminado");
     }
   });
 })
