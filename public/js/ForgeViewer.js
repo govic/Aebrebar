@@ -2312,6 +2312,7 @@ function getOrdenes(){
 $list_pedidos = "";
   $fila = "";
   let cont=0;
+  $("#body_pedidos").empty()
      for(let r = 0; r<res.length; r++){
      //   ids_bd.push(Object.values(res[r]));
         $fila = "";
@@ -2762,21 +2763,21 @@ function set_clave(q){
   
                        //     console.log("PINTO VENCIDO");
   
-                            const color10 = new THREE.Vector4(0.9765,0.0549,0.0235, 1);
+                            const color10 = new THREE.Vector4(0.627,0,1, 1);
                             viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
                   
                           }else{
                             if(compara == -1|| compara ===  NaN){
                           //   boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
                            console.log("PINTO SIN FORMATO"); 
-                          const colorConFormato = new THREE.Vector4(0, 1,0.2, 1);
+                           const colorConFormato = new THREE.Vector4(1, 0.561,0, 1);
                               viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),colorConFormato, null,true);
                       
                             }else{
                               if(compara == 0){
                           //      console.log("PINTO HOY"); 
                               //  boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-                                const color10 = new THREE.Vector4(0.9451,0.9765,0.0235, 1);
+                                const color10 = new THREE.Vector4(0.09,1,1, 1);
                                 viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
           
       
@@ -2786,7 +2787,7 @@ function set_clave(q){
                                 console.log(compara);
                                 boton_fecha ="FECHA SIN FORMATO 1";
       
-                                const color10 = new THREE.Vector4(0.9765,0,0.2549, 1);
+                                const color10 = new THREE.Vector4(1, 0.561,0, 1);
                                 viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
                               
                               }
@@ -2795,7 +2796,8 @@ function set_clave(q){
                        
                         }
                         else{
-                          const color10 = new THREE.Vector4(0.9765,0.0549,0.0235, 1);
+                          // sin valor para hormigonado
+                          const color10 = new THREE.Vector4(0,1,0.961, 1);
                           viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
                       //    console.log("NO ENTRE A HORMIGONADO: "+  fecha_objeto);
                           activo_hormigonado = 0;
@@ -3859,6 +3861,7 @@ function launchViewer(urn) {
                     
                         fecha_hormigonado = result.properties[i].displayValue;
                         let elementos_fecha = fecha_hormigonado.split("/");
+                        let compara =55;
                         if(elementos_fecha.length<=1){
                            elementos_fecha = fecha_hormigonado.split("-");
                         }
@@ -3904,49 +3907,15 @@ function launchViewer(urn) {
                           if(compara == -1){
                             boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
           
-                        /*    gantt.parse({
-                              data: [
-                                  { id: 1, text: result.name, start_date: d3, duration: 5, progress: 0.4, open: true },
-                                  { id: 2, text: "Inicio", start_date: d3, duration: 1, progress: 0.6, parent: 1 }
-                              ],
-                              links: [
-                                  {id: 1, source: 1, target: 2, type: "1"},
-                                  
-                              ]
-                          });
-          
-          */
+             
                           }else{
                             if(compara == 0){
                               boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-          /*
-                              gantt.parse({
-                                data: [
-                                    { id: 1, text: result.name, start_date: d3, duration: 5, progress: 0.4, open: true },
-                                    { id: 2, text: "Inicio", start_date: d3, duration: 1, progress: 0.6, parent: 1 }
-                                ],
-                                links: [
-                                    {id: 1, source: 1, target: 2, type: "1"},
-                                    
-                                ]
-                            });
-          */
-          
+         
                             }
                             else{
                               boton_fecha ="FECHA SIN FORMATO 2";
-                              /*
-                              gantt.parse({
-                                data: [
-                                    { id: 1, text: "Seleccione Un objeto", start_date: "25-05-2021", duration:1, progress: 0.4, open: true },
-                                    { id: 2, text: "Inicio", start_date: "25-05-2021", duration: 1, progress: 0.6, parent: 1 }
-                                ],
-                                links: [
-                                    {id: 1, source: 1, target: 2, type: "1"}
-                                  
-                                ]
-                            });
-                            */
+                       
                             }
                           }
                         }
