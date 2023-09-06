@@ -2297,6 +2297,7 @@ function getOrdenes(){
   fecha_pedidos =[];
   console.log("URN PREVIO CARGA");
   console.log(urn_usada);
+  $("#body_pedidos").empty()
   jQuery.get({
     url: '/getOrdenes',
     contentType: 'application/json',
@@ -2312,7 +2313,7 @@ function getOrdenes(){
 $list_pedidos = "";
   $fila = "";
   let cont=0;
-  $("#body_pedidos").empty()
+  
      for(let r = 0; r<res.length; r++){
      //   ids_bd.push(Object.values(res[r]));
         $fila = "";
