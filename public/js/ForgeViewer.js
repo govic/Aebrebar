@@ -431,7 +431,7 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
                   console.log("CONTANDO PESOS VALOR DE LG "+contador_lg+ "VALOR LGB "+a);
                   let peso = parseFloat(result.properties[82].displayValue,1);
                  
-                      peso = Number.parseFloat(peso,2);
+                     
                   //peso = parseFloat(peso);
                   console.log("PESO BUSCADO");
                   console.log(peso);
@@ -693,9 +693,9 @@ if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
                 console.log("valor categoria actual: "+categoria_actual_obj); 
                 if(categoria_actual_obj==""+parametro_fierro+""){
                   console.log("CONTANDO PESOS VALOR DE LG "+contador_lg+ "VALOR LGB "+a);
-                  let peso = parseFloat(result.properties[82].displayValue);
+                  let peso = parseFloat(result.properties[82].displayValue,1);
                  // peso = peso.toFixed(2);
-                      peso = Number.parseFloat(peso,2);
+                 //     peso = Number.parseFloat(peso,2);
                  // peso = parseFloat(peso);
                   console.log("PESO BUSCADO");
                   console.log(peso);
@@ -1279,9 +1279,8 @@ function filtro_visual(){
                    
                       console.log("ENTRO A PESO LINEAL");
                       let peso = parseFloat(result.properties[t].displayValue);
-                    //  peso = peso.toFixed(2);
-                  //    peso = Number.parseFloat(peso,2);
-                      console.log("ANTES PESO BUSCADO");
+                  
+                      console.log("ANTES PESO BUSCADO2");
                       console.log(peso);
                       //console.log(result.properties[t].displayValue);
                       console.log(result);
@@ -1320,7 +1319,7 @@ function filtro_visual(){
                       console.log( "Listado largos");
                       console.log(listado_largos);
                       //largoTotal  = parseFloat(largoTotal).toFixed(1);
-                      listado_pesos = listado_pesos +","+peso;
+                  
                       listado_largos = listado_largos +","+largo;
                       $("#listado_largo").val(listado_largos);
                       $("#listado_pesos").val(listado_pesos);
@@ -1562,7 +1561,7 @@ function filtro_visual(){
       }
       for(var a=0; a< identificadores.length;a++){
         let actual =  identificadores[a];
-        
+        listado_pesos = "";
         viewer.getProperties( identificadores[a], (result) => { 
          
           for(i=0 ;i< 60;i++){
@@ -1580,12 +1579,14 @@ function filtro_visual(){
                  
                     console.log("ENTRO A PESO LINEAL");
                     let peso = parseFloat(result.properties[t].displayValue,2);
-                   
-                   // peso = Number.parseFloat(peso,2);
-                    console.log("ANTES PESO BUSCADO");
                     console.log(peso);
-                    console.log(result.properties[t].displayValue);
-                    console.log(result);
+                    listado_pesos = listado_pesos + ","+peso;
+                    console.log(listado_pesos);
+                    $("#listado_pesos").val(listado_pesos);
+                   // peso = Number.parseFloat(peso,2);
+                    console.log("ANTES PESO BUSCADO3");
+                    console.log(peso);
+                 
                     
                    // peso = parseFloat(peso);
                     pesoActual = peso;
@@ -1593,7 +1594,7 @@ function filtro_visual(){
                     console.log(peso);
                    
                 
-                
+                    pesoTotal =pesoTotal + peso;
                     pesoTotal  = parseFloat(pesoTotal,1);
                     
                      console.log( "SUMATORIA PESO");
@@ -1612,7 +1613,7 @@ function filtro_visual(){
                     largoActual = largo;
                     console.log("convertido "+largo);
                     listado_largos = listado_largos+","+largo;
-                    listado_pesos = listado_pesos + ","+peso;
+                  
                     //console.log("listado pesos");
                     //console.log(listado_pesos);
                     largoTotal = largoTotal+ largo;
@@ -1623,9 +1624,10 @@ function filtro_visual(){
                     console.log(listado_largos);
                     //largoTotal  = parseFloat(largoTotal).toFixed(1);
                     listado_pesos = listado_pesos +","+peso;
+              
                     listado_largos = listado_largos +","+largo;
                     $("#listado_largo").val(listado_largos);
-                    $("#listado_pesos").val(listado_pesos);
+                    
                     document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(1)+ ' mtrs';
                    
                   }
@@ -2168,10 +2170,10 @@ function eliminar_orden(indice){
     contentType: 'application/json',
     data:  JSON.stringify({ 'ids': id_pedidos_guardados[indice] }),
     success: function (res) {
-    
+      getOrdenes();
     },
   }); 
-  getOrdenes();
+ 
 }
 function pintar_all_orden(){
   var general_ordenes = [];
@@ -2292,12 +2294,13 @@ console.log(id_pedidos_guardados[indice]);
  
 }
 function getOrdenes(){
+  $("#body_pedidos").empty();
   id_pedidos_guardados = [];
   nombre_pedidos = [];
   fecha_pedidos =[];
   console.log("URN PREVIO CARGA");
   console.log(urn_usada);
-  $("#body_pedidos").empty()
+  
   jQuery.get({
     url: '/getOrdenes',
     contentType: 'application/json',
@@ -4578,9 +4581,10 @@ function launchViewer(urn) {
                            
                               console.log("ENTRO A PESO LINEAL");
                               let peso = parseFloat(result2.properties[t].displayValue,1);
-                            //  peso = peso.toFixed(2);
-                             // peso = Number.parseFloat(peso,2);
-                              console.log("ANTES PESO BUSCADO");
+                              listado_pesos = listado_pesos + ","+peso;
+                              $("#listado_pesos").val(listado_pesos);
+                           
+                              console.log("ANTES PESO BUSCADO2");
                               console.log(peso);
                               console.log(result2.properties[t].displayValue);
                               console.log(result2);
@@ -4610,7 +4614,7 @@ function launchViewer(urn) {
                               largoActual = largo;
                               console.log("convertido "+largo);
                               listado_largos = listado_largos+","+largo;
-                              listado_pesos = listado_pesos + ","+peso;
+                             
                               largoTotal = largoTotal+ largo;
                              // largoTotal = largoTotal;
                               console.log( "SUMATORIA LARGO");
@@ -4618,10 +4622,10 @@ function launchViewer(urn) {
                               console.log( "Listado largos");
                               console.log(listado_largos);
                               //largoTotal  = parseFloat(largoTotal).toFixed(1);
-                              listado_pesos = listado_pesos +","+peso;
+                             // listado_pesos = listado_pesos +","+peso;
                               listado_largos = listado_largos +","+largo;
                               $("#listado_largo").val(listado_largos);
-                              $("#listado_pesos").val(listado_pesos);
+                           //   $("#listado_pesos").val(listado_pesos);
                               document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(1)+ ' mtrs';
                              
                             }
@@ -4638,7 +4642,7 @@ function launchViewer(urn) {
                                 document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
                   
                                 $("#listado_largo").val(listado_largos);
-                                $("#listado_pesos").val(listado_pesos);
+                              
                                 //console.log( "Resultado Multiplicación");
                               // console.log( resultado_mul);
                             
@@ -5735,7 +5739,7 @@ function filtro_gantt_inicio( arreglo_filros){
               if(categoria_actual_obj==""+parametro_fierro+""){
                 let peso = parseFloat(result.properties[82].displayValue);
                 //peso = peso.toFixed(2);
-                peso = Number.parseFloat(peso,2);
+               
                // peso = parseFloat(peso);
                 console.log("PESO BUSCADO");
                 console.log(peso);
