@@ -53,6 +53,10 @@ $(document).ready(function () {
           $("#notificaciones").empty();
           $("#notificaciones").html("Archivo " + "subido exitosamente");
           _this.value = '';
+         
+
+          callProyectosSeleccion();
+          location.reload();
 
         },error:function(res){
             console.log("ERROR AL SUBIR");
@@ -285,8 +289,10 @@ function prepareAppBucketTree() {
   //console.log('Pasé por la carga');
   var k = [];
   var i;
-  pruebafun();
-  function pruebafun() {
+  p1();
+  
+  
+  function p1() {
 
 
     $.ajax({
@@ -528,8 +534,8 @@ function borradoInterno(nombreProyecto){
     contentType: 'application/json',
     data: JSON.stringify({ 'namep':nombreProyecto}),
     success: function (res) {
-       window.location.href = window.location.href;
-    },error:function(err){   window.location.href = window.location.href;}
+        location.reload();
+    },error:function(err){   location.reload();}
   });
 }
 function deleteObject(node) {
@@ -588,7 +594,8 @@ function deleteFile(node) {
         prepareAppBucketTree();
         borradoInterno(objectKey);
         $("#forgeViewer").empty();
-        window.location.href = window.location.href;
+        callProyectosSeleccion();
+        location.reload();
       }
     });
 
