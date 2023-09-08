@@ -2571,7 +2571,7 @@ const jj = await resultados;
      //     console.log(diametrosTotal[f]);
         }
         dn['value'] = cont.toFixed(1);
-        pesoNivelActual[valores[g]] = cont.toFixed(1);
+        pesoNivelActual['peso'] = cont.toFixed(1);
 
         dataPesosDiametros.push(ww1);
         dataPesoActual.push(cont.toFixed(1));
@@ -2675,8 +2675,8 @@ const jj = await resultados;
       element: 'morrisDonut1',
       data: barraPesosNivel,
       xkey: 'y',
-      ykeys: valores,
-      labels: valores,
+      ykeys: ['peso'],
+      labels: ['peso'],
       barColors: ['#338AFF','#5833FF','#382F61', '#0D7CF3','#36107D','#041BFC','#33FFAC','#33CEFF','#FF4C33'],
       stacked: true,
       gridTextSize: 11,
