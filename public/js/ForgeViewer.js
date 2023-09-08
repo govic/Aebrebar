@@ -2660,6 +2660,7 @@ function set_clave(q){
 
       }
       if(d== "2"){
+        prederDivColores();
         console.log("ELEMENTOS VENCIDOS");
         if(keys.length == 0 && keys){
          
@@ -2820,6 +2821,9 @@ function set_clave(q){
 
                           fecha_hormigonado = fecha_plan;
                           let elementos_fecha = fecha_hormigonado.split("/");
+                          if(elementos_fecha.length != 3){
+                            elementos_fecha = fecha_hormigonado.split("-");
+                          }
                           console.log("FECHA HORMIGONADO PRECONSULTA: "+elementos_fecha);
                           var today = new Date();
                           var dd = String(today.getDate()).padStart(2, '0');

@@ -70,7 +70,7 @@
 	#mydiv {
 		position: absolute;
 		z-index: 9;
-		max-width: 450px;
+		max-width: 650px;
 		max-height:900px ;
 		background-color: #ffffff;
 		border: 1px solid #d3d3d3;
@@ -85,6 +85,19 @@
 		z-index: 10;
 		background-color: #f4b40c;
 		color: #fff;
+		}
+
+		#divColores{
+		position: absolute;
+		z-index: 9;
+		max-width: 750px;
+		max-height:400px ;
+		background-color: #ffffff;
+		border: 1px solid #d3d3d3;
+		text-align: justify;
+		bottom:100px;
+		left:255px;
+		visibility:hidden;
 		}
  </style>
  <script>
@@ -143,6 +156,13 @@ function apagarDiv(){
 function prenderDiv(){
 	console.log("VISIBLE");
 	document.getElementById("mydiv").style.visibility = 'visible';
+}
+function prederDivColores(){
+	console.log("VISIBLE");
+	document.getElementById("divColores").style.visibility = 'visible';
+}
+function apagarDivColores(){
+	document.getElementById("divColores").style.visibility = 'hidden';
 }
 
  </script>
@@ -466,6 +486,37 @@ function prenderDiv(){
 					  </div>
 				
 			
+
+					  <div id="divColores">
+						<!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+						<div id="mydivheader">
+							<div class="row">
+								<div class="col-6">Estados  </div>
+								
+								<div class="col-6"><button class="btn btn-primary " style="right:0px !important;" onclick="apagarDivColores();" ><i class="si si-close"></i></button></div></div>
+							</div>
+							
+						<div class="row">
+							<div class="col-12">
+								<div class="d-flex justify-content-between" >
+		
+									<div class="listgroup-example ">
+										<ul class="list-group" id="">
+											<li><input type="color" value="#FC0404" disabled/> : Elemento Vencido</li>
+											<li><input type="color" value="#FCBC04" disabled/> : Instalado día del plan</li>
+											<li><input type="color" value="#0440FC" disabled/> :  Instalado antes de plan</li>
+											<li><input type="color" value="#04FCF4" disabled/> :  Sin Fecha</li>
+											<li><input type="color" value="#F1FC04" disabled/> :  Sin Formato</li>
+										</ul>
+										
+									</div>
+								</div>
+							</div>
+					
+							<br>
+						
+						</div>
+					  </div>
 					<!-- /breadcrumb -->
 
 		
