@@ -11,7 +11,10 @@ function consulta_filtro(filtros){
                 
                 if(element.properties.length == 1){
                    let key = element.properties[0].displayValue;
-                   //  console.log("valor propiedad"+ element.properties[0].displayValue);
+                //        console.log("valor propiedad");
+                 //       console.log("Orden");
+          
+                //       console.log(element.properties[0].displayValue);
 
                     if (key in data) {
                         data[key].cantidad++;
@@ -57,6 +60,47 @@ function consulta_filtro(filtros){
         });
     });
 }
+function consulta_filtro3(filtros){
+    return new Promise((resolve, reject) => {
+        
+        viewer.model.getBulkProperties([], filtros, (result) => {
+            console.log("RESULTADO DE NIVELES");
+            console.log(result);
+            let test = result.filter(x => x.properties.length===filtros.length  );
+            let data = {};
+            test.forEach(element => {
+               // console.log("LONGITUD"+element.properties.length);
+                
+                if(element.properties.length == 1 && element.properties[0].displayValue=='Revit Level'){
+                   let key = element.properties[0].displayValue;
+                //        console.log("valor propiedad");
+                 //       console.log("Orden");
+          
+                //       console.log(element.properties[0].displayValue);
+
+                    if (key in data) {
+                        data[key].cantidad++;
+                        data[key].dbIds.push(element.dbId);
+                    } else {
+                        let a = {
+                            cantidad: 1,
+                            dbIds: []
+                        }
+                        a.dbIds.push(element.dbId);
+                        data[key] = a;
+                    }
+                }
+
+            
+                
+            });
+            resolve(data);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
+
 
 function busquedaElemento(elemento, arreglo){
     for(var j = 0; j<arreglo.length;j++){
@@ -67,22 +111,22 @@ function busquedaElemento(elemento, arreglo){
 }
 
 function consulta_filtro2(filtros){
-    console.log("filtros properties antes");
-            console.log(filtros);
+   //    console.log("filtros properties antes");
+         //   console.log(filtros);
     return new Promise((resolve, reject) => {
         
         viewer.model.getBulkProperties([], filtros, (result) => {
-            console.log("filtros properties interior");
-            console.log(filtros);
-            console.log(result);
+        //       console.log("filtros properties interior");
+        //       console.log(filtros);
+       //        console.log(result);
             let test = result.filter(x => x.properties.length===filtros.length);
             let data = {};
             test.forEach(element => {
-                console.log("LONGITUD"+element.properties.length);
+        //           console.log("LONGITUD"+element.properties.length);
                 
                 if(element.properties.length == 1){
                    let key = element.properties[0].displayValue;
-                     console.log("valor propiedad"+ element.properties[0].displayValue);
+         //               console.log("valor propiedad"+ element.properties[0].displayValue);
 
                     if (key in data) {
                         data[key].cantidad++;
@@ -102,8 +146,8 @@ function consulta_filtro2(filtros){
                    // if(element.properties[0].displayValue === valor_fil1 && element.properties[1].displayValue === valor_fil2){
                    if(busquedaElemento(element.properties[0].displayValue,filtros_selec_ha)&&busquedaElemento(element.properties[1].displayValue,filtros_selec_piso) ){  
                    let key  = element.properties[0].displayValue;
-                   console.log("ELEMENTO");
-                   console.log(element);
+            //          console.log("ELEMENTO");
+            //          console.log(element);
                     //console.log("valor propiedad 1"+ element.properties[0].displayValue);
                     //console.log("valor propiedad 2"+ element.properties[1].displayValue);
 
@@ -149,7 +193,6 @@ function consulta_filtro2(filtros){
         });
     });
 }
-
 
 function consulta_filtro_fechas(filtros){
     return new Promise((resolve, reject) => {
@@ -228,3 +271,4 @@ function consulta_filtro_fechas(filtros){
         });
     });
 }
+
