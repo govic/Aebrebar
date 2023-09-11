@@ -1,5 +1,7 @@
 var viewer;
+var iniciado = 0;
 var regex = /(\d+)/g;
+var nivelesOrdenados = [];
 var filtro_a;
 var pedidosTotalarr =[];
 var resultadoCVS = [];
@@ -1959,13 +1961,100 @@ async function getOrdenes(urn){
 function comparar(a, b) {
   return a - b;
 }
+
+function numberPar (arrayNumbers){
+  let newArray = [];
+  let max = arrayNumbers[0];
+
+  for(let i = 0; i < arrayNumbers.length; i+= 2){
+      newArray.push(arrayNumbers[i]* arrayNumbers[i])
+      
+  }
+  
+  let dataLen = newArray.length;
+  //console.log("dataLen",dataLen);
+  for(let i=0; i < dataLen; i++){
+    for(let j=0; j < dataLen; j++){
+      if(j+1 !== dataLen){
+        if(newArray[j] > newArray[j+1]){
+          let swapElement = newArray[j+1];
+          newArray[j+1] = newArray[j];
+          newArray[j] = swapElement;
+        }
+      }  
+    }
+  }
+  //console.log(newArray)
+  return newArray;
+}
+function comparar(a, b) {
+  return a - b;
+}
 async function getValFiltro(filtro_name,urn){
 
   let filtrado = [filtro_name];
   let arr_resp = [];
+  let arr_resp2 = [];
+ 
   var referencia =[];
     referencia2 = [];
+  let elevaciones = [];
+  let nivelesDisponibles = new Promise((resolve, reject) => {
+    nivelesOrdenados =[];
+    consulta_filtro3(['Category']).then((data) => {
+      
+      let keys = Object.values(data);
+      let datos = keys;
+      console.log("NOMBRES CATEGORIAS");
+      console.log(data);
+      console.log("NOMBRES CATEGORIAS2");
+      console.log(keys);
+      console.log(keys[0]['dbIds']);
+  
+      for (let i = 0; i < keys[0]['dbIds'].length; i++) {
+        viewer.getProperties(keys[0]['dbIds'][i], (result) => {
+          let actual = [];
+          console.log("Propiedades de nivel");
+          for (let i = 0; i < 10; i++) {
+          
+            if(result.properties[i].displayName== "Elevation"){
+              actual.push(result.name);
+              
+              let a = parseInt(result.properties[i].displayValue);
+              actual.push(a);
+              elevaciones.push(a);
+              
+            }
+            if((i+1) == 10){
+              arr_resp2.push(actual);
+              elevaciones.sort((a, b) => a - b);
+              arr_resp2.sort((a, b) => a - b);
+            }
+          }
+          console.log(result);
+          elevaciones.sort((a, b) => a - b);
+          arr_resp2.sort((a, b) => a - b);
+        })
+         
+      }
+      // inserta opciones de filtro  para AEC PARTICIÓN HA
+      console.log("VALORES AEC PISO 2023! PRE CONSULTAS2023");
+      console.log(arr_resp2);
+     
+      
+      console.log(elevaciones);
+      console.log(Math.min(Object.values(elevaciones)));
+      console.log(typeof elevaciones[10]);
+      console.log(typeof elevaciones);
     
+      
+          // filtro_a = arr_resp;
+      resolve([arr_resp2,elevaciones]);},(error) => {
+        reject(error);
+});
+
+
+  });
   let filtros = new Promise((resolve, reject) => {
         consulta_filtro(filtrado).then((data) => {
           let keys = Object.keys(data);
@@ -1975,7 +2064,9 @@ async function getValFiltro(filtro_name,urn){
           var i;
         
           for (let i = 0; i < datos.length; i++) {
-            arr_resp.push(datos[i]) ;
+            if(datos[i] != ""){
+               arr_resp.push(datos[i]) ;
+            }
           }
           // inserta opciones de filtro  para AEC PARTICIÓN HA
           console.log("VALORES AEC PISO 2023! PRE CONSULTAS");
@@ -2008,25 +2099,56 @@ async function getValFiltro(filtro_name,urn){
 
    
   var valores = await filtros;
+  var valores2 = await nivelesDisponibles;
   var diametrosTotal = await diametros;
+
+  console.log("elevaciones ordenado");
+  console.log(valores.length);
+  console.log(diametros.length);
+
+ 
+
+  
+  console.log("NIVELES ORDENADOS!!");
+  console.log(nivelesOrdenados);
+ 
+
+  
+
+  //var nivelesRevit = 
+  console.log("Valores niveles");
+  console.log(valores);
+ 
   diametrosTotal.sort(comparar);
   var resultado_ids = [];
   console.log("Diametros 1");
   console.log(diametrosTotal);
   console.log("Pisos 1");
   console.log(valores);
-  valores.sort();
+ 
   console.log(valores);
   var posicion_actual =0;
   let resultados = new Promise((resolve, reject) => {
   var matriz_resultados=[];
-
-
-  
-
-
-
-  for(let p = 0; p<valores.length;p++){
+   setTimeout(function(){
+    for(let d = 0; d<valores.length; d++){
+      console.log("nivel ordenado");
+      console.log(valores2[1]);
+      console.log(valores2[0]);
+      let act = valores2[1][d];
+      for(let g =0;g<valores.length;g++){
+        console.log("valor actual ordenamiento");
+          console.log(valores2[0][g][1]);
+          console.log(valores2[0][g]);
+           if(valores2[0][g][1] ==act ){
+             nivelesOrdenados.push(valores2[0][g][0]);
+             break;
+           }
+       }
+   
+   
+     }
+     for(let p = 0; p<valores.length;p++){
       let diametros_barras = [];
       for(let r =0; r<diametrosTotal.length;r++){
         diametros_barras.push(0);
@@ -2060,9 +2182,11 @@ async function getValFiltro(filtro_name,urn){
   console.log("dimensiones");
   console.log(valores.length+"  "+diametrosTotal.length);
   
+
+
   for(let h=0; h<valores.length;h++){
     if( valores[h] !=""){
-        let valorFiltro = [valores[h]];
+        let valorFiltro = [nivelesOrdenados[h]];
         console.log("PREGUNTA _"+h);
         console.log(valorFiltro);
         console.log("parametro nivel");
@@ -2243,14 +2367,22 @@ async function getValFiltro(filtro_name,urn){
     }
   
   }
+  
+  }, 35000);
+
+ 
 // Piso / d1,d2,...,dn
  //   console.log("resuelve ");
   resolve(matriz_resultados);},(error) => { 
   reject(error);
    });
 
-  
+   setTimeout(() => {
+
+   },36000);
 const jj = await resultados;
+console.log("Matriz resultados niveles");
+console.log(jj);
 // jj matriz de resutados
 // valores arreglo de nombres-piso
 // diametros arregle de diametros por proyecto
@@ -2548,11 +2680,11 @@ const jj = await resultados;
       let pesoNivelActual ={};
 
       if(valores[g] !=""){
-        pesoNivelActual['y'] = valores[g];
+        pesoNivelActual['y'] = nivelesOrdenados[g];
        
-        qj['y'] = valores[g];
-        dn['label'] = valores[g];
-        dataPesoActual.push(valores[g]);
+        qj['y'] = nivelesOrdenados[g];
+        dn['label'] = nivelesOrdenados[g];
+        dataPesoActual.push(nivelesOrdenados[g]);
         let cont = 0;
         let ww1 = [];
         
@@ -2561,7 +2693,7 @@ const jj = await resultados;
           qj[diametrosTotal[f]]= jj[g][f].toFixed(1);
 
 
-          ww.push(valores[g]);
+          ww.push(nivelesOrdenados[g]);
           ww.push(diametrosTotal[f]);
           ww.push(jj[g][f].toFixed(1));
           ww1.push(ww);
@@ -2700,7 +2832,7 @@ resultadoPesosDiametros = morrisData3;
 
   document.getElementById("precarga").style.display = "none";
 
-  }, 35000);
+  },65000);
 
   
 
@@ -2738,6 +2870,7 @@ function generaGrafico(pisos){
 }
 
  function launchViewer(urn) {
+  
   var options = {
     env: 'AutodeskProduction',
     getAccessToken: getForgeToken
@@ -2747,6 +2880,8 @@ function generaGrafico(pisos){
     
     viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser', 'HandleSelectionExtension'] });
     viewer.start();
+    
+
     //cargarProyecto();
     
     var documentId = 'urn:' + urn;
@@ -2762,7 +2897,7 @@ function generaGrafico(pisos){
      // loadPrevisualizaciones();
    //   getDBIds();
  //     getPlanObj();
- console.log("Entro 1 vez");
+       console.log("Entro 1 vez");
         getValFiltro(parametro_nivel,urn);
        // getOrdenes(urn)
    //getOrdenesTotalPedidos(urn);
@@ -4075,34 +4210,10 @@ function quitar_filtros(){
  // gantt.init("gantt_here");
   //location.reload();
 
-  /* gantt.config.columns = [
-        {name: "text", tree: true, width: 180, resize: true},
-        {name: "start_date", align: "center", resize: true},
-        {name: "duration", align: "center"},
-        {name: "buttons", label: "Actions", width: 120, template: function(task){
-          var buttons = 
-          '<input type=button value="Filtrar" onclick=seleccion_modelo('+task.id+')>';
-          return buttons; 
-        }}
-      ];*/
-  /*    gantt.parse({
-        "data": [
-          {"id": 11, "text": "PROYECTO", type: gantt.config.types.project, "progress": 0.6, "open": true},
-          {"id": 13, "text": "Walls", "start_date": "01-04-2021",  type: gantt.config.types.project,"parent": "11", "progress": 1, "open": true},
-          {"id": 14, "text": "Columns", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-          {"id": 15, "text": "Framing", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-          {"id": 20, "text": "Foundation - Wall", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-          {"id": 21, "text": "Foundation - Aislada", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-          {"id": 22, "text": "Foundation - Slab", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-          {"id": 23, "text": "Floors", "start_date": "01-04-2021",  type: gantt.config.types.project, "parent": "11", "progress": 1, "open": true},
-        ]
-      });*/
+ 
       console.log("CLEAR !!");
     
-    //  document.getElementById('largo').innerHTML = '';
-    //  document.getElementById('acum').innerHTML = '' ;
-    //  document.getElementById('peso').innerHTML = '' ;
-     // document.getElementById('btn').innerHTML = '' ;
+
       
       var tableHeaderRowCount = 1;
       var tableRef = document.getElementById('tabla_fierro');
