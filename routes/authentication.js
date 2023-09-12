@@ -848,15 +848,15 @@ router.get('/getUsers',isLoggedIn,async (req,res,next)=>{
     // console.log( datavista );
   }
 })
-router.get('/listaDBIDSPlan', isLoggedIn, async (req, res, next) => {
+router.post('/listaDBIDSPlan', isLoggedIn, async (req, res, next) => {
   idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   // console.log(rows2[0].fullname);
   req.session.passport.user.fullname = rows2[0].fullname;
   var nom = req.session.passport.user.fullname;
   //guardo los datos de la tabla en datavista
-  const { nombre, ids } = req.body;
-  const datavista = await pool.query('SELECT * FROM plan WHERE fecha_plan != "" ');
+  const { urn } = req.body;
+  const datavista = await pool.query('SELECT * FROM plan WHERE fecha_plan != "" AND urn LIKE "'+urn+'"');
   if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.send(datavista);
     // console.log( "GET IDS PLAN" );
@@ -881,10 +881,11 @@ router.post('/insertDBIDS', isLoggedIn, async (req, res, next) => {
 
 
   //guardo los datos de la tabla en datavista
-  const { fecha_plan, fecha_base, dbId } = req.body;
+  const { fecha_plan, fecha_base, dbId,urn } = req.body;
 
-  const insertPlan = { dbId, fecha_plan, fecha_base };
+  const insertPlan = { dbId, fecha_plan, fecha_base,urn };
 
+console.log("llega urn");
 
   await pool.query('INSERT INTO  plan set ?', [insertPlan], async (error, results) => {
     if (error) {
@@ -936,6 +937,8 @@ router.post('/transferenciaDatos', isLoggedIn, async (req, res, next) => {
 });
 
 router.post('/updateDBIDS', isLoggedIn, async (req, res, next) => {
+
+
   idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
    await pool.query('UPDATE pedido set ? WHERE dbId = ?', [updatePlan, i], async (error, results) => {
@@ -950,14 +953,14 @@ router.post('/updateDBIDS', isLoggedIn, async (req, res, next) => {
 
   //guardo los datos de la tabla en datavista
 
-  const { fecha_plan, fecha_base, dbId } = req.body;
+  const { fecha_plan, fecha_base, dbId,urn } = req.body;
   let i = parseInt('' + dbId, 0);
 
   const updatePlan = { fecha_plan, fecha_base };
   console.log('ENVIO UPDATE');
   console.log(req.body);
   if (req.session.passport.user.tipoUsuario == "Administrador") {
-    await pool.query('UPDATE plan set ? WHERE dbId = ?', [updatePlan, i], async (error, results) => {
+    await pool.query('UPDATE plan set fecha_base='+fecha_base+', fecha_plan ='+fecha_plan+' WHERE dbId ='+i+' AND urn LIKE "'+urn+'"', async (error, results) => {
       if (error) {
         console.log(error);
       } else {

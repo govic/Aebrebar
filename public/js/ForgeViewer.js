@@ -87,9 +87,10 @@ function consultaPlan(idBuscado){
 function getPlanObj(){
  // ids_plan = [];
   ids_plan.splice(0, ids_plan.length);
-  jQuery.get({
+  jQuery.post({
     url: '/listaDBIDSPlan',
     contentType: 'application/json',
+    data:  JSON.stringify({ 'urn':''+urnAsignado }),
     success: function (res) {
       console.log("RESULTADO Get server");
      console.log(res);
@@ -219,11 +220,11 @@ function getDBIds(){
 }
 
 function getDBIds_update(plan,base,id){
-
+  
   jQuery.post({
     url: '/updateDBIDS',
     contentType: 'application/json',
-    data:  JSON.stringify({ 'fecha_plan': ''+plan+'','fecha_base':''+base+'', 'dbId': ''+id+'' }),
+    data:  JSON.stringify({ 'fecha_plan': ''+plan+'','fecha_base':''+base+'', 'dbId': ''+id+'','urn':''+urnAsignado }),
     success: function (res) {
       console.log('RESULTADO UPDATE BD');
       console.log(res);
@@ -241,10 +242,11 @@ function getDBIds_update(plan,base,id){
 }
 
 function getDBIds_insert(plan,base,id){
+
   jQuery.post({
     url: '/insertDBIDS',
     contentType: 'application/json',
-    data:  JSON.stringify({ 'fecha_plan': ''+plan+'','fecha_base':''+base+'', 'dbId': ''+id+'' }),
+    data:  JSON.stringify({ 'fecha_plan': ''+plan+'','fecha_base':''+base+'', 'dbId': ''+id+'','urn':''+urnAsignado }),
     success: function (res) {
       console.log('RESULTADO UPDATE BD');
       console.log(res);
