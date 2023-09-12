@@ -2016,8 +2016,8 @@ async function getValFiltro(filtro_name,urn){
           let actual = [];
           console.log("Propiedades de nivel");
           for (let i = 0; i < 10; i++) {
-          
-            if(result.properties[i].displayName== "Elevation"){
+            
+            if(result.properties[i].displayName == "Elevation"){
               actual.push(result.name);
               
               let a = parseInt(result.properties[i].displayValue);
@@ -2109,8 +2109,7 @@ async function getValFiltro(filtro_name,urn){
  
 
   
-  console.log("NIVELES ORDENADOS!!");
-  console.log(nivelesOrdenados);
+
  
 
   
@@ -2131,23 +2130,32 @@ async function getValFiltro(filtro_name,urn){
   let resultados = new Promise((resolve, reject) => {
   var matriz_resultados=[];
    setTimeout(function(){
-    for(let d = 0; d<valores.length; d++){
+    for(let d = 0; d<valores2[0].length; d++){
       console.log("nivel ordenado");
       console.log(valores2[1]);
       console.log(valores2[0]);
       let act = valores2[1][d];
-      for(let g =0;g<valores.length;g++){
+      for(let g =0;g<valores2[0].length;g++){
+        if( g<valores.length){
         console.log("valor actual ordenamiento");
+        console.log("valor g : "+g+"  "+d);
+        console.log("tope : "+valores2[0].length);
           console.log(valores2[0][g][1]);
-          console.log(valores2[0][g]);
-           if(valores2[0][g][1] ==act ){
-             nivelesOrdenados.push(valores2[0][g][0]);
-             break;
-           }
+          
+      //    console.log(valores2[0][g]);
+      
+          if(valores2[0][g][1] ==act ){
+            nivelesOrdenados.push(valores2[0][g][0]);
+            break;
+          }
+        }
+           
        }
    
    
      }
+     console.log("NIVELES ORDENADOS!!");
+     console.log(nivelesOrdenados);
      for(let p = 0; p<valores.length;p++){
       let diametros_barras = [];
       for(let r =0; r<diametrosTotal.length;r++){
@@ -2157,10 +2165,8 @@ async function getValFiltro(filtro_name,urn){
       matriz_resultados.push(diametros_barras);
       console.log("VALORES PISOS resultados");
       console.log(matriz_resultados);
- 
- 
-  }
-
+      }
+    
   for(let p = 0; p<valores.length;p++){
     let diametros_barras = [];
     for(let r =0; r<diametrosTotal.length;r++){
@@ -2180,23 +2186,23 @@ async function getValFiltro(filtro_name,urn){
   console.log("MATRIZ LARGOS");
   console.log(matriz_largos);
   console.log("dimensiones");
-  console.log(valores.length+"  "+diametrosTotal.length);
+  console.log(nivelesOrdenados.length+"  "+diametrosTotal.length);
   
-
-
-  for(let h=0; h<valores.length;h++){
+console.log("niveles ordenados previo recorrer");
+ console.log(nivelesOrdenados);
+  for(let h=0; h<nivelesOrdenados.length;h++){
     if( valores[h] !=""){
         let valorFiltro = [nivelesOrdenados[h]];
         console.log("PREGUNTA _"+h);
         console.log(valorFiltro);
-        console.log("parametro nivel");
-      //  console.log(parametro_nivel);
+        console.log("parametro nivel matriz");
+        console.log(parametro_nivel);
        consulta_filtro2([parametro_nivel]).then((data) => {
           let keys = Object.keys(data);
           let elementos =Array();
           elementos.length = 0;
           elementos = buscaKeys(valorFiltro,keys);
-       //   console.log("ELEMENTOS PREVIO PROCESO");
+         console.log("ELEMENTOS PREVIO PROCESO");
        //   console.log(keys);
        //   console.log(valorFiltro);
       //    console.log(elementos);
@@ -2268,11 +2274,11 @@ async function getValFiltro(filtro_name,urn){
                           }
                           let val_actual = result.properties[t].displayName;
                           if (val_actual == "RS Peso Lineal (kg/m)") {
-                          //  console.log("ENTRO A PESO LINEAL HA");
+                             console.log("ENTRO A PESO LINEAL HA");
                             let peso = parseFloat(result.properties[t].displayValue);
     
-                          //  console.log("ANTES PESO BUSCADO HA");
-                          //  console.log(peso);
+                            console.log("ANTES PESO BUSCADO HA matriz");
+                            console.log(peso);
                           //  console.log(result.properties[t].displayValue);
                           //  console.log(result);
     
@@ -2368,7 +2374,7 @@ async function getValFiltro(filtro_name,urn){
   
   }
   
-  }, 35000);
+  }, 38000);
 
  
 // Piso / d1,d2,...,dn
@@ -2376,13 +2382,11 @@ async function getValFiltro(filtro_name,urn){
   resolve(matriz_resultados);},(error) => { 
   reject(error);
    });
+   const jj = await resultados;
+   console.log("Matriz resultados niveles");
+   console.log(jj);
 
-   setTimeout(() => {
 
-   },36000);
-const jj = await resultados;
-console.log("Matriz resultados niveles");
-console.log(jj);
 // jj matriz de resutados
 // valores arreglo de nombres-piso
 // diametros arregle de diametros por proyecto
@@ -2832,7 +2836,7 @@ resultadoPesosDiametros = morrisData3;
 
   document.getElementById("precarga").style.display = "none";
 
-  },65000);
+  },75000);
 
   
 
