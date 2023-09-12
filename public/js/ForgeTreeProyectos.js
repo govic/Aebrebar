@@ -195,6 +195,51 @@ function guardarAsignación(){
 
 
 }
+function cerrarnoTransferencia(){
+  
+  $('#NoTransferenciaDatos').modal('hide');
+}
+function cerrarTransferenciaok(){
+  
+  $('#OkTransferenciaDatos').modal('hide');
+}
+function iniciarTransferencia(){
+  
+  let urn_emisor =  $('#proyectoEmisor').find(":selected").val();
+  let urn_receptor =  $('#proyectoReceptor').find(":selected").val();
+  $('#TransferenciaDatos').modal('hide');
+  jQuery.post({
+    url: '/transferenciaDatos',
+    contentType: 'application/json',
+    data: JSON.stringify({ 'emisor': urn_emisor,'receptor':urn_receptor}),
+       success: function (res) {
+         console.log(res);
+         //window.location.href = window.location.href;
+      
+        $('#OkTransferenciaDatos').modal('show');
+    } ,error: function (err) {
+      console.log("error");
+      console.log(err);
+      $('#TransferenciaDatos').modal('hide');
+      $('#NoTransferenciaDatos').modal('show');
+    }
+  });
+
+}
+function modalTransferencia(){
+  //TransferenciaDatos
+  let emisor =  $('#proyectoEmisor').find(":selected").text();
+  let receptor =  $('#proyectoReceptor').find(":selected").text();
+  $('#emisorDatos').empty();
+  $('#receptorDatos').empty();
+  $('#emisorDatos').append(''+emisor);
+  $('#receptorDatos').append(''+receptor);
+console.log("ProyectoEmisor :"+emisor +" receptor :"+receptor);
+  $('#TransferenciaDatos').modal('show');
+}
+function cerrarTransferencia(){
+  $('#TransferenciaDatos').modal('hide');
+}
 function cargaProyectosOpt(resultado) {
   console.log("ENTRO A BUSCAR USUARIOS");
    
@@ -204,6 +249,8 @@ function cargaProyectosOpt(resultado) {
   }
   document.getElementById("proyectosAsignacion").innerHTML = "";
   document.getElementById("proyectosAsignacion").innerHTML = opciones;
+  document.getElementById("proyectoEmisor").innerHTML = opciones;
+  document.getElementById("proyectoReceptor").innerHTML = opciones;
 
  
  }

@@ -895,12 +895,57 @@ router.post('/insertDBIDS', isLoggedIn, async (req, res, next) => {
   });
 
 });
+//
+router.post('/transferenciaDatos', isLoggedIn, async (req, res, next) => {
+  idUsua = req.session.passport.user.idUsu;
+  const { emisor, receptor } = req.body;
+  console.log("datos emisor y receptor");
+  console.log(emisor);
+  console.log(receptor);
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
+    await pool.query('UPDATE pedido set urn_actual ="'+receptor+'" WHERE urn_actual LIKE "'+emisor+'"', async (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        await pool.query('UPDATE adicionales_pedidos set urn ="'+receptor+'" WHERE urn LIKE "'+emisor+'"', async (error, results) => {
+          if (error) {
+            console.log(error);
+          } else {
+            await pool.query('UPDATE vistas_save set urn ="'+receptor+'" WHERE urn LIKE "'+emisor+'"', async (error, results) => {
+              if (error) {
+                console.log(error);
+              } else {
+                  res.send("ok");
+        
+              }
+            });
+    
+          }
+        });
 
+      }
+    });
+
+   
+
+   
+   
+   
+  }
+  res.send("proyectos");
+});
 
 router.post('/updateDBIDS', isLoggedIn, async (req, res, next) => {
   idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
+   await pool.query('UPDATE pedido set ? WHERE dbId = ?', [updatePlan, i], async (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("update exitoso");
 
+      }
+    });
 
 
   //guardo los datos de la tabla en datavista
