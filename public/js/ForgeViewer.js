@@ -2106,7 +2106,7 @@ function guardarPostRevision(){
 function saveAddPedido(){
 
   var cantidad_pedido_add = $("#cantidad_pedido_add").val();
-  var nombre_pedido       = nombre_add_actual;
+  var nombre_pedido       = $("#nombre_pedido_resumen2").val();
   
   var diametro_pedido_add = $("#diametro_pedido_add").val();
   var largo_pedido_add    = $("#largo_pedido_add").val();
@@ -2114,12 +2114,12 @@ function saveAddPedido(){
   
    console.log("VALOR PREVIO ENVIO ADD ORDENES ORDENES "+nombre_pedido);
  
-   let datas = JSON.stringify({ 'nombre_pedido': nombre_pedido, 'cantidad': cantidad_pedido_add,'diametro':diametro_pedido_add,'largo':largo_pedido_add });
+   let datas = JSON.stringify({ 'nombre_pedido': nombre_pedido, 'cantidad': cantidad_pedido_add,'diametro':diametro_pedido_add,'largo':largo_pedido_add,'urn':urnAsignado });
    console.log( datas);
    jQuery.post({
     url: '/saveAddOrdenes',
     contentType: 'application/json',
-    data:  JSON.stringify({'nombre_pedido': nombre_pedido, 'cantidad': cantidad_pedido_add,'diametro':diametro_pedido_add,'largo':largo_pedido_add}),
+    data:  JSON.stringify({'nombre_pedido': nombre_pedido, 'cantidad': cantidad_pedido_add,'diametro':diametro_pedido_add,'largo':largo_pedido_add,'urn':urnAsignado}),
   
     success: function (res) {
       console.log("ingreso ordenes ADICIONALES exitoso");
@@ -2257,15 +2257,20 @@ console.log(id_pedidos_guardados[indice]);
       $fila = "";
       $('#body_adicionales').innerHTML = "";
       $fila = "";
+      
       var $list_pedidos2 ="<tr><th>Cantidad</th><th>Largo</th><th>Diametro</th></tr>";
       for(let r = 0; r<res.length; r++){
       //   ids_bd.push(Object.values(res[r]));
          $fila = "";
-         console.log("nombre pedido A");
-        // console.log(Object.values(res[r]));
-         $fila =  "<tr>"+"<td>"+res[r].cantidad+"</td>" +"<td>"+res[r].largo+"</td>" + "<td>"+res[r].diametro+"</td>" +"</tr>";
-         $list_pedidos2 = $list_pedidos2 +$fila;
-         console.log(res[r].nombre_pedido);
+         console.log("Pedidos adicionales");
+        console.log(urnAsignado);
+        console.log(res[r].urn);
+        if(res[r].urn == urnAsignado){
+          $fila =  "<tr>"+"<td>"+res[r].cantidad+"</td>" +"<td>"+res[r].largo+"</td>" + "<td>"+res[r].diametro+"</td>" +"</tr>";
+          $list_pedidos2 = $list_pedidos2 +$fila;
+          console.log(res[r].nombre_pedido);
+        }
+        
         
      }
      console.log("pedidos adicionales");
@@ -2291,6 +2296,11 @@ console.log(id_pedidos_guardados[indice]);
     }
   });
 
+ 
+}
+function addAdicional(nn){
+  $('#modaldemo7').modal('show');
+  $("#nombre_pedido_resumen2").val(""+nn);
  
 }
 function getOrdenes(){
@@ -2323,8 +2333,8 @@ $list_pedidos = "";
         console.log("nombre pedido A");
        // console.log(Object.values(res[r]));
        if(urn_usada ==res[r].urn_actual ){
-        
-        $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-warning 'onclick='filtra_orden("+cont+")'><i class='ti-eye'></i></button>&nbsp;<button class='btn btn-warning ' onclick=eliminar_orden("+cont+")><i class='ti-close'></i></button></td>" + "</tr>";
+        let nombreActual = res[r].nombre_pedido;
+        $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-warning 'onclick='filtra_orden("+cont+")'><i class='ti-eye'></i></button>&nbsp;<button class='btn btn-warning ' onclick='eliminar_orden("+cont+");'><i class='ti-close'></i></button>&nbsp;<button class='btn btn-warning' onclick=addAdicional(\'"+nombreActual+"\');><i class='far fa-arrow-alt-circle-up'></i></button></td>" + "</tr>";
         $list_pedidos = $list_pedidos +$fila;
         console.log(res[r].nombre_pedido);
        
@@ -2351,6 +2361,7 @@ $list_pedidos = "";
     }
   });
 }
+
 function setFechaActualPedido(){
   let date = new Date()
 
@@ -4563,19 +4574,19 @@ function launchViewer(urn) {
                 let data = {};
 
                 test.forEach(elements => {
-                  console.log('Elementos22');
-                  console.log(elements);
-                  console.log(elements.dbId);
+                //  console.log('Elementos22');
+               //   console.log(elements);
+                //  console.log(elements.dbId);
                   var cat_count=1;
                   var categorias = Array();
                   viewer.getProperties(elements.dbId, (result2) => { 
-                    console.log(result2)
+                //    console.log(result2)
                     for(i=0 ;i< 60;i++){
                       let nombre_actual = ""+result2.name;
                       if(nombre_actual ==="Category"){
                         categoria_actual_obj = result2.properties[i].displayValue;
-                        console.log("CATEGORIA BUSCADA");
-                        console.log(categoria_actual_obj);
+                 //       console.log("CATEGORIA BUSCADA");
+                  //      console.log(categoria_actual_obj);
                         //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
                           if(categoria_actual_obj==""+parametro_fierro+""){
                           console.log("ENTRAR REBAR");
@@ -4589,21 +4600,21 @@ function launchViewer(urn) {
                               $("#listado_pesos").val(listado_pesos);
                            
                               console.log("ANTES PESO BUSCADO2");
-                              console.log(peso);
-                              console.log(result2.properties[t].displayValue);
-                              console.log(result2);
+                      //        console.log(peso);
+                      //        console.log(result2.properties[t].displayValue);
+                       //       console.log(result2);
                               
                              // peso = parseFloat(peso);
                               pesoActual = peso;
                               console.log("PESO BUSCADO");
-                              console.log(peso);
+                       //       console.log(peso);
                              
                           
                                pesoTotal = pesoTotal+ peso;
                                pesoTotal  = parseFloat(pesoTotal,1);
                               
                                console.log( "SUMATORIA PESO");
-                               console.log( pesoTotal);
+                       //        console.log( pesoTotal);
                                
                             }
                             if(val_actual == "Total Bar Length"){
@@ -5457,21 +5468,21 @@ function Pintar_Categorias_reflow( ){
       //   console.log(resultado_ids[0][a]);
          let id_actual_tarea_1 = resultado_ids[t][a];
         viewer.getProperties( resultado_ids[t][a], (result) => { 
-           console.log("PROPIEDADES OBJETO");
-           console.log(result);
+       //    console.log("PROPIEDADES OBJETO");
+       //    console.log(result);
            let nombre_actua_objeto  =  result.name;
         // console.log("actual name  "+nombre_actua_objeto);
         // BUSCA LAS PROPIEDADES DEL OBJETO SELECCIONADO / APROXIMA LA CANTIDAD DE PROPIEDADES DISPONIBLES A 60 
         for(i=0 ;i< 60;i++){
  
            let nombre_actual = ""+result.properties[i].displayName;
-           console.log("BUSCO CATEGORIA !");
-           console.log(nombre_actual);
+       //    console.log("BUSCO CATEGORIA !");
+       //    console.log(nombre_actual);
            if(nombre_actual ==="Category"){  // reconoce categoria a la que pertenece el elemento
              categoria_actual_obj = result.properties[i].displayValue;
-             console.log("ENCUENTRO CATEGORIA !");
+      //       console.log("ENCUENTRO CATEGORIA !");
  
-             console.log(categoria_actual_obj);
+       //      console.log(categoria_actual_obj);
              break;
              // capturo categoria
            }
