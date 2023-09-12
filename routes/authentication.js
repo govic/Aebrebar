@@ -1760,10 +1760,11 @@ router.post('/saveOrdenes', isLoggedIn, async (req, res) => {
   await pool.query('INSERT INTO  pedido set ?', [newSelect], async (error, results) => {
     if (error) {
       console.log(error);
+      res.send(error);
     } else {
       console.log("gUARDADO EL PEDIDO");
       console.log(newSelect);
-
+      res.send("ok guardado");
     }
   });
 })
@@ -1877,12 +1878,13 @@ router.post('/CargarAsignacion', isLoggedIn, async (req, res) => {
 //***************************************************** */
 
 router.post('/saveAddOrdenes', isLoggedIn, async (req, res) => {
-  const { nombre_pedido, cantidad, diametro, largo } = req.body;
+  const { nombre_pedido, cantidad, diametro, largo,urn } = req.body;
   const newSelect = {
     nombre_pedido,
     cantidad,
     diametro,
-    largo
+    largo,
+    urn
   };
   //newUser.password = await helpers.encryptPassword(password);
   console.log("ENVIADO ADD ORDENES");
