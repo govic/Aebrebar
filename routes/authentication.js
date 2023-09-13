@@ -1960,12 +1960,12 @@ router.get('/getOrdenes', isLoggedIn, async (req, res, next) => {
   //guardo los datos de la tabla en datavista
   const { nombre, ids } = req.body;
   const datavista = await pool.query('SELECT * FROM pedido');
-  if (true) {
+ 
     console.log("GET IDS PLAN");
     res.send(datavista);
     console.log("GET IDS PLAN");
     console.log(datavista);
-  }
+
 
 });
 /////////////////////// GET ORDENES ADICIONALES/////////
