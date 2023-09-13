@@ -2357,6 +2357,7 @@ $list_pedidos = "";
   
   
     }, error: function (res) {
+        getOrdenes();
         console.log("ERROR GET ORDENES");
         console.log(res);
     
@@ -3017,6 +3018,7 @@ function loadPrevisualizaciones(){
   
   
     }, error: function (err) {
+      loadPrevisualizaciones();
       console.log("Error llamado vistas");
       console.log(err);
     }
