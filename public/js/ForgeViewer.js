@@ -3,6 +3,9 @@ var registro_ultimo_filtro ;
 var id_pedidos_guardados =[];
 var nombre_add_actual;
 var urnAsignado;
+var matrizHormigonado =[];
+var listadoPisos = [];
+var seleccionHormigon = [];
 //var datos;
 var filtro1 = false;
 var filtro2 = false;
@@ -1802,9 +1805,166 @@ function filtro_visual(){
     });
   }
 }
+function getIdsElementos(){
+  filtrado = [filtro_2];
+  listPisos = [];
+  referencia = [];
+  consulta_filtro(filtrado).then((data) => {
+    let keys = Object.keys(data);
+    let datos = keys;
+    console.log("Filtro 2:"+ datos);
+    let filtros_sel = Object.values(keys[0]);
+    elementos = buscaKeys(filtros_sel ,keys);
+    for (i = 0; i < datos.length; i++) {
+       if(datos[i] != "" && datos[i] != null){
+        listPisos.push(datos[i]);
+       }
+        
+     }
+     console.log("BUSQUEDA PISOS");
+     console.log(listPisos);
+     for(let e = 0; e< listPisos.length;e++){
+      console.log("recorro pisos");
+      consulta_filtro2([parametro_nivel]).then((data) => {
+        console.log("recorro pisos2");
+        let keys = Object.keys(data);
+        let elementos = buscaKeys(filtros_general,keys)
+        var identificadores =0;
+        let dbIds =0;
 
+        if(keys.length == 0 && keys){
+          alert("No hay resultados");
+      }
+          else{
+            for(var a = 0; a<keys.length;a++){
+                 if(a==0){
+                   dbIds = data[keys[a]].dbIds;              
+                   referencia.push(dbIds);
+                   identificadores = dbIds;
+                 }
+                 else{
+                   referencia.push((data[keys[a]].dbIds));
+                   identificadores = dbIds.concat(data[keys[[a]]].dbIds);
+    
+                   dbIds = identificadores;
+                 }
+            }
+    
+            resultado_ids = referencia;
+    
+          }
+          console.log("IDS GENERAL");
+         console.log(resultado_ids);
+          let c =1;
+         
+        
+          var id_tareas_objetos = 10000;
+          var activo_hormigonado = 0;
+          var fecha_objeto ="";
+          var valor_aec_piso = "";
+          var nivel_actual = "";
+          var nombre_actua_objeto ="" ;
+          for(t=0; t<resultado_ids.length;t++){
+            for(var a=0; a< resultado_ids[t].length;a++){
+              //  console.log("cantidad   "+resultado_ids[0].length);
+                let categoria_actual_obj ="";
+              //  console.log("RESULTADO IDS");
+              //  console.log(resultado_ids[0][a]);
+                let id_actual_tarea_1 = resultado_ids[t][a];
+                let id_para_pintar = parseInt(resultado_ids[t][a]);
+
+                console.log("NO EXISTE");
+                viewer.getProperties( resultado_ids[t][a], (result) => { 
+                console.log("PROPIEDADES OBJETO");
+                let nombre_actua_objeto  =  result.name;
+                for(i=0 ;i< 50;i++){
+                let nombre_actual = "";
+             //   console.log("PROPIEDAD ACTUAL  "+result.properties[i].displayName);
+        //     console.log('control error');
+        //       console.log(result); 
+                if(result.properties[i].displayName != undefined || result.properties[i].length != 0|| result.properties.length != 0  ){
+                    nombre_actual = ""+result.properties[i].displayName;
+                 }
+                  
+                  if(nombre_actual ==="Category"){  // reconoce categoria a la que pertenece el elemento
+                    categoria_actual_obj = result.properties[i].displayValue;
+         //           console.log("CATEGORIA ACTUAL pintado: "+categoria_actual_obj);
+                   
+                      
+                  }
+                
+              
+                 
+                  }
+                 
+                }) 
+
+               
+              }
+          }
+      })
+
+     }
+ 
+ //   gantt.render();
+  
+    //  document.getElementById("selectores2").innerHTML = botones;
+
+    // PEGA LOS BOTONES PARA FILTRAR SEGUN PARÁMETROS
+});
+
+}
+function calculaSeleccionHormigon(){
+  seleccionHormigon = viewer.getSelection(); // ids elementos seleccionados
+  console.log("PREVIO CALCULO FIERROS/HORMIGON");
+  console.log(seleccionHormigon );
+  console.log(matrizHormigonado);
+  var resultado_fierros = [];
+  for(let j=0;j<seleccionHormigon.length;j++){
+    for(let w =0 ; w< matrizHormigonado.length;w++){
+      
+      viewer.select( [seleccionHormigon[j]]);  
+      let box1 = viewer.utilities.getBoundingBox();
+      viewer.select( [  matrizHormigonado[w]]);  
+      let box2 = viewer.utilities.getBoundingBox();
+      let interseccion = box2.intersectsBox(box1);
+      if(interseccion){
+        resultado_fierros.push(matrizHormigonado[w]);
+      }
+
+    }
+  }
+  console.log("Fierros Contenidos en seccion Hormigon");
+  console.log(resultado_fierros);
+ 
+  let z = "";
+  let idF = [];
+  for(let y =0; y<resultado_fierros.length;y++){
+    if(!isNaN(resultado_fierros[y][0])&& resultado_fierros[y][0] !=""){
+      z = z+","+resultado_fierros[y][0];
+      idF.push(resultado_fierros[y][0]);
+    }
+   
+  }
+  console.log(idF);
+  quitar_filtros();
+  
+  var c = z.split(',').map(function(item) {
+    return parseInt(item, 10);
+  });
+  console.log("Ids previo isolate");
+  console.log(c);
+  viewer.isolate(c);
+  calculaFierrosHormigon(idF);
+ 
+}
+
+function resetSeleccion(){
+    seleccionHormigon = [];
+}
 function getFiltros() {
-
+  
+  listadoPisos = [];
  // console.log("MUESTRA.....!!!!");
     
       let filtrado = [filtro_1];
@@ -1880,7 +2040,7 @@ function getFiltros() {
                 var botones =botones+ "<option value=\"'sin valor' \" >Sin Valor</option>";
                 for (i = 0; i < datos.length; i++) {
                   
-              
+                    listadoPisos.push(datos[i]);
                     botones =botones+ "<option value=\""+datos[i]+"\" >"+datos[i]+"</option>";
                 }
 
@@ -2923,6 +3083,151 @@ function set_clave(q){
   
  
 }
+async function gestionTransferenciaDatos(){
+
+
+
+
+}
+
+async function transferenciaData(){
+  var referencia =[];
+
+    let filtros = new Promise((resolve, reject) => {
+
+        consulta_filtro([parametro_nivel]).then((data) => {
+          let keys = Object.keys(data);
+          console.log("DATA BUSCANDO PARAMETRO NIVEL");
+
+          console.log(data);
+          let elementos =Array();
+          elementos.length = 0;
+          console.log("FILTROS GENERAL TRANSFERENCIA");
+          console.log(listadoPisos);
+          elementos = buscaKeys(listadoPisos,keys);
+          console.log("ELEMENTOS PREVIO PROCESO busqueda hormigonado fierros");
+          console.log("parametros nivel");
+          console.log(parametro_nivel);
+          console.log("keys");
+          console.log(keys);
+          console.log("filtro gral");
+          console.log(filtros_general);
+          console.log("elementos");
+          console.log(elementos);
+          var identificadores=Array();
+          identificadores.length = 0;
+          referencia.length = 0;
+          referencia2.length = 0;
+          let dbIds = Array();
+          dbIds.length = 0;
+          if(elementos.length == 0 && elementos.length && elementos){
+            //    // // // // // // // // // alert("No hay resultados");
+              }else{
+        //          console.log("FILTRADOS IDS"+elementos.length);
+                  for(var a = 0; a<elementos.length;a++){
+                      if(a==0){
+                        dbIds = data[keys[elementos[a]]].dbIds;              
+                        referencia.push(dbIds);
+                        referencia2.push(dbIds);
+                        identificadores = dbIds;
+                      }
+                      else{
+                        referencia.push((data[keys[elementos[a]]].dbIds));
+                        referencia2.push((data[keys[elementos[a]]].dbIds));
+                        identificadores = dbIds.concat(data[keys[elementos[a]]].dbIds);
+      
+                        dbIds = identificadores;
+                      }
+                  }
+                  resultado_ids = referencia;
+              }      
+        for (var a = 0; a <= identificadores.length; a++) {
+        //    console.log("valor de A FINAL " + a + "valor de LARGO " + identificadores.length);
+            if (a == identificadores.length) {
+            //
+            } else {
+              let actual = identificadores;
+    
+              viewer.getProperties(identificadores[a], (result) => {
+              //  console.log("RESPUESTA para A lvl " + a + " && " + identificadores.length);
+              //  console.log(result);
+        //        contador_lg = contador_lg + 1;
+                let pos_diametro =0;
+              
+                for (let i = 0; i < 60; i++) {
+                  let dataActual  =[];
+                  
+                  if (result.properties[i] && result.properties[i].displayName) {
+                    let nombre_actual = "" + result.properties[i].displayName;
+                    if (nombre_actual === "Category") {
+                      categoria_actual_obj = result.properties[i].displayValue;
+                     // console.log("valor categoria actual5: " + categoria_actual_obj);
+    
+                      if (categoria_actual_obj == "Revit Structural Rebar") {
+                      
+                        for (t = 0; t < result.properties.length; t++) {
+                          if(t==0){
+                            dataActual.push(result.dbId);
+                            dataActual.push(result.name);
+                          }
+                          let val_actual = result.properties[t].displayName;
+                          if (val_actual == parametro_fecha) {
+                              console.log("ENTRO A PESO LINEAL HA");
+                              let fechaHormigonado = result.properties[t].displayValue;
+                              dataActual.push(fechaHormigonado);
+    
+                          } 
+                          if(val_actual == parametro_nivel ){
+                             dataActual.push(result.properties[t].displayValue);
+                          }
+                          if(val_actual == filtro_1){
+                            dataActual.push(result.properties[t].displayValue);
+                        
+                          }
+                        
+                          if ((t + 1) == result.properties.length) { // termina de recorrer todas las propiedades
+                             
+                              if(dataActual.length == 4){
+                                 dataActual.push(0);
+                                 matrizHormigonado.push(dataActual);
+                             }
+                             else{
+                                 matrizHormigonado.push(dataActual);
+                             }
+                            
+                            
+                            
+                 
+                          }
+                        }
+                     
+    
+                      }
+    
+                    }
+    
+                  }
+                
+                 
+                }
+                
+              })
+            }
+          }
+          resolve(matrizHormigonado);},(error) => {
+            reject(error);
+        });
+
+    });
+
+    filtros.then(res => {
+    
+      console.log("FIERROS DESDE LLAMADO");
+      console.log(res);
+      
+    });
+  
+}
 function revisaPrevisualizaciones(buscada){
   resultado = false;
   var q =  document.getElementById("id_seleccionados").value;
@@ -3202,6 +3507,10 @@ function drawBox(min, max) {
   viewer.impl.sceneUpdated(true);
 }
 
+function setDatesRebar(){
+
+  
+}
 
 
 function getModifiedWorldBoundingBox (fragIds) {
@@ -3238,6 +3547,13 @@ function launchViewer(urn) {
       getDBIds();
       getPlanObj();
       getOrdenes();
+      setTimeout(()=>{
+        transferenciaData();
+      },20000);
+
+    
+
+       
     //  console.log('DB IDS DESDE SERVER');
    //   console.log(ids_bd);
    //   this.getDBIds_update('1515','1515','125');
@@ -3270,9 +3586,7 @@ function launchViewer(urn) {
  viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, geometobjectTreeCreated);         
  function geometobjectTreeCreated(evt){
              //load the extension MySelectionWindow and call initialization 
-             viewer.loadExtension('MySelectionWindow').then(function(ext){ 
-                 ext.init();  
-             }); 
+            
   }
  viewer.addEventListener(Autodesk.Viewing.SHOW_EVENT, (nodes, model)=> {   
   console.log("nodos  visibles");
@@ -3292,6 +3606,8 @@ function launchViewer(urn) {
       viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT,(event)=>{
       
         const tree = viewer.model.getInstanceTree();
+        console.log("ids seleccionadas");
+        console.log(viewer.getSelection());
         if (tree) { // Could be null if the tree hasn't been loaded yet
           const selectedIds = viewer.getSelection();
           const fragIds = [];
@@ -3347,7 +3663,7 @@ function launchViewer(urn) {
        
         /// viewer.setThemingColor(a[r], color, null, true);
         viewer.getProperties(selects[r], (result) => { 
-          console.log('RESULTADO SELECCION'); 
+          console.log('RESULTADO SELECCION ESPECIAL'); 
           console.log(selects[0]);
               
             let fecha_hormigonado = "";
@@ -6543,6 +6859,197 @@ function genera_gantt(){
 
 }
 
+function calculaFierrosHormigon(listado){
+  identificadores_fierros = listado.filter((item,index)=>{
+    return listado.indexOf(item) === index;
+  })
+ // identificadores_fierros = listado;
+  console.log("inicio suma fierros seleccion hormigon");
+  console.log(identificadores_fierros);
+  var pesoTotal=0;
+  var largoTotal =0;
+  for(var a=0; a< identificadores_fierros.length;a++){
+    let actual =  identificadores_fierros[a];
+    
+    viewer.getProperties( identificadores_fierros[a], (result) => { 
+     
+      for(i=0 ;i< 60;i++){
+        let nombre_actual = ""+result.properties[i].displayName;
+        if(nombre_actual ==="Category"){
+          categoria_actual_obj = result.properties[i].displayValue;
+          console.log("CATEGORIA BUSCADA");
+          console.log(categoria_actual_obj);
+          //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
+            if(categoria_actual_obj==""+parametro_fierro+""){
+            console.log("ENTRAR REBAR");
+            for(t=0;t<result.properties.length;t++){
+              let val_actual = result.properties[t].displayName;
+              if( val_actual == "RS Peso Lineal (kg/m)"){
+             
+                console.log("ENTRO A PESO LINEAL");
+                let peso = parseFloat(result.properties[t].displayValue,1);
+            //    peso = peso.toFixed(2);
+                //peso = Number.parseFloat(peso,2);
+                console.log("ANTES PESO BUSCADO");
+                console.log(peso);
+                console.log(result.properties[t].displayValue);
+                console.log(result);
+                
+               // peso = parseFloat(peso);
+                pesoActual = peso;
+                console.log("PESO BUSCADO");
+                console.log(peso);
+                listado_pesos = listado_pesos+","+peso;
+               
+                 pesoTotal = peso + pesoTotal;
+                 pesoTotal  = parseFloat(pesoTotal,1);
+                
+                 console.log( "SUMATORIA PESO");
+                 console.log( pesoTotal);
+                 
+              }
+              if(val_actual == "Total Bar Length"){
+                console.log("TOTAL LENGTH BAR");
+                
+                let largo = parseFloat(result.properties[t].displayValue);
+                console.log(largo );
+             //   largo = largo.toFixed(1);
+                largo = parseFloat(largo,1);
+                
+                largo = largo /100;
+                largoActual = largo;
+                console.log("convertido "+largo);
+                listado_largos = listado_largos+","+largo;
+               
+                console.log("Listado pesos");
+                console.log( listado_pesos);
+                largoTotal = largoTotal+ largo;
+                largoTotal = largoTotal;
+                console.log( "SUMATORIA LARGO");
+                console.log( largoTotal);
+                console.log( "Listado largos");
+                console.log(listado_largos);
+                //largoTotal  = parseFloat(largoTotal).toFixed(1);
+               // listado_pesos = listado_pesos +","+peso;
+                listado_largos = listado_largos +","+largo;
+                $("#listado_largo").val(listado_largos);
+                $("#listado_pesos").val(listado_pesos);
+                document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(1)+ ' mtrs';
+               
+              }
+              if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
+                    
+                 let resultado_mul = pesoActual*largoActual;
+                 console.log("resultado multiplicacion HF");
+                 console.log(pesoActual+"    "+largoActual );
+                 console.log(resultado_mul);
+                 pesoTotal = pesoTotal+resultado_mul;
+                 console.log("PESO TOTAL HF");
+                 console.log(pesoTotal);
+                  $("#largo_total_pedido").val(largoTotal.toFixed(1));
+                  $("#peso_total_pedido").val(pesoTotal.toFixed(1));
+                  $("#resultado_total_pedido").val(pesoTotal);
+                  document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
+
+                  $("#listado_largo").val(listado_largos);
+                  $("#listado_pesos").val(listado_pesos);
+                  //console.log( "Resultado Multiplicación");
+                // console.log( resultado_mul);
+              
+                  resultado_mul =resultado_mul.toFixed(3);
+                //  xTotal = xTotal + parseFloat(resultado_mul,1);
+                //  console.log( "Total Multiplicación");
+                //  console.log( xTotal);
+               //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
+
+                  document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
+                 // let g = name.split(' ');
+                //  let y = g[2];
+                
+              }
+            }
+            
+           
+            
+            let actuales = $("#id_seleccionados3").val();
+            actual =   actual+","+actuales;
+            $("#id_seleccionados3").val(actual);
+            $("#id_seleccionados4").val(actual);
+           
+            let name = result.name;
+          
+            
+   
+    
+            
+            // Inserta una fila en la tabla, en el índice 0
+           
+           }
+          
+        }
+        if(nombre_actual  === parametro_fecha){
+  
+          fecha_hormigonado = result.properties[i].displayValue;
+
+          let formato_hormigonado_1 = fecha_hormigonado.indexOf("/");
+          let formato_hormigonado_2 = fecha_hormigonado.indexOf("-");
+  
+          if(formato_hormigonado_1 != -1){
+                let elementos_fecha = fecha_hormigonado.split("/");
+              if(elementos_fecha.length>0){
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+                var yyyy = today.getFullYear();
+                if(mm>0){
+                  mm = mm-1; 
+                }
+                today = '0'+mm + '/' + dd + '/' + yyyy;
+                if(elementos_fecha[1] >0){
+                  elementos_fecha[1] = elementos_fecha[1]-1;
+                }
+  
+                var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                // let compara = dates.compare(today,d2);
+            
+                let resultado  = [result.name,d3];
+          
+                console.log("NombreInterno" + resultado[0]);
+                return resultado;
+              }
+          }
+          if(formato_hormigonado_2 != -1){
+            let elementos_fecha = fecha_hormigonado.split("-");
+            if(elementos_fecha.length>0){
+              var today = new Date();
+              var dd = String(today.getDate()).padStart(2, '0');
+              var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+              var yyyy = today.getFullYear();
+              if(mm>0){
+                 mm = mm-1; 
+              }
+              today = '0'+mm + '/' + dd + '/' + yyyy;
+              if(elementos_fecha[1] >0){
+                elementos_fecha[1] = elementos_fecha[1]-1;
+              }
+    
+              var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+              // let compara = dates.compare(today,d2);
+           
+              let resultado  = [result.name,d3];
+         
+              console.log("NombreInterno" + resultado[0]);
+               return resultado;
+            }
+          }
+          
+         }
+      }
+      
+    }) 
+
+  }
+}
 
 function onDocumentLoadSuccess(doc) {
   var geometryItems = doc
