@@ -1043,7 +1043,7 @@ function getOrdenesURN(urnEnvio){
                               },
                               options: {
                                   maintainAspectRatio: false,
-                                  responsive: true,
+                                  responsive: false,
                                   legend: {
                                       display: false,
                                       labels: {
@@ -1296,7 +1296,7 @@ function getOrdenesTotalPedidos(urnEnvio){
       element: 'morrisDonut2',
       data: dataPedidos2,
       colors: ['#FF4C33', '#F3FF33','#5BFF33','#FF33FC','#334FFF','#33FF8A','#FFB833','#33FFAC','#33CEFF'],
-      resize: true,
+      resize: false,
       labelColor:"#8c9fc3"
       
     });
@@ -1378,7 +1378,7 @@ function getPedidosTotal(urnEnvio){
       element: 'morrisDonut2',
       data: dataPedidos,
       colors: ['#FF4C33', '#F3FF33','#5BFF33','#FF33FC','#334FFF','#33FF8A','#FFB833','#33FFAC','#33CEFF'],
-      resize: true,
+      resize: false,
       labelColor:"#8c9fc3"
       
     });
@@ -2137,9 +2137,9 @@ async function getValFiltro(filtro_name,urn){
       let act = valores2[1][d];
       for(let g =0;g<valores2[0].length;g++){
         if( g<valores.length){
-        console.log("valor actual ordenamiento");
-        console.log("valor g : "+g+"  "+d);
-        console.log("tope : "+valores2[0].length);
+          console.log("valor actual ordenamiento");
+          console.log("valor g : "+g+"  "+d);
+          console.log("tope : "+valores2[0].length);
           console.log(valores2[0][g][1]);
           
       //    console.log(valores2[0][g]);
@@ -2202,7 +2202,7 @@ console.log("niveles ordenados previo recorrer");
           let elementos =Array();
           elementos.length = 0;
           elementos = buscaKeys(valorFiltro,keys);
-         console.log("ELEMENTOS PREVIO PROCESO");
+          console.log("ELEMENTOS PREVIO PROCESO");
        //   console.log(keys);
        //   console.log(valorFiltro);
       //    console.log(elementos);
@@ -2653,7 +2653,8 @@ console.log("niveles ordenados previo recorrer");
                 stacked: true,
                 gridTextSize: 11,
                 hideHover: 'auto',
-                resize: true
+                resize: false,
+                barSize: 20
               });
 
      
@@ -2800,7 +2801,8 @@ console.log("niveles ordenados previo recorrer");
       stacked: true,
       gridTextSize: 11,
       hideHover: 'auto',
-      resize: true
+      resize: false,
+      barSize: 20
     });
     // console.log("Dona 2");
     // console.log(donaData);
@@ -2817,7 +2819,8 @@ console.log("niveles ordenados previo recorrer");
       stacked: true,
       gridTextSize: 11,
       hideHover: 'auto',
-      resize: true
+      resize: false,
+      barSize: 20
     });
     /*
   new Morris.Donut({
