@@ -84,11 +84,11 @@ router.post(
     }
     if (req.session.passport.user.tipoUsuario == "Editor") {
       var nom = req.session.passport.user.fullname;
-      res.render('profile', { nom, nom2 });
+      res.render('profileV3', { nom, nom2 });
     }
     if (req.session.passport.user.tipoUsuario == "Visualizador") {
       var nom = req.session.passport.user.fullname;
-      res.render('profile', { nom, nom2 });
+      res.render('profileV2', { nom, nom2 });
     }
   });
 
