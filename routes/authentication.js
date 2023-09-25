@@ -361,7 +361,7 @@ router.get('/deleteVista/:idVS', isLoggedIn, async (req, res) => {
   }
   //rev 
   if (req.session.passport.user.tipoUsuario == "Visualizador") {
-   res.redirect('index');
+   res.redirect('indexV2');
   }
 });
 
@@ -1429,6 +1429,7 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
 
       const idUsu = req.session.passport.user.idUsu;
       if (req.session.passport.user.tipoUsuario == "Administrador") {
+        console.log("config V1!!!!!!!!!!!!!!!");
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1442,19 +1443,21 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
         })
       }
       if (req.session.passport.user.tipoUsuario == "Editor") {
+        console.log("config V3!!!!!!!!!!!!!!!");
         res.render('configV3', {
           alert: true,
           alertTitle: "¡Correcto!",
           alertMessage: "¡Datos correctamente editados!",
           alertIcon: 'success',
           showConfirmButton: false,
-          ruta: 'configV3',
+          ruta: 'config',
           nom,
           nom2,
           idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3
-        })
+       })
       }
       if (req.session.passport.user.tipoUsuario == "Visualizador") {
+        console.log("config V2!!!!!!!!!!!!!!!");
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -2085,8 +2088,23 @@ getConfigViewParams = async (req) => {
 }
 
 router.get('/config', isLoggedIn, async (req, res, next) => {
-  res.render('config', await getConfigViewParams(req));
-  next();
+
+  idUsua = req.session.passport.user.idUsu;
+  var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
+  console.log(rows2[0].fullname);
+  req.session.passport.user.fullname = rows2[0].fullname;
+  req.session.passport.user.username = rows2[0].username;
+  var nom = req.session.passport.user.fullname;
+  var nom2 = req.session.passport.user.username;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
+      res.render('config', await getConfigViewParams(req));
+      next();
+  }
+  if (req.session.passport.user.tipoUsuario == "Editor") {
+    res.render('configV3', await getConfigViewParams(req));
+    next();
+}
+  
 });
 
 router.post('/profile', isLoggedIn, async (req, res) => {
@@ -2634,7 +2652,7 @@ router.get('/estadisticasModelo', isLoggedIn, async (req, res, next) => {
     res.render('estadisticasModeloV3', { nom, idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3 });
   }
   if (req.session.passport.user.tipoUsuario == "Visualizador") {
-    res.render('estadisticasModelo', { nom,idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3 });
+    res.render('estadisticasModelo2', { nom,idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3 });
   }
 })
 //Echart
