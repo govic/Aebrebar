@@ -3,6 +3,8 @@ var registro_ultimo_filtro ;
 var id_pedidos_guardados =[];
 var nombre_add_actual;
 var urnAsignado;
+var fierrosOK = 0;
+var procesoCalculo = -1;
 var matrizHormigonado =[];
 var listadoPisos = [];
 var seleccionHormigon = [];
@@ -1915,47 +1917,55 @@ function getIdsElementos(){
 
 }
 function calculaSeleccionHormigon(){
-  seleccionHormigon = viewer.getSelection(); // ids elementos seleccionados
-  console.log("PREVIO CALCULO FIERROS/HORMIGON");
-  console.log(seleccionHormigon );
-  console.log(matrizHormigonado);
-  var resultado_fierros = [];
-  for(let j=0;j<seleccionHormigon.length;j++){
-    for(let w =0 ; w< matrizHormigonado.length;w++){
-      
-      viewer.select( [seleccionHormigon[j]]);  
-      let box1 = viewer.utilities.getBoundingBox();
-      viewer.select( [  matrizHormigonado[w]]);  
-      let box2 = viewer.utilities.getBoundingBox();
-      let interseccion = box2.intersectsBox(box1);
-      if(interseccion){
-        resultado_fierros.push(matrizHormigonado[w]);
-      }
 
-    }
-  }
-  console.log("Fierros Contenidos en seccion Hormigon");
-  console.log(resultado_fierros);
- 
-  let z = "";
-  let idF = [];
-  for(let y =0; y<resultado_fierros.length;y++){
-    if(!isNaN(resultado_fierros[y][0])&& resultado_fierros[y][0] !=""){
-      z = z+","+resultado_fierros[y][0];
-      idF.push(resultado_fierros[y][0]);
-    }
-   
-  }
-  console.log(idF);
-  quitar_filtros();
+  if(fierrosOK == 1){
+    seleccionHormigon = viewer.getSelection(); // ids elementos seleccionados
+    console.log("PREVIO CALCULO FIERROS/HORMIGON");
+    console.log(seleccionHormigon );
+    console.log(matrizHormigonado);
+    var resultado_fierros = [];
+    for(let j=0;j<seleccionHormigon.length;j++){
+      for(let w =0 ; w< matrizHormigonado.length;w++){
+        procesoCalculo = 0;
+        viewer.select( [seleccionHormigon[j]]);  
+        let box1 = viewer.utilities.getBoundingBox();
+        viewer.select( [  matrizHormigonado[w]]);  
+        let box2 = viewer.utilities.getBoundingBox();
+        let interseccion = box2.intersectsBox(box1);
+        if(interseccion){
+          resultado_fierros.push(matrizHormigonado[w]);
+        }
   
-  var c = z.split(',').map(function(item) {
-    return parseInt(item, 10);
-  });
-  console.log("Ids previo isolate");
-  console.log(c);
-  viewer.isolate(c);
-  calculaFierrosHormigon(idF);
+      }
+    }
+    console.log("Fierros Contenidos en seccion Hormigon");
+    console.log(resultado_fierros);
+   
+    let z = "";
+    let idF = [];
+    for(let y =0; y<resultado_fierros.length;y++){
+      if(!isNaN(resultado_fierros[y][0])&& resultado_fierros[y][0] !=""){
+        z = z+","+resultado_fierros[y][0];
+        idF.push(resultado_fierros[y][0]);
+      }
+     
+    }
+    console.log(idF);
+    quitar_filtros();
+    
+    var c = z.split(',').map(function(item) {
+      return parseInt(item, 10);
+    });
+    console.log("Ids previo isolate");
+    console.log(c);
+    viewer.isolate(c);
+    procesoCalculo = 1;
+    //calculaFierrosHormigon(idF);
+  }
+  else{
+    $("#calculoFierroHormigon").modal('toggle');
+  }
+  
  
 }
 
@@ -2217,6 +2227,9 @@ function savePedido(){
 
 
   
+}
+function closeNegacionFierro(){
+  $('#calculoFierroHormigo').modal('toggle');
 }
 function closeNegacionOrden(){
   $('#modaldemo15').modal('toggle');
@@ -3214,6 +3227,7 @@ async function transferenciaData(){
               })
             }
           }
+          
           resolve(matrizHormigonado);},(error) => {
             reject(error);
         });
@@ -3224,7 +3238,9 @@ async function transferenciaData(){
     
       console.log("FIERROS DESDE LLAMADO");
       console.log(res);
-      
+      setTimeout(()=>{
+        fierrosOK = 1;
+      },10000) 
     });
   
 }
@@ -3549,7 +3565,7 @@ function launchViewer(urn) {
       getOrdenes();
       setTimeout(()=>{
         transferenciaData();
-      },20000);
+      },15000);
 
     
 
@@ -3603,1550 +3619,26 @@ function launchViewer(urn) {
   //////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
 // Detección de selección de elementos
-      viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT,(event)=>{
+     // viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT,(event)=>{
       
-        const tree = viewer.model.getInstanceTree();
-        console.log("ids seleccionadas");
-        console.log(viewer.getSelection());
-        if (tree) { // Could be null if the tree hasn't been loaded yet
-          const selectedIds = viewer.getSelection();
-          const fragIds = [];
-          for (const dbId of selectedIds) {
-           
-            tree.enumNodeFragments(
-              dbId,
-              function (fragId) { fragIds.push(fragId); },
-              false
-            );
-            console.log("Seleccion TEST");
-            console.log('dbId:', dbId, 'fragIds:', fragIds);
-          
-
-          }
-        //  var wa = getModifiedWorldBoundingBox(fragIds);
-         // console.log("TEST DE SELECCION");
-         // console.log(wa);
-        }
-      
-      
-        console.log("Seleccion!222!!!!!!!!!!!!!!!!!!!!!!!");
-        console.log(event);
-        console.log(event.dbIdArray);
-        // Poner en Blanco tabla de pedidos
-        document.getElementById("largo").innerHTML="";
-        document.getElementById("peso").innerHTML="";
-        document.getElementById("btn").innerHTML="";
-        var a= event.dbIdArray;
-        console.log("ELEMENTOS SELECCIONADOS");
-        let selects = event.dbIdArray;
-        console.log(selects);
-        //viewer.select( [selects]);
-        console.log("list ids");
-        console.log(event.fragIdsArray);
-        console.log("frag list");
-        console.log(viewer.model.getFragmentList());
-
-        /*
-        var bBox = getModifiedWorldBoundingBox(
-          event.fragIdsArray,
-          viewer.model.getFragmentList()
-        );*/
-
-     //   drawBox(bBox.min, bBox.max);
-     //   var box = viewer.utilities.getBoundingBox();
-    //    console.log(box);
-       // var box = getModifiedWorldBoundingBox(selects);
-       console.log("BOUNDING BOX BOX BOX");
-
-        for(let r =0; r<selects.length;r++){
-         const colorFierro = new THREE.Vector4(0.0, 0.0, 1.0,1.0);
        
-        /// viewer.setThemingColor(a[r], color, null, true);
-        viewer.getProperties(selects[r], (result) => { 
-          console.log('RESULTADO SELECCION ESPECIAL'); 
-          console.log(selects[0]);
-              
-            let fecha_hormigonado = "";
-            if(result.name){
-              var categoria_actual = result.name.split("[");
-              console.log(categoria_actual);
-               // nombre_objeto
-            
-              let boton_fecha = "";
-    
-            }
-            
-        //   console.log(result.name.split("["));
-            if(categoria_actual){
-          
-  
-         
-            if(categoria_actual[0] === "Rebar Bar "){
-              console.log("si es Rebar Bar ");
-              viewer.setThemingColor(selects[r], colorFierro , null, true);
-            }
-            }
-           
-          
-  
-            
-        
-            
-        //    console.log("VALORES");
-        //   console.log(result);
-            
-        }) ;
-        }
-        
+     //   console.log("ids seleccionadas");
+     //   console.log(viewer.getSelection());
+     
       
-
-
-          let dbId = viewer.getSelection(); 
-        // this.existeId(125);
-          //idsSeleccionados = dbId;
-          //  console.log("toco");
-        //    console.log(dbId);
-            document.getElementById("propiedades_id").innerHTML = "";
+        //console.log("Seleccion!222!!!!!!!!!!!!!!!!!!!!!!!");
+      
+     
+        var a= event.dbIdArray;
+     //   console.log("ELEMENTOS SELECCIONADOS");
         
-        // console.log("ID PROPIEDAD");
-      //  console.log(dbId.dbId);
-        // console.log(dbId);
-            let busqueda = existeId(dbId[0]); 
-            console.log('RESULTADO BUSQUEDA ID - FN');
-            console.log(busqueda);
-            if(busqueda == false){
-              viewer.getProperties(dbId[0], (result) => { 
-                console.log('RESULTADO SELECCION'); 
-                document.getElementById("propiedades_id").innerHTML = "";
-                  console.log(result); 
-                  document.getElementById("edicion_data").innerHTML = "";
-                  document.getElementById("edicion_data2").innerHTML = "";
-                  //<a class='btn ripple btn-info' data-target='#modaldemo3' data-toggle='modal' href=''>Editar Datos</a>
-                 
-                  let fecha_hormigonado = "";
-                  if(result.name){
-                    var categoria_actual = result.name.split("[");
-                    document.getElementById("propiedades_id").innerHTML += "<li><b> Nombre</b> :"+result.name+"</li>";
-                    // nombre_objeto
-                    $("#nombre_objeto").val(result.name);
-                    let boton_fecha = "";
-          
-                  }
-                  
-              //   console.log(result.name.split("["));
-                  if(categoria_actual){
-                    if(categoria_actual[0] === "Floor "){
-                      console.log("si es flooor");
-                      for(i=0 ;i< 60;i++){
-                      
-                      switch(i){
-                          case 0:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 1:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 4:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 11:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                          case 12:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 13:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                          break;
-                          case 16:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 17:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 18:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 21:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 24:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 28:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 29:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 30:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 31:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 32:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 39:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 43:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;                  
-                      }
-                      
-                      }
-                  }
-        
-                  if(categoria_actual[0] === "RS VHA. "){
-                    console.log("si es RS VHA");
-                    for(i=0 ;i< 60;i++){
-                    
-                    switch(i){
-                        case 0:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 1:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 4:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 11:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 12:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 13:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                        break;
-                        case 16:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 17:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 18:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 21:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 24:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 28:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 29:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 30:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 31:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 32:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 39:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 43:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;                  
-                    }
-                    
-                    }
-                  }
-                  if(categoria_actual[0] === "Basic Wall "){
-              //    console.log("si es Basic Wall ");
-                  for(i=0 ;i< 60;i++){
-                  
-                  switch(i){
-                      case 0:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 1:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 5:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 10:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 19:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 20:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                      break;
-                      case 21:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 22:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 23:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                    case 24:
-                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                    case 25:
-                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                    case 27:
-                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                    case 31:
-                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                    case 32:
-                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                    case 33:
-                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                    break;
-                    case 34:
-                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                    break;
-                    case 42:
-                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                    case 46:
-                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;                  
-                  }
-                  
-                  }
-                  }
-                  if(categoria_actual[0] === "Wall Foundation "){
-                    console.log("si es Wall Foundation ");
-                    for(i=0 ;i< 60;i++){
-                    
-                    switch(i){
-                        case 0:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 1:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 5:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 6:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 7:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 8:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                        break;
-                        case 9:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 10:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 11:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 12:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 13:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 14:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 20:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 21:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 22:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 23:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>123"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 30:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>123"+result.properties[i].displayValue+"</li>";
-                      break;
-                                    
-                    }
-                    
-                    }
-                  }
-                  if(categoria_actual[0] === "RS Fundacion Aislada Tipo "){
-                    console.log("si es RS Fundacion Aislada Tipo ");
-                    for(i=0 ;i< 60;i++){
-                    
-                    switch(i){
-                        case 0:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 1:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 3:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 8:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 10:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 11:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                        break;
-                        case 12:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 13:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 16:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 22:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 23:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 24:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 25:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 35:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 36:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 37:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break; 
-                                    
-                    }
-                    
-                    }
-                  }  
-                  if(categoria_actual[0] === "Foundation Slab "){
-                    console.log("si es Foundation Slab ");
-                    for(i=0 ;i< 60;i++){
-                    
-                    switch(i){
-                        case 0:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 1:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 4:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 10:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 11:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 12:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                        break;
-                        case 14:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 15:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 16:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 19:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 20:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 21:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 24:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 28:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 29:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 30:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 31:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 37:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;   
-                        case 40:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;                
-                    }
-                    
-                    }
-                  }
-                  if(categoria_actual[0] === "Rebar Bar "){
-                    console.log("si es Rebar Bar ");
-                    for(i=0 ;i< 60;i++){
-                    
-                    switch(i){
-                        case 0:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 1:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 3:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 4:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 6:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 20:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                        break;
-                        case 22:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 23:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 24:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 25:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 26:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 36:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 45:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 46:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 47:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 48:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 60:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 61:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;   
-                        case 63:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 64:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break; 
-                      case 65:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 66:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 67:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;               
-                    }
-                    
-                    }
-                  }
-                  }
-                  console.log("tipo resultado propiedades "+typeof result.properties);
-                  for(i=0 ;i< 50;i++){
-               
-                    if(result.properties[i]&&result.properties[i].displayName){
-                      let nombre_actual = ""+result.properties[i].displayName;
-                      if(nombre_actual  === parametro_fecha){
-                    
-        
-                    
-                        fecha_hormigonado = result.properties[i].displayValue;
-                        let elementos_fecha = fecha_hormigonado.split("/");
-                        let compara =55;
-                        if(elementos_fecha.length<=1){
-                           elementos_fecha = fecha_hormigonado.split("-");
-                        }
-                        var today = new Date();
-                        var dd = String(today.getDate()).padStart(2, '0');
-                        var mm = String(today.getMonth() + 1).padStart(2, '0'); //
-                        var yyyy = today.getFullYear();
-                        if(mm>0){
-                          mm = mm-1; 
-                        }
-                        today = '0'+mm + '/' + dd + '/' + yyyy;
-                        if(elementos_fecha[1] >0){
-                          elementos_fecha[1] = elementos_fecha[1];
-                        }
-                      // // // // // // // // // // // alert(elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]);
-                        //// // // // // // // // // // alert(today);
-                        if(elementos_fecha[1]){
-                          if(elementos_fecha[1].length ==0){
-                            var d2 = '0'+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
-                            var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                         
-                          }else{
-                            var d2 = elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
-                            var d3   = elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                         
-                          }
-                           
-                        }
-                        if(today&&d2){
-                          let compara = dates.compare(today,d2);
-                        }else{
-                          compara = 1;
-                        }
-                       
-                        if(compara == 1){
-                          boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-          
-          
-                    
-          
-          
-                        }else{
-                          if(compara == -1){
-                            boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-          
-             
-                          }else{
-                            if(compara == 0){
-                              boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-         
-                            }
-                            else{
-                              boton_fecha ="FECHA SIN FORMATO 2";
-                       
-                            }
-                          }
-                        }
-                        
-                      }
-                    }
-                  
-                   
-                }
-        
-                  
-               //   document.getElementById("propiedades_id").innerHTML += " AEC Secuencia Hormigonado <li><b>"+" :</b>"+fecha_hormigonado+" Estado: "+boton_fecha+"</li>";
-                $("#dateMask1").val(fecha_hormigonado);
-                $("#plan1").val(fecha_hormigonado);
-                $("#dateMask2").val(fecha_hormigonado);
-                $("#plan2").val(fecha_hormigonado);
-                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo3' data-toggle='modal' href=''>Fecha Instalación</a></li>";
-                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a></li>";
-                  
-              //    console.log("VALORES");
-              //   console.log(result);
-                  
-              }) ;
-            }else{
-                let base = busqueda[1];
-                let plan = busqueda[2];
-                viewer.getProperties(dbId[0], (result) => { 
-
-
-                  
-                  console.log('RESULTADO SELECCION'); 
-                  document.getElementById("propiedades_id").innerHTML = "";
-                    console.log(result); 
-                    //<a class='btn ripple btn-info' data-target='#modaldemo3' data-toggle='modal' href=''>Editar Datos</a>
-                    document.getElementById("edicion_data").innerHTML = "<a class='btn ripple btn-warning block' data-target='#modaldemo3' data-toggle='modal' href=''>Editar Fecha Instalación</a>";
-                    document.getElementById("edicion_data2").innerHTML = "<br><a class='btn ripple btn-warning block' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a>";
-                    
-                    let fecha_hormigonado = "";
-                    if(result.name){
-                      var categoria_actual = result.name.split("[");
-                      document.getElementById("propiedades_id").innerHTML += "<li><b> Nombre</b> :"+result.name+"</li>";
-                      // nombre_objeto
-                      $("#nombre_objeto").val(result.name);
-                      let boton_fecha = "";
-            
-                    }
-                    
-                //   console.log(result.name.split("["));
-                
-                    if(categoria_actual[0] === "Floor "){
-                        console.log("si es flooor");
-                        for(i=0 ;i< 60;i++){
-                        
-                        switch(i){
-                            case 0:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                            case 1:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                            case 4:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                            case 11:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                            case 12:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                            case 13:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                            break;
-                            case 16:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                            case 17:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                            case 18:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                          case 21:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                          case 24:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                          case 28:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                          case 29:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                              break;
-                          case 30:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 31:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                          case 32:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                          case 39:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 43:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;                  
-                        }
-                        
-                        }
-                    }
-          
-                    if(categoria_actual[0] === "RS VHA. "){
-                      console.log("si es RS VHA");
-                      for(i=0 ;i< 60;i++){
-                      
-                      switch(i){
-                          case 0:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 1:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 4:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 11:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                          case 12:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 13:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                          break;
-                          case 16:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 17:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 18:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 21:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 24:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 28:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 29:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 30:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 31:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 32:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 39:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 43:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;                  
-                      }
-                      
-                      }
-                    }
-                    if(categoria_actual[0] === "Basic Wall "){
-                //    console.log("si es Basic Wall ");
-                    for(i=0 ;i< 60;i++){
-                    
-                    switch(i){
-                        case 0:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 1:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 5:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 10:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 19:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 20:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                        break;
-                        case 21:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 22:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 23:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 24:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 25:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 27:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 31:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                      case 32:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 33:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 34:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                      break;
-                      case 42:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                      case 46:
-                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;                  
-                    }
-                    
-                    }
-                    }
-                    if(categoria_actual[0] === "Wall Foundation "){
-                      console.log("si es Wall Foundation ");
-                      for(i=0 ;i< 60;i++){
-                      
-                      switch(i){
-                          case 0:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 1:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 5:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 6:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                          case 7:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 8:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                          break;
-                          case 9:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 10:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 11:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 12:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 13:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 14:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 20:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 21:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 22:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 23:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>123"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 30:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>123"+result.properties[i].displayValue+"</li>";
-                        break;
-                                      
-                      }
-                      
-                      }
-                    }
-                    if(categoria_actual[0] === "RS Fundacion Aislada Tipo "){
-                      console.log("si es RS Fundacion Aislada Tipo ");
-                      for(i=0 ;i< 60;i++){
-                      
-                      switch(i){
-                          case 0:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 1:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 3:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 8:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                          case 10:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 11:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                          break;
-                          case 12:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 13:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 16:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 22:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 23:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 24:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 25:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 35:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 36:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 37:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break; 
-                                      
-                      }
-                      
-                      }
-                    }  
-                    if(categoria_actual[0] === "Foundation Slab "){
-                      console.log("si es Foundation Slab ");
-                      for(i=0 ;i< 60;i++){
-                      
-                      switch(i){
-                          case 0:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 1:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 4:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 10:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                          case 11:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 12:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                          break;
-                          case 14:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 15:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 16:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 19:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 20:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 21:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 24:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 28:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 29:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 30:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 31:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 37:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;   
-                          case 40:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;                
-                      }
-                      
-                      }
-                    }
-                    if(categoria_actual[0] === "Rebar Bar "){
-                      console.log("si es Rebar Bar ");
-                      for(i=0 ;i< 60;i++){
-                      
-                      switch(i){
-                          case 0:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 1:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 3:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 4:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                          case 6:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 20:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
-                          break;
-                          case 22:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 23:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 24:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 25:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 26:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 36:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 45:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 46:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 47:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 48:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 60:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;
-                        case 61:
-                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break;   
-                          case 63:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                          case 64:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                          break; 
-                        case 65:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;
-                        case 66:
-                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                            break;
-                        case 67:
-                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
-                        break;               
-                      }
-                      
-                      }
-                    }
-                    let nombre_actual ="";
-                    if(result.properties[i]){
-                      nombre_actual = ""+result.properties[i].displayName;
-                    }
-                        
-                      
-                        fecha_hormigonado = base;
-                        let elementos_fecha = fecha_hormigonado.split("/");
-                        if(elementos_fecha.length <=1){
-                          elementos_fecha = fecha_hormigonado.split("-");
-                        }
-                     
-                        var today = new Date();
-                        var dd = String(today.getDate()).padStart(2, '0');
-                        var mm = String(today.getMonth() + 1).padStart(2, '0'); //
-                        var yyyy = today.getFullYear();
-                        if(mm>0){
-                          mm = mm-1; 
-                        }
-                        today = '0'+mm + '/' + dd + '/' + yyyy;
-                        if(elementos_fecha[1] >0){
-                          elementos_fecha[1] = elementos_fecha[1];
-                        }
-                      // // // // // // // // // // // alert(elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]);
-                        //// // // // // // // // // alert(today);
-                        var d2 = '0'+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
-                        var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                        let compara = dates.compare(today,d2);
-                        let compara2 = dates.compare(today,d3);
-
-                        if(compara == 0){
-                          if(compara2 != 0){compara = compara2;}
-                        }
-                        if(compara == 1){
-                          boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido o Sin Formato (Fecha Plan) <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-          
-          
-                    
-          
-          
-                        }else{
-                          if(compara == -1){
-                            boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-          
-                        /*    gantt.parse({
-                              data: [
-                                  { id: 1, text: result.name, start_date: d3, duration: 5, progress: 0.4, open: true },
-                                  { id: 2, text: "Inicio", start_date: d3, duration: 1, progress: 0.6, parent: 1 }
-                              ],
-                              links: [
-                                  {id: 1, source: 1, target: 2, type: "1"},
-                                  
-                              ]
-                          });
-          
-          */
-                          }else{
-                            if(compara == 0){
-                              boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-          /*
-                              gantt.parse({
-                                data: [
-                                    { id: 1, text: result.name, start_date: d3, duration: 5, progress: 0.4, open: true },
-                                    { id: 2, text: "Inicio", start_date: d3, duration: 1, progress: 0.6, parent: 1 }
-                                ],
-                                links: [
-                                    {id: 1, source: 1, target: 2, type: "1"},
-                                    
-                                ]
-                            });
-          */
-          
-                            }
-                            else{
-                              boton_fecha =" Fecha Sin Formato";
-                              /*
-                              gantt.parse({
-                                data: [
-                                    { id: 1, text: "Seleccione Un objeto", start_date: "25-05-2021", duration:1, progress: 0.4, open: true },
-                                    { id: 2, text: "Inicio", start_date: "25-05-2021", duration: 1, progress: 0.6, parent: 1 }
-                                ],
-                                links: [
-                                    {id: 1, source: 1, target: 2, type: "1"}
-                                  
-                                ]
-                            });
-                            */
-                            }
-                          }
-                        }
-                        
-                    
-                 
-          
-                    
-                    document.getElementById("propiedades_id").innerHTML += " AEC Secuencia Hormigonado <li><b>"+" :</b>"+base+" Estado: "+boton_fecha+"</li>";
-                    document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning' data-target='#modaldemo3' data-toggle='modal' href=''>Fecha Instalación</a></li>";
-                    document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a></li>";
-                    
-                    
-                //    console.log("VALORES");
-                //   console.log(result);
-                    
-                }) ;
-           
-                $("#dateMask1").val(base);
-                $("#plan1").val(plan);
-                $("#dateMask2").val(base);
-                $("#plan2").val(plan);
-                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo3' data-toggle='modal' href=''>Fecha Instalación</a></li>";
-                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a></li>";
-                
-            }
-          
-            document.getElementById("id_seleccionados").value =selects.join();
-            document.getElementById("id_seleccionados2").value =selects.join();
-            document.getElementById("id_seleccionados3").value =selects.join();
-            document.getElementById("id_seleccionados4").value =selects.join();
-            
-            document.getElementById("elementos_seleccionados").innerHTML = "";
-            let boton_guardar = "<a class='btn ripple btn-warning block' data-target='#modaldemo4' data-toggle='modal' href=''><i class='ti-save'></i></a>";
-          
-            document.getElementById("elementos_seleccionados").innerHTML = "  "+""+boton_guardar;
-            
-        //   gantt.selectTask(dbId);
-          
-        
-          
             
           
-            viewer.model.getBulkProperties(dbId, ['Name','Level','Area','Volume','Thickness'], (result) => {
-            
-              
-              let test = result.filter(x => x.properties[0].displayValue !== '');
-                let data = {};
-
-                test.forEach(elements => {
-                //  console.log('Elementos22');
-               //   console.log(elements);
-                //  console.log(elements.dbId);
-                  var cat_count=1;
-                  var categorias = Array();
-                  viewer.getProperties(elements.dbId, (result2) => { 
-                //    console.log(result2)
-                    for(i=0 ;i< 60;i++){
-                      let nombre_actual = ""+result2.name;
-                      if(nombre_actual ==="Category"){
-                        categoria_actual_obj = result2.properties[i].displayValue;
-                 //       console.log("CATEGORIA BUSCADA");
-                  //      console.log(categoria_actual_obj);
-                        //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
-                          if(categoria_actual_obj==""+parametro_fierro+""){
-                          console.log("ENTRAR REBAR");
-                          for(t=0;t<result2.properties.length;t++){
-                            let val_actual = result2.properties[t].displayName;
-                            if( val_actual == "RS Peso Lineal (kg/m)"){
-                           
-                              console.log("ENTRO A PESO LINEAL");
-                              let peso = parseFloat(result2.properties[t].displayValue,1);
-                              listado_pesos = listado_pesos + ","+peso;
-                              $("#listado_pesos").val(listado_pesos);
-                           
-                              console.log("ANTES PESO BUSCADO2");
-                      //        console.log(peso);
-                      //        console.log(result2.properties[t].displayValue);
-                       //       console.log(result2);
-                              
-                             // peso = parseFloat(peso);
-                              pesoActual = peso;
-                              console.log("PESO BUSCADO");
-                       //       console.log(peso);
-                             
-                          
-                               pesoTotal = pesoTotal+ peso;
-                               pesoTotal  = parseFloat(pesoTotal,1);
-                              
-                               console.log( "SUMATORIA PESO");
-                       //        console.log( pesoTotal);
-                               
-                            }
-                            if(val_actual == "Total Bar Length"){
-                              console.log("TOTAL LENGTH BAR");
-                              
-                              let largo = parseFloat(result2.properties[t].displayValue);
-                              console.log(largo );
-                            //  largo = largo.toFixed(1);
-                              largo = parseFloat(largo,1);
-                              
-                              largo = largo /100;
-                              largoActual = largo;
-                              console.log("convertido "+largo);
-                              listado_largos = listado_largos+","+largo;
-                             
-                              largoTotal = largoTotal+ largo;
-                             // largoTotal = largoTotal;
-                              console.log( "SUMATORIA LARGO");
-                              console.log( largoTotal);
-                              console.log( "Listado largos");
-                              console.log(listado_largos);
-                              //largoTotal  = parseFloat(largoTotal).toFixed(1);
-                             // listado_pesos = listado_pesos +","+peso;
-                              listado_largos = listado_largos +","+largo;
-                              $("#listado_largo").val(listado_largos);
-                           //   $("#listado_pesos").val(listado_pesos);
-                              document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(1)+ ' mtrs';
-                             
-                            }
-                            if((t+1 )==result2.properties.length){ // termina de recorrer todas las propiedades
-                                  
-                               let resultado_mul = pesoActual*largoActual;
-                               console.log("resultado multiplicacion");
-                               console.log(pesoActual+"    "+largoActual );
-                               console.log(resultado_mul);
-                               pesoTotal = pesoTotal+resultado_mul;
-                                $("#largo_total_pedido").val(largoTotal.toFixed(1));
-                                $("#peso_total_pedido").val(pesoTotal.toFixed(1));
-                                $("#resultado_total_pedido").val(pesoTotal);
-                                document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
-                  
-                                $("#listado_largo").val(listado_largos);
-                              
-                                //console.log( "Resultado Multiplicación");
-                              // console.log( resultado_mul);
-                            
-                                resultado_mul =resultado_mul.toFixed(3);
-                                xTotal = xTotal + parseFloat(resultado_mul,1);
-                                console.log( "Total Multiplicación");
-                                console.log( xTotal);
-                             //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
-                  
-                                document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
-                               // let g = name.split(' ');
-                              //  let y = g[2];
-                              
-                            }
-                          }
-                          
-                         
-                          
-                          let actuales = $("#id_seleccionados3").val();
-                          actual =   actual+","+actuales;
-                          $("#id_seleccionados3").val(actual);
-                          $("#id_seleccionados4").val(actual);
-                         
-                          let name = result.name;
-                        
-                          
-                  
-                  
-                          
-                          // Inserta una fila en la tabla, en el índice 0
-                         
-                         }
-                         if(cat_count == 1){ // no hay ningun elemento
-                             indice_actual = 0;
-                             categorias.push(result2.properties[i].displayValue);
-                             categoria_actual = result2.properties[i].displayValue;
-                             cat_count =cat_count +1;
-                         //    console.log("entre una vez "+ cat_count );
-                         /*
-                             var taskId = gantt.addTask({
-                              id:cat_count,
-                              text:result.properties[i].displayValue,
-                              start_date:hoy,
-                              duration:1
-                            },11,1);*/
-                            
-                         }else{
-                           // busco si se encuentra
-                        //   console.log("GUARDAFDAS //////////////////////////////");
-                        //   console.log(categorias);
-                            for(var t =0 ; t< cat_count; t++){
-                                if( result2.properties[i].displayValue === categorias[t]){
-                                  esta = 1; 
-                                  indice_actual = t;
-                                  break
-                                }
-                            }
-                            if(esta ==0){ // no se encontró  se procede a agregar la nueva categoria
-                              categorias.push(result2.properties[i].displayValue);
-                              cat_count =cat_count +1;
-                              indice_actual = cat_count -1;
-                              // console.log("agregue nuevo "+ cat_count);
-                            
-                            /*
-                              var taskId = gantt.addTask({
-                                                    id:cat_count,
-                                                    text:result.properties[i].displayValue,
-                                                    start_date:hoy,
-                                                    duration:1
-                                },11,1);*/
-                         //   gantt.sort("start_date",false);
-                       //     gantt.render();
-                            
-                            }
-                            else{
-                              esta = 0;
-                            }
-                          }
-                      }
-                      if(nombre_actual  === parametro_fecha){
-                  
-                        fecha_hormigonado = result2.properties[i].displayValue;
-                  
-                        let formato_hormigonado_1 = fecha_hormigonado.indexOf("/");
-                        let formato_hormigonado_2 = fecha_hormigonado.indexOf("-");
-                  
-                        if(formato_hormigonado_1 != -1){
-                              let elementos_fecha = fecha_hormigonado.split("/");
-                            if(elementos_fecha.length>0){
-                              var today = new Date();
-                              var dd = String(today.getDate()).padStart(2, '0');
-                              var mm = String(today.getMonth() + 1).padStart(2, '0'); //
-                              var yyyy = today.getFullYear();
-                              if(mm>0){
-                                mm = mm-1; 
-                              }
-                              today = '0'+mm + '/' + dd + '/' + yyyy;
-                              if(elementos_fecha[1] >0){
-                                elementos_fecha[1] = elementos_fecha[1]-1;
-                              }
-                  
-                              var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                              // let compara = dates.compare(today,d2);
-                          
-                              let resultado  = [result.name,d3];
-                        
-                              console.log("NombreInterno" + resultado[0]);
-                              return resultado;
-                            }
-                        }
-                        if(formato_hormigonado_2 != -1){
-                          let elementos_fecha = fecha_hormigonado.split("-");
-                          if(elementos_fecha.length>0){
-                            var today = new Date();
-                            var dd = String(today.getDate()).padStart(2, '0');
-                            var mm = String(today.getMonth() + 1).padStart(2, '0'); //
-                            var yyyy = today.getFullYear();
-                            if(mm>0){
-                               mm = mm-1; 
-                            }
-                            today = '0'+mm + '/' + dd + '/' + yyyy;
-                            if(elementos_fecha[1] >0){
-                              elementos_fecha[1] = elementos_fecha[1]-1;
-                            }
-                  
-                            var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                            // let compara = dates.compare(today,d2);
-                         
-                            let resultado  = [result2.name,d3];
-                       
-                            console.log("NombreInterno" + resultado[0]);
-                             return resultado;
-                          }
-                        }
-                        
-                       }
-                    }
-                    
-                  });
-                  if(elements.length >=5){
-                    let name= elements.properties[0].displayValue;
-                      let level= elements.properties[1].displayValue;
-                      let struct= elements.properties[2].displayValue;
-                      let area= elements.properties[3].displayValue;
-                      let vol= elements.properties[4].displayValue;
-                     
-
-                  }
-                  else{
-                    if(elements.properties[0]){
-                      let name= elements.properties[0].displayValue;
-                    }
-                    if(elements.properties[1]){
-                      let level= elements.properties[1].displayValue;
-                    }
-                   
-                  } 
-                  
-                
-                  });
-         
-            
-              }, (error) => {
-                  reject(error);
-              });
-          });
+          
+        //  });
      
     
-  });
+ });
 
 }
 //Busca si el id (elemento de modelo) tiene una fecha
@@ -6860,195 +5352,198 @@ function genera_gantt(){
 }
 
 function calculaFierrosHormigon(listado){
-  identificadores_fierros = listado.filter((item,index)=>{
-    return listado.indexOf(item) === index;
-  })
- // identificadores_fierros = listado;
-  console.log("inicio suma fierros seleccion hormigon");
-  console.log(identificadores_fierros);
-  var pesoTotal=0;
-  var largoTotal =0;
-  for(var a=0; a< identificadores_fierros.length;a++){
-    let actual =  identificadores_fierros[a];
-    
-    viewer.getProperties( identificadores_fierros[a], (result) => { 
-     
-      for(i=0 ;i< 60;i++){
-        let nombre_actual = ""+result.properties[i].displayName;
-        if(nombre_actual ==="Category"){
-          categoria_actual_obj = result.properties[i].displayValue;
-          console.log("CATEGORIA BUSCADA");
-          console.log(categoria_actual_obj);
-          //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
-            if(categoria_actual_obj==""+parametro_fierro+""){
-            console.log("ENTRAR REBAR");
-            for(t=0;t<result.properties.length;t++){
-              let val_actual = result.properties[t].displayName;
-              if( val_actual == "RS Peso Lineal (kg/m)"){
-             
-                console.log("ENTRO A PESO LINEAL");
-                let peso = parseFloat(result.properties[t].displayValue,1);
-            //    peso = peso.toFixed(2);
-                //peso = Number.parseFloat(peso,2);
-                console.log("ANTES PESO BUSCADO");
-                console.log(peso);
-                console.log(result.properties[t].displayValue);
-                console.log(result);
-                
-               // peso = parseFloat(peso);
-                pesoActual = peso;
-                console.log("PESO BUSCADO");
-                console.log(peso);
-                listado_pesos = listado_pesos+","+peso;
+  
+    identificadores_fierros = listado.filter((item,index)=>{
+      return listado.indexOf(item) === index;
+    })
+   // identificadores_fierros = listado;
+   // console.log("inicio suma fierros seleccion hormigon");
+   // console.log(identificadores_fierros);
+    var pesoTotal=0;
+    var largoTotal =0;
+    for(var a=0; a< identificadores_fierros.length;a++){
+      let actual =  identificadores_fierros[a];
+      
+      viewer.getProperties( identificadores_fierros[a], (result) => { 
+       
+        for(i=0 ;i< 60;i++){
+          let nombre_actual = ""+result.properties[i].displayName;
+          if(nombre_actual ==="Category"){
+            categoria_actual_obj = result.properties[i].displayValue;
+            console.log("CATEGORIA BUSCADA");
+            console.log(categoria_actual_obj);
+            //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
+              if(categoria_actual_obj==""+parametro_fierro+""){
+              console.log("ENTRAR REBAR");
+              for(t=0;t<result.properties.length;t++){
+                let val_actual = result.properties[t].displayName;
+                if( val_actual == "RS Peso Lineal (kg/m)"){
                
-                 pesoTotal = peso + pesoTotal;
-                 pesoTotal  = parseFloat(pesoTotal,1);
-                
-                 console.log( "SUMATORIA PESO");
-                 console.log( pesoTotal);
+                  console.log("ENTRO A PESO LINEAL");
+                  let peso = parseFloat(result.properties[t].displayValue,1);
+              //    peso = peso.toFixed(2);
+                  //peso = Number.parseFloat(peso,2);
+                  console.log("ANTES PESO BUSCADO");
+                  console.log(peso);
+                  console.log(result.properties[t].displayValue);
+                  console.log(result);
+                  
+                 // peso = parseFloat(peso);
+                  pesoActual = peso;
+                  console.log("PESO BUSCADO");
+                  console.log(peso);
+                  listado_pesos = listado_pesos+","+peso;
                  
-              }
-              if(val_actual == "Total Bar Length"){
-                console.log("TOTAL LENGTH BAR");
-                
-                let largo = parseFloat(result.properties[t].displayValue);
-                console.log(largo );
-             //   largo = largo.toFixed(1);
-                largo = parseFloat(largo,1);
-                
-                largo = largo /100;
-                largoActual = largo;
-                console.log("convertido "+largo);
-                listado_largos = listado_largos+","+largo;
-               
-                console.log("Listado pesos");
-                console.log( listado_pesos);
-                largoTotal = largoTotal+ largo;
-                largoTotal = largoTotal;
-                console.log( "SUMATORIA LARGO");
-                console.log( largoTotal);
-                console.log( "Listado largos");
-                console.log(listado_largos);
-                //largoTotal  = parseFloat(largoTotal).toFixed(1);
-               // listado_pesos = listado_pesos +","+peso;
-                listado_largos = listado_largos +","+largo;
-                $("#listado_largo").val(listado_largos);
-                $("#listado_pesos").val(listado_pesos);
-                document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(1)+ ' mtrs';
-               
-              }
-              if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
-                    
-                 let resultado_mul = pesoActual*largoActual;
-                 console.log("resultado multiplicacion HF");
-                 console.log(pesoActual+"    "+largoActual );
-                 console.log(resultado_mul);
-                 pesoTotal = pesoTotal+resultado_mul;
-                 console.log("PESO TOTAL HF");
-                 console.log(pesoTotal);
-                  $("#largo_total_pedido").val(largoTotal.toFixed(1));
-                  $("#peso_total_pedido").val(pesoTotal.toFixed(1));
-                  $("#resultado_total_pedido").val(pesoTotal);
-                  document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
-
+                   pesoTotal = peso + pesoTotal;
+                   pesoTotal  = parseFloat(pesoTotal,1);
+                  
+                   console.log( "SUMATORIA PESO");
+                   console.log( pesoTotal);
+                   
+                }
+                if(val_actual == "Total Bar Length"){
+                  console.log("TOTAL LENGTH BAR");
+                  
+                  let largo = parseFloat(result.properties[t].displayValue);
+                  console.log(largo );
+               //   largo = largo.toFixed(1);
+                  largo = parseFloat(largo,1);
+                  
+                  largo = largo /100;
+                  largoActual = largo;
+                  console.log("convertido "+largo);
+                  listado_largos = listado_largos+","+largo;
+                 
+                  console.log("Listado pesos");
+                  console.log( listado_pesos);
+                  largoTotal = largoTotal+ largo;
+                  largoTotal = largoTotal;
+                  console.log( "SUMATORIA LARGO");
+                  console.log( largoTotal);
+                  console.log( "Listado largos");
+                  console.log(listado_largos);
+                  //largoTotal  = parseFloat(largoTotal).toFixed(1);
+                 // listado_pesos = listado_pesos +","+peso;
+                  listado_largos = listado_largos +","+largo;
                   $("#listado_largo").val(listado_largos);
                   $("#listado_pesos").val(listado_pesos);
-                  //console.log( "Resultado Multiplicación");
-                // console.log( resultado_mul);
-              
-                  resultado_mul =resultado_mul.toFixed(3);
-                //  xTotal = xTotal + parseFloat(resultado_mul,1);
-                //  console.log( "Total Multiplicación");
-                //  console.log( xTotal);
-               //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
-
-                  document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
-                 // let g = name.split(' ');
-                //  let y = g[2];
+                  document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(1)+ ' mtrs';
+                 
+                }
+                if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
+                      
+                   let resultado_mul = pesoActual*largoActual;
+                   console.log("resultado multiplicacion HF");
+                   console.log(pesoActual+"    "+largoActual );
+                   console.log(resultado_mul);
+                   pesoTotal = pesoTotal+resultado_mul;
+                   console.log("PESO TOTAL HF");
+                   console.log(pesoTotal);
+                    $("#largo_total_pedido").val(largoTotal.toFixed(1));
+                    $("#peso_total_pedido").val(pesoTotal.toFixed(1));
+                    $("#resultado_total_pedido").val(pesoTotal);
+                    document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
+  
+                    $("#listado_largo").val(listado_largos);
+                    $("#listado_pesos").val(listado_pesos);
+                    //console.log( "Resultado Multiplicación");
+                  // console.log( resultado_mul);
                 
+                    resultado_mul =resultado_mul.toFixed(3);
+                  //  xTotal = xTotal + parseFloat(resultado_mul,1);
+                  //  console.log( "Total Multiplicación");
+                  //  console.log( xTotal);
+                 //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
+  
+                    document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
+                   // let g = name.split(' ');
+                  //  let y = g[2];
+                  
+                }
               }
-            }
+              
+             
+              
+              let actuales = $("#id_seleccionados3").val();
+              actual =   actual+","+actuales;
+              $("#id_seleccionados3").val(actual);
+              $("#id_seleccionados4").val(actual);
+             
+              let name = result.name;
             
-           
+              
+     
+      
+              
+              // Inserta una fila en la tabla, en el índice 0
+             
+             }
             
-            let actuales = $("#id_seleccionados3").val();
-            actual =   actual+","+actuales;
-            $("#id_seleccionados3").val(actual);
-            $("#id_seleccionados4").val(actual);
-           
-            let name = result.name;
-          
-            
-   
+          }
+          if(nombre_actual  === parametro_fecha){
     
+            fecha_hormigonado = result.properties[i].displayValue;
+  
+            let formato_hormigonado_1 = fecha_hormigonado.indexOf("/");
+            let formato_hormigonado_2 = fecha_hormigonado.indexOf("-");
+    
+            if(formato_hormigonado_1 != -1){
+                  let elementos_fecha = fecha_hormigonado.split("/");
+                if(elementos_fecha.length>0){
+                  var today = new Date();
+                  var dd = String(today.getDate()).padStart(2, '0');
+                  var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+                  var yyyy = today.getFullYear();
+                  if(mm>0){
+                    mm = mm-1; 
+                  }
+                  today = '0'+mm + '/' + dd + '/' + yyyy;
+                  if(elementos_fecha[1] >0){
+                    elementos_fecha[1] = elementos_fecha[1]-1;
+                  }
+    
+                  var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                  // let compara = dates.compare(today,d2);
+              
+                  let resultado  = [result.name,d3];
             
-            // Inserta una fila en la tabla, en el índice 0
-           
-           }
-          
-        }
-        if(nombre_actual  === parametro_fecha){
-  
-          fecha_hormigonado = result.properties[i].displayValue;
-
-          let formato_hormigonado_1 = fecha_hormigonado.indexOf("/");
-          let formato_hormigonado_2 = fecha_hormigonado.indexOf("-");
-  
-          if(formato_hormigonado_1 != -1){
-                let elementos_fecha = fecha_hormigonado.split("/");
+                  console.log("NombreInterno" + resultado[0]);
+                  return resultado;
+                }
+            }
+            if(formato_hormigonado_2 != -1){
+              let elementos_fecha = fecha_hormigonado.split("-");
               if(elementos_fecha.length>0){
                 var today = new Date();
                 var dd = String(today.getDate()).padStart(2, '0');
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); //
                 var yyyy = today.getFullYear();
                 if(mm>0){
-                  mm = mm-1; 
+                   mm = mm-1; 
                 }
                 today = '0'+mm + '/' + dd + '/' + yyyy;
                 if(elementos_fecha[1] >0){
                   elementos_fecha[1] = elementos_fecha[1]-1;
                 }
-  
+      
                 var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
                 // let compara = dates.compare(today,d2);
-            
+             
                 let resultado  = [result.name,d3];
-          
-                console.log("NombreInterno" + resultado[0]);
-                return resultado;
-              }
-          }
-          if(formato_hormigonado_2 != -1){
-            let elementos_fecha = fecha_hormigonado.split("-");
-            if(elementos_fecha.length>0){
-              var today = new Date();
-              var dd = String(today.getDate()).padStart(2, '0');
-              var mm = String(today.getMonth() + 1).padStart(2, '0'); //
-              var yyyy = today.getFullYear();
-              if(mm>0){
-                 mm = mm-1; 
-              }
-              today = '0'+mm + '/' + dd + '/' + yyyy;
-              if(elementos_fecha[1] >0){
-                elementos_fecha[1] = elementos_fecha[1]-1;
-              }
-    
-              var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-              // let compara = dates.compare(today,d2);
            
-              let resultado  = [result.name,d3];
-         
-              console.log("NombreInterno" + resultado[0]);
-               return resultado;
+                console.log("NombreInterno" + resultado[0]);
+                 return resultado;
+              }
             }
-          }
-          
-         }
-      }
-      
-    }) 
+            
+           }
+        }
+        
+      }) 
+  
+    }
 
-  }
+
 }
 
 function onDocumentLoadSuccess(doc) {
@@ -7107,217 +5602,1454 @@ function onDocumentLoadSuccess(doc) {
            });
     // documented loaded, any action?
     viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, (e) => {
-      console.log("SELECCION 5");
-      console.log(e);
-      console.log(e.dbIdArray);
-      if (e.dbIdArray.length === 0) return;
-      for(var q = 0; i < e.dbIdArray.length;q++){
-        viewer.getProperties(e.dbIdArray[q], (props) => {
-          props.forEach((ele) => {
-            if (ele.properties.lenght === 0) return;
-            var taskId = ele.properties[0].displayValue;
-            console.log("Valor propiedad 1"+taskId);
-           
-          })
-        })
-      }
+  
+      if (e.dbIdArray.length === 0   ) return;
+  
+      if(procesoCalculo ==-1){
+        let selects = e.dbIdArray;
+    
 
-   
-      let c =1;
-      var hoy = 10 + '-' +05 + '-' +2021;
-      var cat_count=1;
-      var esta =0;
-      var categorias = Array();
-      var categoria_actual;
-      var indice_actual = 0;
-      var pesoTotal = 0;
-      var largoTotal = 0;
-      var xTotal = 0;
-      var pesoActual =0;
-      var largoActual = 0;
-      var tableTotales = document.getElementById('tabla_total');
-      var tableRef = document.getElementById('tabla_fierro');
-      var rowCount = tableRef.rows.length;
-      var rowCountTotales = tableTotales.rows.length;
-      var tableHeaderRowCount = 1;
-      listado_pesos ="";
-      console.log("Listado Pesos antes");
-      console.log(listado_pesos);
-      for (var i = tableHeaderRowCount; i < rowCount; i++) {
-        tableRef.deleteRow(tableHeaderRowCount);
-      }
-      identificadores_fierros = e.dbIdArray;
-      for(var a=0; a< identificadores_fierros.length;a++){
-        let actual =  identificadores_fierros[a];
-        
-        viewer.getProperties( identificadores_fierros[a], (result) => { 
-         
-          for(i=0 ;i< 60;i++){
-            let nombre_actual = ""+result.properties[i].displayName;
-            if(nombre_actual ==="Category"){
-              categoria_actual_obj = result.properties[i].displayValue;
-              console.log("CATEGORIA BUSCADA");
-              console.log(categoria_actual_obj);
-              //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
-                if(categoria_actual_obj==""+parametro_fierro+""){
-                console.log("ENTRAR REBAR");
-                for(t=0;t<result.properties.length;t++){
-                  let val_actual = result.properties[t].displayName;
-                  if( val_actual == "RS Peso Lineal (kg/m)"){
-                 
-                    console.log("ENTRO A PESO LINEAL");
-                    let peso = parseFloat(result.properties[t].displayValue,1);
-                //    peso = peso.toFixed(2);
-                    //peso = Number.parseFloat(peso,2);
-                    console.log("ANTES PESO BUSCADO");
-                    console.log(peso);
-                    console.log(result.properties[t].displayValue);
-                    console.log(result);
-                    
-                   // peso = parseFloat(peso);
-                    pesoActual = peso;
-                    console.log("PESO BUSCADO");
-                    console.log(peso);
-                    listado_pesos = listado_pesos+","+peso;
-                   
-                     pesoTotal = peso + pesoTotal;
-                     pesoTotal  = parseFloat(pesoTotal,1);
-                    
-                     console.log( "SUMATORIA PESO");
-                     console.log( pesoTotal);
-                     
-                  }
-                  if(val_actual == "Total Bar Length"){
-                    console.log("TOTAL LENGTH BAR");
-                    
-                    let largo = parseFloat(result.properties[t].displayValue);
-                    console.log(largo );
-                 //   largo = largo.toFixed(1);
-                    largo = parseFloat(largo,1);
-                    
-                    largo = largo /100;
-                    largoActual = largo;
-                    console.log("convertido "+largo);
-                    listado_largos = listado_largos+","+largo;
-                   
-                    console.log("Listado pesos");
-                    console.log( listado_pesos);
-                    largoTotal = largoTotal+ largo;
-                    largoTotal = largoTotal;
-                    console.log( "SUMATORIA LARGO");
-                    console.log( largoTotal);
-                    console.log( "Listado largos");
-                    console.log(listado_largos);
-                    //largoTotal  = parseFloat(largoTotal).toFixed(1);
-                   // listado_pesos = listado_pesos +","+peso;
-                    listado_largos = listado_largos +","+largo;
-                    $("#listado_largo").val(listado_largos);
-                    $("#listado_pesos").val(listado_pesos);
-                    document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(1)+ ' mtrs';
-                   
-                  }
-                  if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
-                        
-                     let resultado_mul = pesoActual*largoActual;
-                     console.log("resultado multiplicacion");
-                     console.log(pesoActual+"    "+largoActual );
-                     console.log(resultado_mul);
-                     pesoTotal = pesoTotal+resultado_mul;
-                      $("#largo_total_pedido").val(largoTotal.toFixed(1));
-                      $("#peso_total_pedido").val(pesoTotal.toFixed(1));
-                      $("#resultado_total_pedido").val(pesoTotal);
-                      document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
-
-                      $("#listado_largo").val(listado_largos);
-                      $("#listado_pesos").val(listado_pesos);
-                      //console.log( "Resultado Multiplicación");
-                    // console.log( resultado_mul);
-                  
-                      resultado_mul =resultado_mul.toFixed(3);
-                      xTotal = xTotal + parseFloat(resultado_mul,1);
-                      console.log( "Total Multiplicación");
-                      console.log( xTotal);
-                   //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
-
-                      document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
-                     // let g = name.split(' ');
-                    //  let y = g[2];
-                    
-                  }
-                }
-                
-               
-                
-                let actuales = $("#id_seleccionados3").val();
-                actual =   actual+","+actuales;
-                $("#id_seleccionados3").val(actual);
-                $("#id_seleccionados4").val(actual);
-               
-                let name = result.name;
-              
-                
+        for(let r =0; r<selects.length;r++){
+         const colorFierro = new THREE.Vector4(0.0, 0.0, 1.0,1.0);
        
+        /// viewer.setThemingColor(a[r], color, null, true);
+        viewer.getProperties(selects[r], (result) => { 
+     //     console.log('RESULTADO SELECCION ESPECIAL'); 
+     //     console.log(selects[0]);
+              
+            let fecha_hormigonado = "";
+            if(result.name){
+              var categoria_actual = result.name.split("[");
+              console.log(categoria_actual);
+               // nombre_objeto
+            
+              let boton_fecha = "";
+    
+            }
+            
+        //   console.log(result.name.split("["));
+            if(categoria_actual){
+          
+  
+         
+            if(categoria_actual[0] === "Rebar Bar "){
+              console.log("si es Rebar Bar ");
+              viewer.setThemingColor(selects[r], colorFierro , null, true);
+            }
+            }
+           
+          
+  
+            
         
-                
-                // Inserta una fila en la tabla, en el índice 0
-               
-               }
-               if(cat_count == 1){ // no hay ningun elemento
-                   indice_actual = 0;
-                   categorias.push(result.properties[i].displayValue);
-                   categoria_actual = result.properties[i].displayValue;
-                   cat_count =cat_count +1;
-               //    console.log("entre una vez "+ cat_count );
-               /*
-                   var taskId = gantt.addTask({
-                    id:cat_count,
-                    text:result.properties[i].displayValue,
-                    start_date:hoy,
-                    duration:1
-                  },11,1);*/
+            
+        //    console.log("VALORES");
+        //   console.log(result);
+            
+        }) ;
+        }
+ 
+          let dbId = viewer.getSelection(); 
+          document.getElementById("propiedades_id").innerHTML = "";
+        
+        
+      //  console.log(dbId.dbId);
+        // console.log(dbId);
+            let busqueda = existeId(dbId[0]); 
+   
+            if(busqueda == false){
+              viewer.getProperties(dbId[0], (result) => { 
+                console.log('RESULTADO SELECCION'); 
+                document.getElementById("propiedades_id").innerHTML = "";
+                  console.log(result); 
+                  document.getElementById("edicion_data").innerHTML = "";
+                  document.getElementById("edicion_data2").innerHTML = "";
+                  //<a class='btn ripple btn-info' data-target='#modaldemo3' data-toggle='modal' href=''>Editar Datos</a>
+                 
+                  let fecha_hormigonado = "";
+                  if(result.name){
+                    var categoria_actual = result.name.split("[");
+                    document.getElementById("propiedades_id").innerHTML += "<li><b> Nombre</b> :"+result.name+"</li>";
+                    // nombre_objeto
+                    $("#nombre_objeto").val(result.name);
+                    let boton_fecha = "";
+          
+                  }
                   
-               }else{
-                 // busco si se encuentra
-              //   console.log("GUARDAFDAS //////////////////////////////");
-              //   console.log(categorias);
-                  for(var t =0 ; t< cat_count; t++){
-                      if( result.properties[i].displayValue === categorias[t]){
-                        esta = 1; 
-                        indice_actual = t;
-                        break
+              //   console.log(result.name.split("["));
+                  if(categoria_actual){
+                    if(categoria_actual[0] === "Floor "){
+                      console.log("si es flooor");
+                      for(i=0 ;i< 60;i++){
+                      
+                      switch(i){
+                          case 0:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 1:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 4:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 11:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                          case 12:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 13:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                          break;
+                          case 16:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 17:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 18:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 21:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 24:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 28:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 29:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 30:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 31:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 32:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 39:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 43:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;                  
+                      }
+                      
                       }
                   }
-                  if(esta ==0){ // no se encontró  se procede a agregar la nueva categoria
-                    categorias.push(result.properties[i].displayValue);
-                    cat_count =cat_count +1;
-                    indice_actual = cat_count -1;
-                    // console.log("agregue nuevo "+ cat_count);
+        
+                  if(categoria_actual[0] === "RS VHA. "){
+                    console.log("si es RS VHA");
+                    for(i=0 ;i< 60;i++){
+                    
+                    switch(i){
+                        case 0:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 1:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 4:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 11:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 12:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 13:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                        break;
+                        case 16:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 17:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 18:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 21:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 24:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 28:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 29:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 30:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 31:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 32:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 39:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 43:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;                  
+                    }
+                    
+                    }
+                  }
+                  if(categoria_actual[0] === "Basic Wall "){
+              //    console.log("si es Basic Wall ");
+                  for(i=0 ;i< 60;i++){
                   
-                  /*
-                    var taskId = gantt.addTask({
-                                          id:cat_count,
-                                          text:result.properties[i].displayValue,
-                                          start_date:hoy,
-                                          duration:1
-                      },11,1);*/
-               //   gantt.sort("start_date",false);
-             //     gantt.render();
+                  switch(i){
+                      case 0:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 1:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 5:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 10:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 19:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 20:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                      break;
+                      case 21:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 22:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 23:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                    case 24:
+                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                    case 25:
+                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                    case 27:
+                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                    case 31:
+                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                    case 32:
+                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                    case 33:
+                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                    break;
+                    case 34:
+                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                    break;
+                    case 42:
+                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                    case 46:
+                      document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;                  
+                  }
                   
                   }
-                  else{
-                    esta = 0;
                   }
+                  if(categoria_actual[0] === "Wall Foundation "){
+                    console.log("si es Wall Foundation ");
+                    for(i=0 ;i< 60;i++){
+                    
+                    switch(i){
+                        case 0:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 1:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 5:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 6:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 7:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 8:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                        break;
+                        case 9:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 10:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 11:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 12:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 13:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 14:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 20:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 21:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 22:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 23:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>123"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 30:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>123"+result.properties[i].displayValue+"</li>";
+                      break;
+                                    
+                    }
+                    
+                    }
+                  }
+                  if(categoria_actual[0] === "RS Fundacion Aislada Tipo "){
+                    console.log("si es RS Fundacion Aislada Tipo ");
+                    for(i=0 ;i< 60;i++){
+                    
+                    switch(i){
+                        case 0:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 1:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 3:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 8:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 10:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 11:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                        break;
+                        case 12:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 13:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 16:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 22:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 23:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 24:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 25:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 35:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 36:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 37:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break; 
+                                    
+                    }
+                    
+                    }
+                  }  
+                  if(categoria_actual[0] === "Foundation Slab "){
+                    console.log("si es Foundation Slab ");
+                    for(i=0 ;i< 60;i++){
+                    
+                    switch(i){
+                        case 0:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 1:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 4:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 10:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 11:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 12:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                        break;
+                        case 14:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 15:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 16:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 19:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 20:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 21:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 24:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 28:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 29:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 30:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 31:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 37:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;   
+                        case 40:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;                
+                    }
+                    
+                    }
+                  }
+                  if(categoria_actual[0] === "Rebar Bar "){
+                    console.log("si es Rebar Bar ");
+                    for(i=0 ;i< 60;i++){
+                    
+                    switch(i){
+                        case 0:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 1:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 3:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 4:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 6:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 20:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                        break;
+                        case 22:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 23:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 24:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 25:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 26:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 36:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 45:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 46:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 47:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 48:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 60:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 61:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;   
+                        case 63:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 64:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break; 
+                      case 65:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 66:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 67:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;               
+                    }
+                    
+                    }
+                  }
+                  }
+                  console.log("tipo resultado propiedades "+typeof result.properties);
+                  for(i=0 ;i< 50;i++){
+               
+                    if(result.properties[i]&&result.properties[i].displayName){
+                      let nombre_actual = ""+result.properties[i].displayName;
+                      if(nombre_actual  === parametro_fecha){
+                    
+        
+                    
+                        fecha_hormigonado = result.properties[i].displayValue;
+                        let elementos_fecha = fecha_hormigonado.split("/");
+                        let compara =55;
+                        if(elementos_fecha.length<=1){
+                           elementos_fecha = fecha_hormigonado.split("-");
+                        }
+                        var today = new Date();
+                        var dd = String(today.getDate()).padStart(2, '0');
+                        var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+                        var yyyy = today.getFullYear();
+                        if(mm>0){
+                          mm = mm-1; 
+                        }
+                        today = '0'+mm + '/' + dd + '/' + yyyy;
+                        if(elementos_fecha[1] >0){
+                          elementos_fecha[1] = elementos_fecha[1];
+                        }
+                      // // // // // // // // // // // alert(elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]);
+                        //// // // // // // // // // // alert(today);
+                        if(elementos_fecha[1]){
+                          if(elementos_fecha[1].length ==0){
+                            var d2 = '0'+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                            var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                         
+                          }else{
+                            var d2 = elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                            var d3   = elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                         
+                          }
+                           
+                        }
+                        if(today&&d2){
+                          let compara = dates.compare(today,d2);
+                        }else{
+                          compara = 1;
+                        }
+                       
+                        if(compara == 1){
+                          boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+          
+          
+                    
+          
+          
+                        }else{
+                          if(compara == -1){
+                            boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+          
+             
+                          }else{
+                            if(compara == 0){
+                              boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+         
+                            }
+                            else{
+                              boton_fecha ="FECHA SIN FORMATO 2";
+                       
+                            }
+                          }
+                        }
+                        
+                      }
+                    }
+                  
+                   
                 }
-            }
-            if(nombre_actual  === parametro_fecha){
-      
-              fecha_hormigonado = result.properties[i].displayValue;
+        
+                  
+               //   document.getElementById("propiedades_id").innerHTML += " AEC Secuencia Hormigonado <li><b>"+" :</b>"+fecha_hormigonado+" Estado: "+boton_fecha+"</li>";
+                $("#dateMask1").val(fecha_hormigonado);
+                $("#plan1").val(fecha_hormigonado);
+                $("#dateMask2").val(fecha_hormigonado);
+                $("#plan2").val(fecha_hormigonado);
+                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo3' data-toggle='modal' href=''>Fecha Instalación</a></li>";
+                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a></li>";
+                  
+              //    console.log("VALORES");
+              //   console.log(result);
+                  
+              }) ;
+            }else{
+                let base = busqueda[1];
+                let plan = busqueda[2];
+                viewer.getProperties(dbId[0], (result) => { 
 
-              let formato_hormigonado_1 = fecha_hormigonado.indexOf("/");
-              let formato_hormigonado_2 = fecha_hormigonado.indexOf("-");
+
+                  
+            //      console.log('RESULTADO SELECCION'); 
+                  document.getElementById("propiedades_id").innerHTML = "";
+                    console.log(result); 
+                    //<a class='btn ripple btn-info' data-target='#modaldemo3' data-toggle='modal' href=''>Editar Datos</a>
+                    document.getElementById("edicion_data").innerHTML = "<a class='btn ripple btn-warning block' data-target='#modaldemo3' data-toggle='modal' href=''>Editar Fecha Instalación</a>";
+                    document.getElementById("edicion_data2").innerHTML = "<br><a class='btn ripple btn-warning block' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a>";
+                    
+                    let fecha_hormigonado = "";
+                    if(result.name){
+                      var categoria_actual = result.name.split("[");
+                      document.getElementById("propiedades_id").innerHTML += "<li><b> Nombre</b> :"+result.name+"</li>";
+                      // nombre_objeto
+                      $("#nombre_objeto").val(result.name);
+                      let boton_fecha = "";
+            
+                    }
+                    
+                //   console.log(result.name.split("["));
+                
+                    if(categoria_actual[0] === "Floor "){
+                        console.log("si es flooor");
+                        for(i=0 ;i< 60;i++){
+                        
+                        switch(i){
+                            case 0:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                            case 1:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                            case 4:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                            case 11:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                            case 12:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                            case 13:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                            break;
+                            case 16:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                            case 17:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                            case 18:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                          case 21:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                          case 24:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                          case 28:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                          case 29:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                              break;
+                          case 30:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 31:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                          case 32:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                          case 39:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 43:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;                  
+                        }
+                        
+                        }
+                    }
+          
+                    if(categoria_actual[0] === "RS VHA. "){
+                      console.log("si es RS VHA");
+                      for(i=0 ;i< 60;i++){
+                      
+                      switch(i){
+                          case 0:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 1:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 4:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 11:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                          case 12:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 13:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                          break;
+                          case 16:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 17:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 18:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 21:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 24:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 28:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 29:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 30:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 31:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 32:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 39:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 43:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;                  
+                      }
+                      
+                      }
+                    }
+                    if(categoria_actual[0] === "Basic Wall "){
+                //    console.log("si es Basic Wall ");
+                    for(i=0 ;i< 60;i++){
+                    
+                    switch(i){
+                        case 0:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 1:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 5:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 10:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 19:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 20:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                        break;
+                        case 21:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 22:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 23:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 24:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 25:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 27:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 31:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                      case 32:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 33:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 34:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                      break;
+                      case 42:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                      case 46:
+                        document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;                  
+                    }
+                    
+                    }
+                    }
+                    if(categoria_actual[0] === "Wall Foundation "){
+                      console.log("si es Wall Foundation ");
+                      for(i=0 ;i< 60;i++){
+                      
+                      switch(i){
+                          case 0:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 1:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 5:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 6:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                          case 7:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 8:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                          break;
+                          case 9:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 10:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 11:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 12:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 13:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 14:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 20:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 21:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 22:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 23:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>123"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 30:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>123"+result.properties[i].displayValue+"</li>";
+                        break;
+                                      
+                      }
+                      
+                      }
+                    }
+                    if(categoria_actual[0] === "RS Fundacion Aislada Tipo "){
+                      console.log("si es RS Fundacion Aislada Tipo ");
+                      for(i=0 ;i< 60;i++){
+                      
+                      switch(i){
+                          case 0:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 1:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 3:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 8:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                          case 10:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 11:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                          break;
+                          case 12:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 13:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 16:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 22:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 23:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 24:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 25:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 35:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 36:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 37:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break; 
+                                      
+                      }
+                      
+                      }
+                    }  
+                    if(categoria_actual[0] === "Foundation Slab "){
+                      console.log("si es Foundation Slab ");
+                      for(i=0 ;i< 60;i++){
+                      
+                      switch(i){
+                          case 0:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 1:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 4:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 10:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                          case 11:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 12:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                          break;
+                          case 14:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 15:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 16:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 19:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 20:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 21:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 24:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 28:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 29:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 30:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 31:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 37:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;   
+                          case 40:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;                
+                      }
+                      
+                      }
+                    }
+                    if(categoria_actual[0] === "Rebar Bar "){
+                      console.log("si es Rebar Bar ");
+                      for(i=0 ;i< 60;i++){
+                      
+                      switch(i){
+                          case 0:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 1:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 3:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 4:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                          case 6:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 20:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>"; 
+                          break;
+                          case 22:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 23:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 24:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 25:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 26:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 36:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 45:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 46:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 47:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 48:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 60:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;
+                        case 61:
+                          document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break;   
+                          case 63:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                          case 64:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                          break; 
+                        case 65:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;
+                        case 66:
+                            document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                            break;
+                        case 67:
+                              document.getElementById("propiedades_id").innerHTML += "<li><b>"+result.properties[i].displayName+" :</b>"+result.properties[i].displayValue+"</li>";
+                        break;               
+                      }
+                      
+                      }
+                    }
+                    let nombre_actual ="";
+                    if(result.properties[i]){
+                      nombre_actual = ""+result.properties[i].displayName;
+                    }
+                        
+                      
+                        fecha_hormigonado = base;
+                        let elementos_fecha = fecha_hormigonado.split("/");
+                        if(elementos_fecha.length <=1){
+                          elementos_fecha = fecha_hormigonado.split("-");
+                        }
+                     
+                        var today = new Date();
+                        var dd = String(today.getDate()).padStart(2, '0');
+                        var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+                        var yyyy = today.getFullYear();
+                        if(mm>0){
+                          mm = mm-1; 
+                        }
+                        today = '0'+mm + '/' + dd + '/' + yyyy;
+                        if(elementos_fecha[1] >0){
+                          elementos_fecha[1] = elementos_fecha[1];
+                        }
+                      // // // // // // // // // // // alert(elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]);
+                        //// // // // // // // // // alert(today);
+                        var d2 = '0'+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                        var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                        let compara = dates.compare(today,d2);
+                        let compara2 = dates.compare(today,d3);
+
+                        if(compara == 0){
+                          if(compara2 != 0){compara = compara2;}
+                        }
+                        if(compara == 1){
+                          boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido o Sin Formato (Fecha Plan) <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+          
+          
+                    
+          
+          
+                        }else{
+                          if(compara == -1){
+                            boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+          
+                        /*    gantt.parse({
+                              data: [
+                                  { id: 1, text: result.name, start_date: d3, duration: 5, progress: 0.4, open: true },
+                                  { id: 2, text: "Inicio", start_date: d3, duration: 1, progress: 0.6, parent: 1 }
+                              ],
+                              links: [
+                                  {id: 1, source: 1, target: 2, type: "1"},
+                                  
+                              ]
+                          });
+          
+          */
+                          }else{
+                            if(compara == 0){
+                              boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+          /*
+                              gantt.parse({
+                                data: [
+                                    { id: 1, text: result.name, start_date: d3, duration: 5, progress: 0.4, open: true },
+                                    { id: 2, text: "Inicio", start_date: d3, duration: 1, progress: 0.6, parent: 1 }
+                                ],
+                                links: [
+                                    {id: 1, source: 1, target: 2, type: "1"},
+                                    
+                                ]
+                            });
+          */
+          
+                            }
+                            else{
+                              boton_fecha =" Fecha Sin Formato";
+                              /*
+                              gantt.parse({
+                                data: [
+                                    { id: 1, text: "Seleccione Un objeto", start_date: "25-05-2021", duration:1, progress: 0.4, open: true },
+                                    { id: 2, text: "Inicio", start_date: "25-05-2021", duration: 1, progress: 0.6, parent: 1 }
+                                ],
+                                links: [
+                                    {id: 1, source: 1, target: 2, type: "1"}
+                                  
+                                ]
+                            });
+                            */
+                            }
+                          }
+                        }
+                        
+                    
+                 
+          
+                    
+                    document.getElementById("propiedades_id").innerHTML += " AEC Secuencia Hormigonado <li><b>"+" :</b>"+base+" Estado: "+boton_fecha+"</li>";
+                    document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning' data-target='#modaldemo3' data-toggle='modal' href=''>Fecha Instalación</a></li>";
+                    document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a></li>";
+                    
+                    
+                //    console.log("VALORES");
+                //   console.log(result);
+                    
+                }) ;
+           
+                $("#dateMask1").val(base);
+                $("#plan1").val(plan);
+                $("#dateMask2").val(base);
+                $("#plan2").val(plan);
+                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo3' data-toggle='modal' href=''>Fecha Instalación</a></li>";
+                document.getElementById("propiedades_id").innerHTML += "<li><b><a class='btn ripple btn-warning block' data-target='#modaldemo5' data-toggle='modal' href=''>Ver Fecha Plan</a></li>";
+                
+            }
+          
+            document.getElementById("id_seleccionados").value =selects.join();
+            document.getElementById("id_seleccionados2").value =selects.join();
+            document.getElementById("id_seleccionados3").value =selects.join();
+            document.getElementById("id_seleccionados4").value =selects.join();
+            
+            document.getElementById("elementos_seleccionados").innerHTML = "";
+            let boton_guardar = "<a class='btn ripple btn-warning block' data-target='#modaldemo4' data-toggle='modal' href=''><i class='ti-save'></i></a>";
+          
+            document.getElementById("elementos_seleccionados").innerHTML = "  "+""+boton_guardar;
+            
+        //   gantt.selectTask(dbId);
+          
+        
+          
+      }
+
+   if( procesoCalculo != 0){
+        let c =1;
       
-              if(formato_hormigonado_1 != -1){
-                    let elementos_fecha = fecha_hormigonado.split("/");
+        var cat_count=1;
+        var esta =0;
+        var categorias = Array();
+        var categoria_actual;
+        var indice_actual = 0;
+        var pesoTotal = 0;
+        var largoTotal = 0;
+        var xTotal = 0;
+        var pesoActual =0;
+        var largoActual = 0;
+        var tableTotales = document.getElementById('tabla_total');
+        var tableRef = document.getElementById('tabla_fierro');
+        var rowCount = tableRef.rows.length;
+        var rowCountTotales = tableTotales.rows.length;
+        var tableHeaderRowCount = 1;
+        listado_pesos ="";
+        console.log("Listado Pesos antes");
+        console.log(listado_pesos);
+        for (var i = tableHeaderRowCount; i < rowCount; i++) {
+          tableRef.deleteRow(tableHeaderRowCount);
+        }
+        identificadores_fierros = e.dbIdArray;
+        for(var a=0; a< identificadores_fierros.length;a++){
+          let actual =  identificadores_fierros[a];
+          
+          viewer.getProperties( identificadores_fierros[a], (result) => { 
+          
+            for(i=0 ;i< 60;i++){
+              let nombre_actual = ""+result.properties[i].displayName;
+              if(nombre_actual ==="Category"){
+                categoria_actual_obj = result.properties[i].displayValue;
+              //  console.log("CATEGORIA BUSCADA");
+            //   console.log(categoria_actual_obj);
+                //if(categoria_actual_obj=="Revit Structural Rebar" && result.properties[82].displayValue != "" && result.properties[82].displayValue != null){
+                  if(categoria_actual_obj==""+parametro_fierro+""){
+                    console.log("ENTRAR REBAR");
+                  for(t=0;t<result.properties.length;t++){
+                      let val_actual = result.properties[t].displayName;
+                    if( val_actual == "RS Peso Lineal (kg/m)"){
+                  
+                      //    console.log("ENTRO A PESO LINEAL");
+                      let peso = parseFloat(result.properties[t].displayValue,1);
+                  //    peso = peso.toFixed(2);
+                      //peso = Number.parseFloat(peso,2);
+                  //   console.log("ANTES PESO BUSCADO");
+                  //   console.log(peso);
+                  //   console.log(result.properties[t].displayValue);
+                  //   console.log(result);
+                      
+                    // peso = parseFloat(peso);
+                      pesoActual = peso;
+                  //   console.log("PESO BUSCADO");
+                  //   console.log(peso);
+                      listado_pesos = listado_pesos+","+peso;
+                    
+                      pesoTotal = peso + pesoTotal;
+                      pesoTotal  = parseFloat(pesoTotal,1);
+                      
+                    //   console.log( "SUMATORIA PESO");
+                  //    console.log( pesoTotal);
+                      
+                    }
+                    if(val_actual == "Total Bar Length"){
+                    //  console.log("TOTAL LENGTH BAR");
+                      
+                      let largo = parseFloat(result.properties[t].displayValue);
+                  //   console.log(largo );
+                  //   largo = largo.toFixed(1);
+                      largo = parseFloat(largo,1);
+                      
+                      largo = largo /100;
+                      largoActual = largo;
+                      console.log("convertido "+largo);
+                      listado_largos = listado_largos+","+largo;
+                    
+                  //   console.log("Listado pesos");
+                  //   console.log( listado_pesos);
+                      largoTotal = largoTotal+ largo;
+                      largoTotal = largoTotal;
+                  //   console.log( "SUMATORIA LARGO");
+                  //   console.log( largoTotal);
+                  //   console.log( "Listado largos");
+                  //   console.log(listado_largos);
+                      //largoTotal  = parseFloat(largoTotal).toFixed(1);
+                    // listado_pesos = listado_pesos +","+peso;
+                      listado_largos = listado_largos +","+largo;
+                      $("#listado_largo").val(listado_largos);
+                      $("#listado_pesos").val(listado_pesos);
+                      document.getElementById('largo').innerHTML = '' +largoTotal.toFixed(1)+ ' mtrs';
+                    
+                    }
+                    if((t+1 )==result.properties.length){ // termina de recorrer todas las propiedades
+                          
+                      let resultado_mul = pesoActual*largoActual;
+                    //   console.log("resultado multiplicacion");
+                    //   console.log(pesoActual+"    "+largoActual );
+                    //   console.log(resultado_mul);
+                      pesoTotal = pesoTotal+resultado_mul;
+                        $("#largo_total_pedido").val(largoTotal.toFixed(1));
+                        $("#peso_total_pedido").val(pesoTotal.toFixed(1));
+                        $("#resultado_total_pedido").val(pesoTotal);
+                        document.getElementById('peso').innerHTML = '' +pesoTotal.toFixed(1)+ ' Kgs';
+
+                        $("#listado_largo").val(listado_largos);
+                        $("#listado_pesos").val(listado_pesos);
+                        //console.log( "Resultado Multiplicación");
+                      // console.log( resultado_mul);
+                    
+                        resultado_mul =resultado_mul.toFixed(3);
+                        xTotal = xTotal + parseFloat(resultado_mul,1);
+                        console.log( "Total Multiplicación");
+                    //    console.log( xTotal);
+                    //   document.getElementById('acum').innerHTML = '' +xTotal.toFixed(1);
+
+                        document.getElementById('btn').innerHTML = '<button  class="btn btn-success btn-block" data-target="#modaldemo6" data-toggle="modal" ">Ejecutar Pedido <i class="icon ion-ios-arrow-left tx-11 mg-l-6"></i></button>';
+                      // let g = name.split(' ');
+                      //  let y = g[2];
+                      
+                    }
+                  }
+                  
+                
+                  
+                  let actuales = $("#id_seleccionados3").val();
+                  actual =   actual+","+actuales;
+                  $("#id_seleccionados3").val(actual);
+                  $("#id_seleccionados4").val(actual);
+                
+                  let name = result.name;
+                
+                  
+        
+          
+                  
+                  // Inserta una fila en la tabla, en el índice 0
+                
+                }
+                if(cat_count == 1){ // no hay ningun elemento
+                    indice_actual = 0;
+                    categorias.push(result.properties[i].displayValue);
+                    categoria_actual = result.properties[i].displayValue;
+                    cat_count =cat_count +1;
+                //    console.log("entre una vez "+ cat_count );
+                /*
+                    var taskId = gantt.addTask({
+                      id:cat_count,
+                      text:result.properties[i].displayValue,
+                      start_date:hoy,
+                      duration:1
+                    },11,1);*/
+                    
+                }else{
+                  // busco si se encuentra
+                //   console.log("GUARDAFDAS //////////////////////////////");
+                //   console.log(categorias);
+                    for(var t =0 ; t< cat_count; t++){
+                        if( result.properties[i].displayValue === categorias[t]){
+                          esta = 1; 
+                          indice_actual = t;
+                          break
+                        }
+                    }
+                    if(esta ==0){ // no se encontró  se procede a agregar la nueva categoria
+                      categorias.push(result.properties[i].displayValue);
+                      cat_count =cat_count +1;
+                      indice_actual = cat_count -1;
+                      // console.log("agregue nuevo "+ cat_count);
+                    
+                    /*
+                      var taskId = gantt.addTask({
+                                            id:cat_count,
+                                            text:result.properties[i].displayValue,
+                                            start_date:hoy,
+                                            duration:1
+                        },11,1);*/
+                //   gantt.sort("start_date",false);
+              //     gantt.render();
+                    
+                    }
+                    else{
+                      esta = 0;
+                    }
+                  }
+              }
+              if(nombre_actual  === parametro_fecha){
+        
+                fecha_hormigonado = result.properties[i].displayValue;
+
+                let formato_hormigonado_1 = fecha_hormigonado.indexOf("/");
+                let formato_hormigonado_2 = fecha_hormigonado.indexOf("-");
+        
+                if(formato_hormigonado_1 != -1){
+                      let elementos_fecha = fecha_hormigonado.split("/");
+                    if(elementos_fecha.length>0){
+                      var today = new Date();
+                      var dd = String(today.getDate()).padStart(2, '0');
+                      var mm = String(today.getMonth() + 1).padStart(2, '0'); //
+                      var yyyy = today.getFullYear();
+                      if(mm>0){
+                        mm = mm-1; 
+                      }
+                      today = '0'+mm + '/' + dd + '/' + yyyy;
+                      if(elementos_fecha[1] >0){
+                        elementos_fecha[1] = elementos_fecha[1]-1;
+                      }
+        
+                      var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                      // let compara = dates.compare(today,d2);
+                  
+                      let resultado  = [result.name,d3];
+                
+                      console.log("NombreInterno" + resultado[0]);
+                      return resultado;
+                    }
+                }
+                if(formato_hormigonado_2 != -1){
+                  let elementos_fecha = fecha_hormigonado.split("-");
                   if(elementos_fecha.length>0){
                     var today = new Date();
                     var dd = String(today.getDate()).padStart(2, '0');
@@ -7330,7 +7062,7 @@ function onDocumentLoadSuccess(doc) {
                     if(elementos_fecha[1] >0){
                       elementos_fecha[1] = elementos_fecha[1]-1;
                     }
-      
+          
                     var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
                     // let compara = dates.compare(today,d2);
                 
@@ -7339,39 +7071,17 @@ function onDocumentLoadSuccess(doc) {
                     console.log("NombreInterno" + resultado[0]);
                     return resultado;
                   }
-              }
-              if(formato_hormigonado_2 != -1){
-                let elementos_fecha = fecha_hormigonado.split("-");
-                if(elementos_fecha.length>0){
-                  var today = new Date();
-                  var dd = String(today.getDate()).padStart(2, '0');
-                  var mm = String(today.getMonth() + 1).padStart(2, '0'); //
-                  var yyyy = today.getFullYear();
-                  if(mm>0){
-                     mm = mm-1; 
-                  }
-                  today = '0'+mm + '/' + dd + '/' + yyyy;
-                  if(elementos_fecha[1] >0){
-                    elementos_fecha[1] = elementos_fecha[1]-1;
-                  }
-        
-                  var d3=  '0'+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                  // let compara = dates.compare(today,d2);
-               
-                  let resultado  = [result.name,d3];
-             
-                  console.log("NombreInterno" + resultado[0]);
-                   return resultado;
                 }
+                
               }
-              
-             }
-          }
-          
-        }) 
-    
-      }
-    
+            }
+            
+          }) 
+      
+        }
+        procesoCalculo = -1;
+   }
+     
     })
   });
 }
