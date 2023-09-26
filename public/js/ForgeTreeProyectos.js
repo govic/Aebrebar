@@ -105,6 +105,7 @@ $(document).ready(function () {
         },error:function(res){
             console.log("ERROR AL SUBIR");
             console.log(res);
+            uptoBucket();
         }
 
       });
