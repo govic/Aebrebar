@@ -23,6 +23,50 @@ $(document).ready(function () {
     $("#newBucketKey").focus();
   })
 
+  function uptoBucket(){
+    var node2 = $('#appBuckets').jstree(true);
+    var arrObj = Object.keys(node2._model.data);
+    var arr = $('#appBuckets').jstree(true).get_json('#', { no_state: true, flat: true });
+    //console.log(node);
+    console.log(arr);
+    var _this = this;
+    if (_this.files.length == 0) return;
+    var file = _this.files[0];
+    if (arr[0].id == "p2_proyectos") {
+
+      console.log("entró a la subida bucket");
+      var formData = new FormData();
+      formData.append('fileToUpload', file);
+      formData.append('bucketKey', arr[0].id);
+
+      $.ajax({
+        url: '/api/forge/oss/objects',
+        data: formData,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function (data) {
+         // $('#appBuckets').jstree(true).refresh();
+         $('#appBuckets').jstree(true).destroy();
+         prepareAppBucketTree();
+          $("#notificaciones").empty();
+          $("#notificaciones").html("Archivo " + "subido exitosamente");
+          _this.value = '';
+         
+
+          callProyectosSeleccion();
+          location.reload();
+
+        },error:function(res){
+            console.log("ERROR AL SUBIR");
+            console.log(res);
+            uptoBucket();
+        }
+
+      });
+
+    }
+  }
   $('#hiddenUploadField').change(function () {
     // var node = $('#appBuckets').jstree(true).get_selected(true)[0];
     var node2 = $('#appBuckets').jstree(true);
@@ -89,27 +133,7 @@ function callProyectos2() {
         openViewer(res[0].nombre);
       },
     });
-    /* jQuery.ajax({
-         url: '/api/forge/oss/bucketsProyectos',
-         headers: { 'Authorization': 'Bearer ' + access_token },
-         success: function (res) {
-           console.log(res);
-           let dropdown = "";
-            for (i = 0; i < res.length; i++) {
-              
-             dropdown = dropdown+  "<li><a class='slide-item' href='#' onclick='openViewer("+"\""+res[i].urn+"\""+")'>"+res[i].objectKey+"</a></li>";
-             // dropdown = dropdown+ "<a href='#' class='dropdown-item' onclick='openViewer("+"\""+res[i].urn+"\""+")'>"+res[i].objectKey+"</a>"
-               if(i==0){
-                   openViewer(res[i].urn);
-               }
-            }  
-            document.getElementById("proyectos_visor").innerHTML = dropdown;
-         },
-         error: function (err) {
-           console.log("error");
-           console.log(err);
-         }
-       });*/
+   
   })
 }
 function cargarProyecto() {
@@ -364,22 +388,7 @@ function prepareAppBucketTree() {
       $('#appBuckets').jstree({
 
         'core': {
-          /*'data' : [
-            { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
-            { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
-            { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
-            { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
-         ]*/
-          /*'data' : [
-            {
-              'id' : 'node_2',
-              'text' : 'Root node with options',
-              'state' : { 'opened' : true, 'selected' : true, 'IsAdm' : false},
-              'children' : [ { 'text' : 'Child 1' }, 'Child 2']
-              
-            }
-          ]
-        */
+         
           'themes': { "stripes": true },
           'data': [
             {
@@ -394,22 +403,7 @@ function prepareAppBucketTree() {
             }
           ]
 
-          /*'data':{
-            "url": "/api/forge/oss/buckets",
-            "dataType": "json",
-            'multiple': false,
-            
-            success: function (res) {
-              console.log(res);
-              
-            },
-    
-            "data": function (node) {
-              return { "id": node.id };
-              
-            }
-            
-          }*/
+         
 
         },
         'types': {
