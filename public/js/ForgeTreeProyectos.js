@@ -75,7 +75,7 @@ $(document).ready(function () {
     var arr = $('#appBuckets').jstree(true).get_json('#', { no_state: true, flat: true });
     //console.log(node);
     console.log(arr);
-    var _this = this;
+    _this = this;
     if (_this.files.length == 0) return;
     var file = _this.files[0];
     if (arr[0].id == "p2_proyectos") {
