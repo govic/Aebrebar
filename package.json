@@ -4,7 +4,8 @@
   "description": "Visor de Modelos con Dashboard personalizado",
   "main": "index.js",
   "scripts": {
-    "start": "node start.js"
+    "start": "node start.js",
+    "local": "RDS_HOSTNAME=awseb-e-9hwnfyycty-stack-awsebrdsdatabase-irk1lq9e0jp0.ck39wztsivta.sa-east-1.rds.amazonaws.com RDS_USERNAME=admin RDS_PASSWORD=6shPwTu1TpCg4t4y nodemon start.js"
   },
   "author": "Ing. Felix Enzo Garofalo",
   "license": "ISC",
@@ -35,5 +36,8 @@
     "timeago.js": "^4.0.2",
     "utm-latlng": "^1.0.6",
     "xml2js": "^0.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

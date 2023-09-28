@@ -2,30 +2,24 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const session = require('express-session');
-const validator = require('express-validator');
 const passport = require('passport');
-
 const flash = require('connect-flash');
 const MySQLStore = require('express-mysql-session')(session);
-const bodyParser = require('body-parser');
-
-
+const multer = require("multer");
 const { database } = require('./public/js/keys');
-
-
 const PORT = process.env.PORT || 3000;
 const config = require('./config');
+
 if (config.credentials.client_id == null || config.credentials.client_secret == null) {
     console.error('Missing FORGE_CLIENT_ID or FORGE_CLIENT_SECRET env. variables.');
     return;
 }
 
-
-
 //initializations
 let app = express();
-require('./public/js/passport');
+app.use(multer({ limits: { fileSize: 1000000000 } }).single("file")); // 1 GB
 
+require('./public/js/passport');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json({ limit: '50mb' }));
@@ -44,7 +38,6 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.use('/api/forge/oauth', require('./routes/oauth'));
 app.use('/api/forge/oss', require('./routes/oss'));
 app.use('/api/forge/modelderivative', require('./routes/modelderivative'));
@@ -56,7 +49,6 @@ app.use((err, req, res, next) => {
     app.locals.success = req.flash('success');
     next();
 });
-
 
 //starting the server
 app.listen(PORT, () => { console.log(`Server listening on port ${PORT}`); });
