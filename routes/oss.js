@@ -125,10 +125,16 @@ router.get('/bucketsProyectos', async (req, res, next) => {
 // POST /api/forge/oss/objects - uploads new object to given bucket.
 // Request body must be structured as 'form-data' dictionary
 // with the uploaded file under "fileToUpload" key, and the bucket name under "bucketKey".
-router.post('/objects', multer({ dest: 'uploads/' }).single('fileToUpload'), async (req, res, next) => {
+const uploadObjects = multer({
+    dest: 'uploads/',
+    limits: {
+        fileSize: 1000000000, // 1 GB
+    },
+});
+router.post('/objects', uploadObjects.single('fileToUpload'), async (req, res, next) => {
     fs.readFile(req.file.path, async (err, data) => {
         if (err) {
-            console.error(`error on router.post /objects, error: ${err}, data?.length: ${data?.length}`);
+            console.error(`error on router.post /objects, error: ${err}`);
             console.error(err);
             next(err);
         }
@@ -137,7 +143,7 @@ router.post('/objects', multer({ dest: 'uploads/' }).single('fileToUpload'), asy
             await new ObjectsApi().uploadObject(req.body.bucketKey, req.file.originalname, data.length, data, {}, req.oauth_client, req.oauth_token);
             res.status(200).end();
         } catch (err) {
-            console.error(`error on router.post /objects, ObjectsApi.uploadObject, error: ${err}, data?.length: ${data?.length}`);
+            console.error(`error on router.post /objects, ObjectsApi.uploadObject, error: ${err}`);
             console.error(err);
             next(err);
         }
