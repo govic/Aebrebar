@@ -103,9 +103,8 @@ $(document).ready(function () {
           callProyectosSeleccion();
           location.reload();
 
-        }, error: function (res) {
-          console.log("ERROR AL SUBIR");
-          console.log(res);
+        }, error: function (_, _, err) {
+          console.error(`error on uptoBucket, POST /api/forge/oss/objects, error: ${err}`);
           uptoBucket();
         }
 

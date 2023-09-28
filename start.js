@@ -5,7 +5,6 @@ const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
 const MySQLStore = require('express-mysql-session')(session);
-const multer = require("multer");
 const { database } = require('./public/js/keys');
 const PORT = process.env.PORT || 3000;
 const config = require('./config');

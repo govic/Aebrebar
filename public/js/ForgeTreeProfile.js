@@ -47,16 +47,14 @@ $(document).ready(function () {
         contentType: false,
         type: 'POST',
         success: function (data) {
-         // $('#appBuckets').jstree(true).refresh();
-         $('#appBuckets').jstree(true).destroy();
-         prepareAppBucketTree();
+          // $('#appBuckets').jstree(true).refresh();
+          $('#appBuckets').jstree(true).destroy();
+          prepareAppBucketTree();
           $("#notificaciones").empty();
           $("#notificaciones").html("Archivo " + "subido exitosamente");
           _this.value = '';
-
-        },error:function(res){
-            console.log("ERROR AL SUBIR");
-            console.log(res);
+        }, error: function (_, _, err) {
+          console.error(`error on uptoBucket, POST /api/forge/oss/objects, error: ${err}`);
         }
 
       });
@@ -129,44 +127,44 @@ function cargarProyecto() {
   });
 
 }
-function gotoProyecto(urn){
-   
- 
-   console.log("DATA NOMBRE");
-   console.log(urn);
-   console.log("DATA IDS");
+function gotoProyecto(urn) {
+
+
+  console.log("DATA NOMBRE");
+  console.log(urn);
+  console.log("DATA IDS");
   // console.log(q);
- 
-   jQuery.post({
-     url: '/vista',
-     contentType: 'application/json',
-     data: JSON.stringify({ 'nombre': urn }),
-     success: function (res) {
-       // location.href = "/index"
-       
-     },
-   });
+
+  jQuery.post({
+    url: '/vista',
+    contentType: 'application/json',
+    data: JSON.stringify({ 'nombre': urn }),
+    success: function (res) {
+      // location.href = "/index"
+
+    },
+  });
 }
 
-function callProyectosAsignados(){
+function callProyectosAsignados() {
   jQuery.post({
     url: '/getProyectosAsignados',
     contentType: 'application/json',
-    data: JSON.stringify({ 'nombre': ''}),
+    data: JSON.stringify({ 'nombre': '' }),
     success: function (res) {
       console.log("RESULTADO DE PROYECTOS");
       console.log(res);
       if (res.length == 0) {
-        document.getElementById("listaProyectos").innerHTML ="No hay proyectos Asignados . Diríjase a la sección de administración y añada los proyctos que desee visualizar";
+        document.getElementById("listaProyectos").innerHTML = "No hay proyectos Asignados . Diríjase a la sección de administración y añada los proyctos que desee visualizar";
       } else {
         console.log(res);
         console.log(res);
         let dropdown = "";
         for (i = 0; i < res.length; i++) {
 
-         // dropdown = dropdown + "<option class='slide-item' href='#' value='" + res[i].urn + "'>" + res[i].objectKey + "</option>";
+          // dropdown = dropdown + "<option class='slide-item' href='#' value='" + res[i].urn + "'>" + res[i].objectKey + "</option>";
           // dropdown = dropdown+ "<a href='#' class='dropdown-item' onclick='openViewer("+"\""+res[i].urn+"\""+")'>"+res[i].objectKey+"</a>"
-          dropdown =    dropdown+ "<div class='media'><div class='media-icon bg-primary-transparent text-primary'> <a href='' onclick='gotoProyecto(\""+res[i].urn+"\");'><i class='icon ion-md-link'></i></a> </div><div class='media-body'><span><label for='FullName'>"+ res[i].namep +"</label></span> "+""+"</div></div></div>";
+          dropdown = dropdown + "<div class='media'><div class='media-icon bg-primary-transparent text-primary'> <a href='' onclick='gotoProyecto(\"" + res[i].urn + "\");'><i class='icon ion-md-link'></i></a> </div><div class='media-body'><span><label for='FullName'>" + res[i].namep + "</label></span> " + "" + "</div></div></div>";
         }
         document.getElementById("listaProyectos").innerHTML = dropdown;
       }
@@ -192,9 +190,9 @@ function callProyectosSeleccion() {
           let dropdown = "";
           for (i = 0; i < res.length; i++) {
 
-           // dropdown = dropdown + "<option class='slide-item' href='#' value='" + res[i].urn + "'>" + res[i].objectKey + "</option>";
+            // dropdown = dropdown + "<option class='slide-item' href='#' value='" + res[i].urn + "'>" + res[i].objectKey + "</option>";
             // dropdown = dropdown+ "<a href='#' class='dropdown-item' onclick='openViewer("+"\""+res[i].urn+"\""+")'>"+res[i].objectKey+"</a>"
-            dropdown =    dropdown+ "<div class='media'><div class='media-icon bg-primary-transparent text-primary'> <a href='' onclick='gotoProyecto(\""+res[i].urn+"\");'><i class='icon ion-md-link'></i></a> </div><div class='media-body'><span><label for='FullName'>"+ res[i].objectKey +"</label></span> "+""+"</div></div></div>";
+            dropdown = dropdown + "<div class='media'><div class='media-icon bg-primary-transparent text-primary'> <a href='' onclick='gotoProyecto(\"" + res[i].urn + "\");'><i class='icon ion-md-link'></i></a> </div><div class='media-body'><span><label for='FullName'>" + res[i].objectKey + "</label></span> " + "" + "</div></div></div>";
           }
           document.getElementById("listaProyectos").innerHTML = dropdown;
         }
@@ -454,9 +452,9 @@ function translateObject(node) {
     data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectKey }),
     success: function (res) {
       $("#forgeViewer").html('Traducción Iniciada, espere unos instantes..');
-    },error:function(res){
-        console.log("ERROR AL INTENTAR TRADUCIR");
-        console.log(res);
+    }, error: function (res) {
+      console.log("ERROR AL INTENTAR TRADUCIR");
+      console.log(res);
     }
   });
 }
