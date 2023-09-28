@@ -2,7 +2,7 @@ var MyVars = {
   keepTrying: true,
   ajaxCalls: []
 };
-var  _this;
+var _this;
 var urn_usada = "";
 $(document).ready(function () {
   setTimeout(function () {
@@ -24,14 +24,14 @@ $(document).ready(function () {
     $("#newBucketKey").focus();
   })
 
-  function uptoBucket(){
+  function uptoBucket() {
     var node2 = $('#appBuckets').jstree(true);
     var arrObj = Object.keys(node2._model.data);
     var arr = $('#appBuckets').jstree(true).get_json('#', { no_state: true, flat: true });
     //console.log(node);
     console.log(arr);
     _this = this;
-    if (_this.files.length == 0) return;
+    if (_this?.files?.length == 0) return;
     var file = _this.files[0];
     if (arr[0].id == "p2_proyectos") {
 
@@ -47,21 +47,21 @@ $(document).ready(function () {
         contentType: false,
         type: 'POST',
         success: function (data) {
-         // $('#appBuckets').jstree(true).refresh();
-         $('#appBuckets').jstree(true).destroy();
-         prepareAppBucketTree();
+          // $('#appBuckets').jstree(true).refresh();
+          $('#appBuckets').jstree(true).destroy();
+          prepareAppBucketTree();
           $("#notificaciones").empty();
           $("#notificaciones").html("Archivo " + "subido exitosamente");
           _this.value = '';
-         
+
 
           callProyectosSeleccion();
           location.reload();
 
-        },error:function(res){
-            console.log("ERROR AL SUBIR");
-            console.log(res);
-            uptoBucket();
+        }, error: function (res) {
+          console.log("ERROR AL SUBIR");
+          console.log(res);
+          uptoBucket();
         }
 
       });
@@ -92,21 +92,21 @@ $(document).ready(function () {
         contentType: false,
         type: 'POST',
         success: function (data) {
-         // $('#appBuckets').jstree(true).refresh();
-         $('#appBuckets').jstree(true).destroy();
-         prepareAppBucketTree();
+          // $('#appBuckets').jstree(true).refresh();
+          $('#appBuckets').jstree(true).destroy();
+          prepareAppBucketTree();
           $("#notificaciones").empty();
           $("#notificaciones").html("Archivo " + "subido exitosamente");
           _this.value = '';
-         
+
 
           callProyectosSeleccion();
           location.reload();
 
-        },error:function(res){
-            console.log("ERROR AL SUBIR");
-            console.log(res);
-            uptoBucket();
+        }, error: function (res) {
+          console.log("ERROR AL SUBIR");
+          console.log(res);
+          uptoBucket();
         }
 
       });
@@ -135,13 +135,13 @@ function callProyectos2() {
         openViewer(res[0].nombre);
       },
     });
-   
+
   })
 }
 function cargarProyecto() {
 
   var q = document.getElementById("proyectos_disponibles").value;
-   alert(q);
+  alert(q);
 
   console.log("DATA NOMBRE");
   console.log(q);
@@ -161,8 +161,8 @@ function cargarProyecto() {
 }
 
 function cargarUsuarios() {
- console.log("ENTRO A BUSCAR USUARIOS");
-  
+  console.log("ENTRO A BUSCAR USUARIOS");
+
   jQuery.get({
     url: '/getUsers',
     contentType: 'application/json',
@@ -170,23 +170,23 @@ function cargarUsuarios() {
       console.log("LISTADO DE USUARIOS");
       console.log(res);
       var opciones = "";
-      for(let y =0; y <res.length;y++){
-        opciones += "<option value='"+res[y].idUsu+"'>"+res[y].username+"</option>";
+      for (let y = 0; y < res.length; y++) {
+        opciones += "<option value='" + res[y].idUsu + "'>" + res[y].username + "</option>";
       }
       document.getElementById("usuariosAsignacion").innerHTML = "";
       document.getElementById("usuariosAsignacion").innerHTML = opciones;
-      
+
     },
   });
 
 }
 
-function eliminarAsociacion(proyecto,usuario){
-console.log("INGRESO A ELIMINACION")
+function eliminarAsociacion(proyecto, usuario) {
+  console.log("INGRESO A ELIMINACION")
   jQuery.post({
     url: '/eliminarAsignacion',
     contentType: 'application/json',
-    data: JSON.stringify({ 'nameusuario': usuario,'namep':proyecto}),
+    data: JSON.stringify({ 'nameusuario': usuario, 'namep': proyecto }),
     success: function (res) {
       console.log("Eliminado con Exito");
       console.log(res);
@@ -194,13 +194,13 @@ console.log("INGRESO A ELIMINACION")
     },
   });
 }
-function guardarAsignación(){
+function guardarAsignación() {
 
   let proyectoAsig = $('#proyectosAsignacion').find(":selected").val();
-  let nombreProyAsig =  $('#proyectosAsignacion').find(":selected").text();
+  let nombreProyAsig = $('#proyectosAsignacion').find(":selected").text();
 
 
-  
+
   let usuarioAsig = $('#usuariosAsignacion').find(":selected").val();
   let nombreUsuAsig = $('#usuariosAsignacion').find(":selected").text();
 
@@ -212,38 +212,38 @@ function guardarAsignación(){
   jQuery.post({
     url: '/CargarAsignacion',
     contentType: 'application/json',
-    data: JSON.stringify({ 'nameusuario': nombreUsuAsig,'usuario':usuarioAsig,'urn':proyectoAsig,'namep':nombreProyAsig}),
+    data: JSON.stringify({ 'nameusuario': nombreUsuAsig, 'usuario': usuarioAsig, 'urn': proyectoAsig, 'namep': nombreProyAsig }),
     success: function (res) {
-     console.log("okok");
-     window.location.href = window.location.href;
+      console.log("okok");
+      window.location.href = window.location.href;
     },
   });
 
 
 }
-function cerrarnoTransferencia(){
-  
+function cerrarnoTransferencia() {
+
   $('#NoTransferenciaDatos').modal('hide');
 }
-function cerrarTransferenciaok(){
-  
+function cerrarTransferenciaok() {
+
   $('#OkTransferenciaDatos').modal('hide');
 }
-function iniciarTransferencia(){
-  
-  let urn_emisor =  $('#proyectoEmisor').find(":selected").val();
-  let urn_receptor =  $('#proyectoReceptor').find(":selected").val();
+function iniciarTransferencia() {
+
+  let urn_emisor = $('#proyectoEmisor').find(":selected").val();
+  let urn_receptor = $('#proyectoReceptor').find(":selected").val();
   $('#TransferenciaDatos').modal('hide');
   jQuery.post({
     url: '/transferenciaDatos',
     contentType: 'application/json',
-    data: JSON.stringify({ 'emisor': urn_emisor,'receptor':urn_receptor}),
-       success: function (res) {
-         console.log(res);
-         //window.location.href = window.location.href;
-      
-        $('#OkTransferenciaDatos').modal('show');
-    } ,error: function (err) {
+    data: JSON.stringify({ 'emisor': urn_emisor, 'receptor': urn_receptor }),
+    success: function (res) {
+      console.log(res);
+      //window.location.href = window.location.href;
+
+      $('#OkTransferenciaDatos').modal('show');
+    }, error: function (err) {
       console.log("error");
       console.log(err);
       $('#TransferenciaDatos').modal('hide');
@@ -252,34 +252,34 @@ function iniciarTransferencia(){
   });
 
 }
-function modalTransferencia(){
+function modalTransferencia() {
   //TransferenciaDatos
-  let emisor =  $('#proyectoEmisor').find(":selected").text();
-  let receptor =  $('#proyectoReceptor').find(":selected").text();
+  let emisor = $('#proyectoEmisor').find(":selected").text();
+  let receptor = $('#proyectoReceptor').find(":selected").text();
   $('#emisorDatos').empty();
   $('#receptorDatos').empty();
-  $('#emisorDatos').append(''+emisor);
-  $('#receptorDatos').append(''+receptor);
-console.log("ProyectoEmisor :"+emisor +" receptor :"+receptor);
+  $('#emisorDatos').append('' + emisor);
+  $('#receptorDatos').append('' + receptor);
+  console.log("ProyectoEmisor :" + emisor + " receptor :" + receptor);
   $('#TransferenciaDatos').modal('show');
 }
-function cerrarTransferencia(){
+function cerrarTransferencia() {
   $('#TransferenciaDatos').modal('hide');
 }
 function cargaProyectosOpt(resultado) {
   console.log("ENTRO A BUSCAR USUARIOS");
-   
+
   var opciones = "";
-  for(let y =0; y <resultado.length;y++){
-    opciones += "<option value='"+resultado[y].urn+"'>"+resultado[y].objectKey+"</option>";
+  for (let y = 0; y < resultado.length; y++) {
+    opciones += "<option value='" + resultado[y].urn + "'>" + resultado[y].objectKey + "</option>";
   }
   document.getElementById("proyectosAsignacion").innerHTML = "";
   document.getElementById("proyectosAsignacion").innerHTML = opciones;
   document.getElementById("proyectoEmisor").innerHTML = opciones;
   document.getElementById("proyectoReceptor").innerHTML = opciones;
 
- 
- }
+
+}
 
 function callProyectosSeleccion() {
   cargarUsuarios();
@@ -293,7 +293,7 @@ function callProyectosSeleccion() {
         console.log("Llamo a proyectos2");
         if (res.length == 0) {
           callProyectosSeleccion();
-         
+
         } else {
           cargaProyectosOpt(res)
           console.log(res);
@@ -305,7 +305,7 @@ function callProyectosSeleccion() {
             // dropdown = dropdown+ "<a href='#' class='dropdown-item' onclick='openViewer("+"\""+res[i].urn+"\""+")'>"+res[i].objectKey+"</a>"
 
           }
-        //  document.getElementById("proyectos_disponibles").innerHTML = dropdown;
+          //  document.getElementById("proyectos_disponibles").innerHTML = dropdown;
         }
 
       },
@@ -363,8 +363,8 @@ function prepareAppBucketTree() {
   var k = [];
   var i;
   p1();
-  
-  
+
+
   function p1() {
 
 
@@ -390,7 +390,7 @@ function prepareAppBucketTree() {
       $('#appBuckets').jstree({
 
         'core': {
-         
+
           'themes': { "stripes": true },
           'data': [
             {
@@ -405,7 +405,7 @@ function prepareAppBucketTree() {
             }
           ]
 
-         
+
 
         },
         'types': {
@@ -537,9 +537,9 @@ function translateObject(node) {
     data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectKey }),
     success: function (res) {
       $("#forgeViewer").html('Traducción Iniciada, espere unos instantes..');
-    },error:function(res){
-        console.log("ERROR AL INTENTAR TRADUCIR");
-        console.log(res);
+    }, error: function (res) {
+      console.log("ERROR AL INTENTAR TRADUCIR");
+      console.log(res);
     }
   });
 }
@@ -571,14 +571,14 @@ function ocultarNodoPorData() {
   });
 }
 
-function borradoInterno(nombreProyecto){
+function borradoInterno(nombreProyecto) {
   jQuery.post({
     url: '/eliminarAsignacionInterna',
     contentType: 'application/json',
-    data: JSON.stringify({ 'namep':nombreProyecto}),
+    data: JSON.stringify({ 'namep': nombreProyecto }),
     success: function (res) {
-        location.reload();
-    },error:function(err){   location.reload();}
+      location.reload();
+    }, error: function (err) { location.reload(); }
   });
 }
 function deleteObject(node) {
@@ -594,13 +594,13 @@ function deleteObject(node) {
     data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectKey }),
     success: function (res) {
 
-     
+
       $("#forgeViewer").html('Por favor vuelva a intentarlo en unos minutos..');
     }, error: function (err) {
       console.log(err);
     }
   });
-  
+
 
 }
 function deleteFile(node) {
@@ -612,7 +612,7 @@ function deleteFile(node) {
   console.log(objectKey);
   console.log(objectID); // URN PROYECTO
 
-  
+
 
   $("#notificaciones").html(" Se ha iniciado el proceso de  borrado para " + objectKey);
 
