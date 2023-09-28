@@ -17,7 +17,6 @@ if (config.credentials.client_id == null || config.credentials.client_secret == 
 
 //initializations
 let app = express();
-app.use(multer({ limits: { fileSize: 1000000000 } }).single("file")); // 1 GB
 
 require('./public/js/passport');
 
