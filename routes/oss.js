@@ -1,6 +1,6 @@
 const fs = require('fs');
 const express = require('express');
-const multer  = require('multer');
+const multer = require('multer');
 const { BucketsApi, ObjectsApi, PostBucketsPayload } = require('forge-apis');
 
 const { getClient, getInternalToken } = require('./common/oauth');
@@ -33,7 +33,7 @@ router.get('/buckets', async (req, res, next) => {
                     children: true
                 };
             }));
-        } catch(err) {
+        } catch (err) {
             console.log("2");
             console.log(err);
             next(err);
@@ -51,7 +51,7 @@ router.get('/buckets', async (req, res, next) => {
                     children: false
                 };
             }));
-        } catch(err) {
+        } catch (err) {
             console.log("1");
             console.log(err);
             next(err);
@@ -63,63 +63,63 @@ router.get('/buckets', async (req, res, next) => {
 // Request body must be a valid JSON in the form of { "bucketKey": "<new_bucket_name>" }.
 router.post('/buckets', async (req, res, next) => {
     let payload = new PostBucketsPayload();
-    payload.bucketKey = '"'+config.credentials.client_id.toLowerCase() + '- ' + req.body.bucketKey+'"';
+    payload.bucketKey = '"' + config.credentials.client_id.toLowerCase() + '- ' + req.body.bucketKey + '"';
     payload.policyKey = 'persistent'; // expires in 24h
     try {
         // Create a bucket using [BucketsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/BucketsApi.md#createBucket).
         await new BucketsApi().createBucket(payload, {}, req.oauth_client, req.oauth_token);
         res.status(200).end();
-    } catch(err) {
+    } catch (err) {
         next(err);
     }
 });
 
-router.get('/bucketsProyectos', async(req,res,next)=>{
-  const bucket_name = req.query.id;
-  const opc = req.query.opc
- try{
-    const buckets = await new BucketsApi().getBuckets({},req.oauth_client,req.oauth_token);
-    
-    if(opc =="1"){
-        const bucket_name = req.query.bucketKey;
-         const object_name = req.query.objName;
-         
-        try {
-            // Retrieve objects from Forge using the [ObjectsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/ObjectsApi.md#getObjects)
-            const objects = await new ObjectsApi().deleteObject(bucket_name, object_name, req.oauth_client, req.oauth_token);
-            res.json(objects.body.items.map((object) => {
-                return {
-                    id: Buffer.from(object.objectId).toString('base64'),
-                    text: object.objectKey,
-                    type: 'object',
-                    children: false
-                };
-            }));
-        } catch(err) {
-            next(err);
-        }
-    }else{
-        buckets.body.items.forEach(async(bucket)=>{
-            let lista = [];
-             const objects = await new ObjectsApi().getObjects(bucket.bucketKey,{},req.oauth_client,req.oauth_token);
-             objects.body.items.forEach(item=>{
-                     let _item ={
+router.get('/bucketsProyectos', async (req, res, next) => {
+    const bucket_name = req.query.id;
+    const opc = req.query.opc
+    try {
+        const buckets = await new BucketsApi().getBuckets({}, req.oauth_client, req.oauth_token);
+
+        if (opc == "1") {
+            const bucket_name = req.query.bucketKey;
+            const object_name = req.query.objName;
+
+            try {
+                // Retrieve objects from Forge using the [ObjectsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/ObjectsApi.md#getObjects)
+                const objects = await new ObjectsApi().deleteObject(bucket_name, object_name, req.oauth_client, req.oauth_token);
+                res.json(objects.body.items.map((object) => {
+                    return {
+                        id: Buffer.from(object.objectId).toString('base64'),
+                        text: object.objectKey,
+                        type: 'object',
+                        children: false
+                    };
+                }));
+            } catch (err) {
+                next(err);
+            }
+        } else {
+            buckets.body.items.forEach(async (bucket) => {
+                let lista = [];
+                const objects = await new ObjectsApi().getObjects(bucket.bucketKey, {}, req.oauth_client, req.oauth_token);
+                objects.body.items.forEach(item => {
+                    let _item = {
                         urn: Buffer.from(item.objectId).toString('base64'),
                         bucketKey: item.bucketKey,
-                        objectKey:item.objectKey,
-                        size:item.size
+                        objectKey: item.objectKey,
+                        size: item.size
                     }
-                     lista.push(_item);
-                  });
-            res.json(lista);    
-        });
+                    lista.push(_item);
+                });
+                res.json(lista);
+            });
 
+        }
+
+
+    } catch (err) {
+        next(err);
     }
-    
-   
-}catch(err){
-    next(err);
-}
 
 });
 // POST /api/forge/oss/objects - uploads new object to given bucket.
@@ -128,18 +128,17 @@ router.get('/bucketsProyectos', async(req,res,next)=>{
 router.post('/objects', multer({ dest: 'uploads/' }).single('fileToUpload'), async (req, res, next) => {
     fs.readFile(req.file.path, async (err, data) => {
         if (err) {
-            console.log("3");
-            console.log(err);
+            console.error(`error on router.post /objects, error: ${err}, data?.length: ${data?.length}`);
+            console.error(err);
             next(err);
-            
         }
         try {
             // Upload an object to bucket using [ObjectsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/ObjectsApi.md#uploadObject).
             await new ObjectsApi().uploadObject(req.body.bucketKey, req.file.originalname, data.length, data, {}, req.oauth_client, req.oauth_token);
             res.status(200).end();
-        } catch(err) {
-              console.log("3");
-            console.log(err);
+        } catch (err) {
+            console.error(`error on router.post /objects, ObjectsApi.uploadObject, error: ${err}, data?.length: ${data?.length}`);
+            console.error(err);
             next(err);
         }
     });
@@ -152,33 +151,33 @@ router.delete('/files/:id', function (req, res) {
 
     var objects = new forgeSDK.ObjectsApi();
     objects.deleteObject(boName.bucketKey, boName.objectName, tokenSession.getOAuth(), tokenSession.getCredentials())
-      .then(function (data) {
-          res.json({ status: "success" })
-      })
-      .catch(function (error) {
-          res.status(error.statusCode).end(error.statusMessage);
-      })
+        .then(function (data) {
+            res.json({ status: "success" })
+        })
+        .catch(function (error) {
+            res.status(error.statusCode).end(error.statusMessage);
+        })
 })
 router.post('/deleteObject', async (req, res, next) => {
     console.log("LLEGA");
     console.log(req.body);
-    
+
     const bucket_name = req.body.bucketKey;
     const object_name = req.body.objectName;
 
-        try {
-            // Retrieve objects from Forge using the [ObjectsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/ObjectsApi.md#getObjects)
-            const objects = await new ObjectsApi().deleteObject(bucket_name, object_name, req.oauth_client, req.oauth_token);
-            console.log("Borro llama objs");
-            console.log(objects);
-            res.json({ status: "success" })
-            res.redirect('/proyectos');
-           
-        } catch(err) {
-            next(err);
-        }
-    
+    try {
+        // Retrieve objects from Forge using the [ObjectsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/ObjectsApi.md#getObjects)
+        const objects = await new ObjectsApi().deleteObject(bucket_name, object_name, req.oauth_client, req.oauth_token);
+        console.log("Borro llama objs");
+        console.log(objects);
+        res.json({ status: "success" })
+        res.redirect('/proyectos');
+
+    } catch (err) {
+        next(err);
+    }
+
 });
 
-     
+
 module.exports = router;
