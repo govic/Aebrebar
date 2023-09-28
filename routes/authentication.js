@@ -80,12 +80,11 @@ router.post(
     if (req.session.passport.user.tipoUsuario == "Administrador") {
       var nom = req.session.passport.user.fullname;
       var nom2 = req.session.passport.user.username;
-      console.log(nom2);
       res.render('profile', { nom, nom2 });
     }
     if (req.session.passport.user.tipoUsuario == "Editor") {
       var nom = req.session.passport.user.fullname;
-      res.render('profilev3', { nom, nom2 });
+      res.render('profileV3', { nom, nom2 });
     }
     if (req.session.passport.user.tipoUsuario == "Visualizador") {
       var nom = req.session.passport.user.fullname;
@@ -362,7 +361,7 @@ router.get('/deleteVista/:idVS', isLoggedIn, async (req, res) => {
   }
   //rev 
   if (req.session.passport.user.tipoUsuario == "Visualizador") {
-   res.redirect('index');
+   res.redirect('indexV2');
   }
 });
 
@@ -508,12 +507,17 @@ router.post('/signup', isLoggedIn, async (req, res) => {
 });
 router.get('/prueba', isLoggedIn, async (req, res, next) => {
   idUsua = req.session.passport.user.idUsu;
+  
+  const { urn } = req.body;
+  console.log("URN BUSCA VISTAS");
+  console.log(urn);
+  console.log(req.body)
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   console.log(rows2[0].fullname);
   req.session.passport.user.fullname = rows2[0].fullname;
   var nom = req.session.passport.user.fullname;
   //guardo los datos de la tabla en datavista
-  const datavista = await pool.query('SELECT * FROM vistas_save');
+  const datavista = await pool.query('SELECT * FROM vistas_save WHERE urn LIKE "'+urn+'"');
   if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.send(datavista);
     console.log(datavista);
@@ -526,6 +530,40 @@ router.get('/prueba', isLoggedIn, async (req, res, next) => {
   if (req.session.passport.user.tipoUsuario == "Visualizador") {
     res.send(datavista);
     console.log(datavista);
+  }
+
+});
+
+router.post('/buscaVistas', isLoggedIn, async (req, res, next) => {
+  idUsua = req.session.passport.user.idUsu;
+  
+  const { urn } = req.body;
+  console.log("URN BUSCA VISTAS2");
+  console.log(urn);
+  console.log("todo");
+
+  var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
+  console.log(rows2[0].fullname);
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  //guardo los datos de la tabla en datavista
+  const datavista = await pool.query('SELECT * FROM vistas_save WHERE urn LIKE "'+urn+'"');
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
+   
+    console.log("Resultado Ids");
+    console.log(datavista);
+    res.send(datavista);
+  }
+  if (req.session.passport.user.tipoUsuario == "Editor") {
+   
+    console.log(datavista);
+    res.send(datavista);
+  }
+  //rev
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
+   
+    console.log(datavista);
+    res.send(datavista);
   }
 
 });
@@ -625,6 +663,11 @@ router.post('/recuperacion', isNotLoggedIn, async (req, res) => {
 //cambio de contraseña con token
 router.get('/cambiar_password', isNotLoggedIn, async (req, res, next) => {
   res.render('cambiar_password');
+});
+
+
+router.post('/getOrdenesMaestroFierros', isNotLoggedIn, async (req, res, done) => {
+  const { password, password2, tokenId } = req.body;
 });
 
 router.post('/cambio_de_pass', isNotLoggedIn, async (req, res, done) => {
@@ -805,15 +848,15 @@ router.get('/getUsers',isLoggedIn,async (req,res,next)=>{
     // console.log( datavista );
   }
 })
-router.get('/listaDBIDSPlan', isLoggedIn, async (req, res, next) => {
+router.post('/listaDBIDSPlan', isLoggedIn, async (req, res, next) => {
   idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
   // console.log(rows2[0].fullname);
   req.session.passport.user.fullname = rows2[0].fullname;
   var nom = req.session.passport.user.fullname;
   //guardo los datos de la tabla en datavista
-  const { nombre, ids } = req.body;
-  const datavista = await pool.query('SELECT * FROM plan WHERE fecha_plan != "" ');
+  const { urn } = req.body;
+  const datavista = await pool.query('SELECT * FROM plan WHERE fecha_plan != "" AND urn LIKE "'+urn+'"');
   if (req.session.passport.user.tipoUsuario == "Administrador") {
     res.send(datavista);
     // console.log( "GET IDS PLAN" );
@@ -838,10 +881,11 @@ router.post('/insertDBIDS', isLoggedIn, async (req, res, next) => {
 
 
   //guardo los datos de la tabla en datavista
-  const { fecha_plan, fecha_base, dbId } = req.body;
+  const { fecha_plan, fecha_base, dbId,urn } = req.body;
 
-  const insertPlan = { dbId, fecha_plan, fecha_base };
+  const insertPlan = { dbId, fecha_plan, fecha_base,urn };
 
+console.log("llega urn");
 
   await pool.query('INSERT INTO  plan set ?', [insertPlan], async (error, results) => {
     if (error) {
@@ -852,24 +896,71 @@ router.post('/insertDBIDS', isLoggedIn, async (req, res, next) => {
   });
 
 });
+//
+router.post('/transferenciaDatos', isLoggedIn, async (req, res, next) => {
+  idUsua = req.session.passport.user.idUsu;
+  const { emisor, receptor } = req.body;
+  console.log("datos emisor y receptor");
+  console.log(emisor);
+  console.log(receptor);
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
+    await pool.query('UPDATE pedido set urn_actual ="'+receptor+'" WHERE urn_actual LIKE "'+emisor+'"', async (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        await pool.query('UPDATE adicionales_pedidos set urn ="'+receptor+'" WHERE urn LIKE "'+emisor+'"', async (error, results) => {
+          if (error) {
+            console.log(error);
+          } else {
+            await pool.query('UPDATE vistas_save set urn ="'+receptor+'" WHERE urn LIKE "'+emisor+'"', async (error, results) => {
+              if (error) {
+                console.log(error);
+              } else {
+                  res.send("ok");
+        
+              }
+            });
+    
+          }
+        });
 
+      }
+    });
+
+   
+
+   
+   
+   
+  }
+  res.send("proyectos");
+});
 
 router.post('/updateDBIDS', isLoggedIn, async (req, res, next) => {
+
+
   idUsua = req.session.passport.user.idUsu;
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
+   await pool.query('UPDATE pedido set ? WHERE dbId = ?', [updatePlan, i], async (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("update exitoso");
 
+      }
+    });
 
 
   //guardo los datos de la tabla en datavista
 
-  const { fecha_plan, fecha_base, dbId } = req.body;
+  const { fecha_plan, fecha_base, dbId,urn } = req.body;
   let i = parseInt('' + dbId, 0);
 
   const updatePlan = { fecha_plan, fecha_base };
   console.log('ENVIO UPDATE');
   console.log(req.body);
   if (req.session.passport.user.tipoUsuario == "Administrador") {
-    await pool.query('UPDATE plan set ? WHERE dbId = ?', [updatePlan, i], async (error, results) => {
+    await pool.query('UPDATE plan set fecha_base='+fecha_base+', fecha_plan ='+fecha_plan+' WHERE dbId ='+i+' AND urn LIKE "'+urn+'"', async (error, results) => {
       if (error) {
         console.log(error);
       } else {
@@ -936,14 +1027,15 @@ router.post('/prueba', isLoggedIn, async (req, res) => {
     const datavista = await pool.query('SELECT * FROM vistas_save');
 
     //aquí le paso los datos de los inputs (Los capto a través del "name")
-    const { nombre, ids } = req.body;
+    const { nombre, ids,urn } = req.body;
     console.log("body");
     console.log(req.body);
     console.log(req.body.nombre);
     //entonces en la variable newDatos pongo los datos a insertar
     const newDatos = {
       nombre,
-      ids
+      ids,
+      urn
     };
     // aquí le digo que cambie la tabla usuario con los datos del nuevo usuario que tiene la id de isUsu, o sea la de la sesión
     await pool.query('INSERT vistas_save set ?', [newDatos], async (error, results) => {
@@ -1125,10 +1217,8 @@ router.post('/vista', isLoggedIn, async (req, res) => {
       }
       //rev
       if (req.session.passport.user.tipoUsuario == "Visualizador") {
-        console.log(results);
-      console.log(error);
+       
         res.send('ok');
-        ///ok
     
     
       }
@@ -1137,9 +1227,79 @@ router.post('/vista', isLoggedIn, async (req, res) => {
   }
   
   
- 
+  //ahora empieza la función
  
 });
+/*router.post('/signup', passport.authenticate('local.signup', {
+  successRedirect: '#',
+  failureRedirect: '/signup',
+  failureFlash: true
+}));*/
+
+//modals
+/*router.get('/modals', (req, res, next) => {
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
+  res.render('modals');
+}
+if (req.session.passport.user.tipoUsuario == "Visualizador") {
+ res.render('modalsV2');
+}})*/
+
+//--
+//index
+/*router.get('/index2', isLoggedIn, async (req, res, next) => {
+  idUsua = req.session.passport.user.idUsu;
+  var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
+  console.log(rows2[0].fullname);
+  req.session.passport.user.fullname = rows2[0].fullname;
+  var nom = req.session.passport.user.fullname;
+  var nom2 = req.session.passport.user.username;
+
+  var rows3 = await pool.query('SELECT * FROM filtros WHERE id = ?', [1]);
+  const filtro_1 = rows3[0].filtro_1;
+  const filtro_2 = rows3[0].filtro_2;
+
+  const rows4 = await pool.query('SELECT * FROM gantt', [idUsua]);
+  const categoria_01 = rows4[0].categoria_01;
+  const categoria_02 = rows4[0].categoria_02;
+  const categoria_03 = rows4[0].categoria_03;
+  const categoria_04 = rows4[0].categoria_04;
+  const parametro_nivel = rows4[0].parametro_nivel;
+  const parametro_fecha = rows4[0].parametro_fecha;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
+
+    res.render('index2', {
+      alert: true,
+      alertTitle: "¡Correcto!",
+      alertMessage: "¡Datos correctamente editados!",
+      alertIcon: 'success',
+      showConfirmButton: false,
+      ruta: 'index2',
+      nom,
+      nom2,
+      idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
+    });
+  }
+  if (req.session.passport.user.tipoUsuario == "Editor") {
+
+    res.render('index2V3', {
+      alert: true,
+      alertTitle: "¡Correcto!",
+      alertMessage: "¡Datos correctamente editados!",
+      alertIcon: 'success',
+      showConfirmButton: false,
+      ruta: 'index2V3',
+      nom,
+      nom2,
+      idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha
+    });
+  }
+  if (req.session.passport.user.tipoUsuario == "Visualizador") {
+    
+    res.render('index2', { nom, filtro_1 });
+  }
+})
+*/
 
 //index
 router.get('/index', isLoggedIn, async (req, res, next) => {
@@ -1258,6 +1418,7 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
 
       const idUsu = req.session.passport.user.idUsu;
       if (req.session.passport.user.tipoUsuario == "Administrador") {
+        console.log("config V1!!!!!!!!!!!!!!!");
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1271,19 +1432,21 @@ router.post('/filtro', isLoggedIn, async (req, res) => {
         })
       }
       if (req.session.passport.user.tipoUsuario == "Editor") {
+        console.log("config V3!!!!!!!!!!!!!!!");
         res.render('configV3', {
           alert: true,
           alertTitle: "¡Correcto!",
           alertMessage: "¡Datos correctamente editados!",
           alertIcon: 'success',
           showConfirmButton: false,
-          ruta: 'configV3',
+          ruta: 'config',
           nom,
           nom2,
           idUsu, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3
-        })
+       })
       }
       if (req.session.passport.user.tipoUsuario == "Visualizador") {
+        console.log("config V2!!!!!!!!!!!!!!!");
         res.render('config', {
           alert: true,
           alertTitle: "¡Correcto!",
@@ -1637,10 +1800,11 @@ router.post('/saveOrdenes', isLoggedIn, async (req, res) => {
   await pool.query('INSERT INTO  pedido set ?', [newSelect], async (error, results) => {
     if (error) {
       console.log(error);
+      res.send(error);
     } else {
       console.log("gUARDADO EL PEDIDO");
       console.log(newSelect);
-
+      res.send("ok guardado");
     }
   });
 })
@@ -1654,6 +1818,25 @@ router.post('/peso_nivel_1', isLoggedIn, async (req, res) => {
       console.log(error);
     } else {
       console.log("Registro peso nivel 1 Exitoso " + categorias.pesos_nivel);
+    }
+  });
+})
+
+
+
+//eliminarAsignacionInterna
+router.post('/eliminarAsignacionInterna', isLoggedIn, async (req, res) => {
+  const consulta= { namep } = req.body;
+  
+  //newUser.password = await helpers.encryptPassword(password);
+
+  await pool.query('DELETE FROM  proyectos_usuario WHERE  namep = "'+consulta.namep+'"', async (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(" PEDIDO eliminado");
+      console.log(consulta);
+      res.redirect('/proyectos');
     }
   });
 })
@@ -1735,12 +1918,13 @@ router.post('/CargarAsignacion', isLoggedIn, async (req, res) => {
 //***************************************************** */
 
 router.post('/saveAddOrdenes', isLoggedIn, async (req, res) => {
-  const { nombre_pedido, cantidad, diametro, largo } = req.body;
+  const { nombre_pedido, cantidad, diametro, largo,urn } = req.body;
   const newSelect = {
     nombre_pedido,
     cantidad,
     diametro,
-    largo
+    largo,
+    urn
   };
   //newUser.password = await helpers.encryptPassword(password);
   console.log("ENVIADO ADD ORDENES");
@@ -1768,12 +1952,12 @@ router.get('/getOrdenes', isLoggedIn, async (req, res, next) => {
   //guardo los datos de la tabla en datavista
   const { nombre, ids } = req.body;
   const datavista = await pool.query('SELECT * FROM pedido');
-  if (true) {
+ 
     console.log("GET IDS PLAN");
     res.send(datavista);
     console.log("GET IDS PLAN");
     console.log(datavista);
-  }
+
 
 });
 /////////////////////// GET ORDENES ADICIONALES/////////
@@ -1817,7 +2001,7 @@ router.post('/deleteOrdenes', isLoggedIn, async (req, res) => {
     } else {
       console.log(" PEDIDO eliminado");
       console.log(newSelect);
-
+      res.send("Ok Pedido Eliminado");
     }
   });
 })
@@ -1893,8 +2077,23 @@ getConfigViewParams = async (req) => {
 }
 
 router.get('/config', isLoggedIn, async (req, res, next) => {
-  res.render('config', await getConfigViewParams(req));
-  next();
+
+  idUsua = req.session.passport.user.idUsu;
+  var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
+  console.log(rows2[0].fullname);
+  req.session.passport.user.fullname = rows2[0].fullname;
+  req.session.passport.user.username = rows2[0].username;
+  var nom = req.session.passport.user.fullname;
+  var nom2 = req.session.passport.user.username;
+  if (req.session.passport.user.tipoUsuario == "Administrador") {
+      res.render('config', await getConfigViewParams(req));
+      next();
+  }
+  if (req.session.passport.user.tipoUsuario == "Editor") {
+    res.render('configV3', await getConfigViewParams(req));
+    next();
+}
+  
 });
 
 router.post('/profile', isLoggedIn, async (req, res) => {
@@ -2207,7 +2406,89 @@ router.get('/proyectos', isLoggedIn, async (req, res, next) => {
   var consulta_vals = "";
   var data_uso = "";
 
- 
+  /*var rows2 = await pool.query('SELECT * FROM lineapuntos');
+    console.log("LISTADO PUNTOS POLIGONO");
+    let c = 0;
+    var utmObj = require('utm-latlng');
+    
+  
+    var utm=new utmObj();
+    var contador_pares = 1;
+    var inserciones = [];
+    var contador_vueltas = 0;
+    
+    console.log("CANTIDAD DE POLIGONOS "+rows2.length);
+    rows2.forEach(row => {
+      //console.log("Elemento "+c);
+      
+      console.log(row.puntos_pol);
+      let lista_act= row.puntos_pol;
+      data_uso = data_uso+"=Predio ID: "+row.IDPREDIO+"/ID RODAL: "+row.IDRODAL+"/TIPO USO:"+row.TIPOUSO+"/USO ACTUAL:"+row.IDUSOACTUA+"/ AÑO Plantanción"+row.ANOPANTAC+"/"+"/SUP"+row.SUPERFICIE+"/SECCIÓN"+row.SECCION+"\n";
+      var newarr = lista_act.split(",");
+      console.log( 'Nuevo aar');
+      console.log( newarr);
+       
+      consulta_vals = "#";
+       for(var a =0; a<newarr.length;a=a+2){
+          console.log("INICIOLECTURA");
+      //  if(newarr[a] !== "" && newarr[a+1] !=" "){
+           console.log("LAT " +newarr[a+1]+"  lg :"+newarr[a]);
+           if(newarr[a+1] != "" && newarr[a+1] != undefined){
+              let s =  utm.convertLatLngToUtm(newarr[a+1], newarr[a],5);
+              console.log("LAT TO UTM");
+              console.log(s.Easting);
+              console.log(s.Northing);
+              if(s.Easting != NaN && s.Easting != "NaN"){
+              consulta_vals = consulta_vals+s.Easting+"/"+s.Northing;
+              consulta_vals = consulta_vals+"#";
+              }
+           }
+           
+          
+        //  if(consulta_vals.length>6){
+        //    console.log(consulta_vals);
+        //  }
+        
+        }
+     // }
+     inserciones.push(consulta_vals);
+      c++;
+  });
+  console.log("RESULTADO INSERCIONES");
+   console.log(inserciones);
+   console.log("CANTIDAD ELEMENTOS");
+   console.log(inserciones.length);
+   var resultado_poligonos ="";
+  for(var i = 0; i<inserciones.length;i++){
+  resultado_poligonos= resultado_poligonos+inserciones[i]+"$";
+  console.log("Linea numero "+i);
+  console.log(inserciones[i]);
+   
+  
+  }
+  
+  //-33.45008365948, -70.66429779660
+  //-37.373838699156, -73.463709509738
+  var test = utm.convertLatLngToUtm( -33.45008365948,-70.66429779660,8);
+    console.log("RESULTADO PRUEBA 12&/12 .. "+test.Easting+"  "+test.Northing);
+    
+  fs.writeFile('resultado.txt', resultado_poligonos, function (err) {
+    if (err) throw err;
+    console.log('Saved!');
+  });
+  fs.writeFile('usos.txt', data_uso, function (err) {
+    if (err) throw err;
+    console.log('Saved2!');
+  });
+   // split([separator][, limit]);
+   // var utmObj = require('utm-latlng');
+   // var utm=new utmObj(); //Default Ellipsoid is 'WGS 84'
+    
+    
+   
+   
+        //Camino_80097
+  */
 
   if (req.session.passport.user.tipoUsuario == "Administrador") {
 
@@ -2360,7 +2641,7 @@ router.get('/estadisticasModelo', isLoggedIn, async (req, res, next) => {
     res.render('estadisticasModeloV3', { nom, idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3 });
   }
   if (req.session.passport.user.tipoUsuario == "Visualizador") {
-    res.render('estadisticasModelo', { nom,idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3 });
+    res.render('estadisticasModelo2', { nom,idUsua, filtro_1, filtro_2, categoria_01, categoria_02, categoria_03, categoria_04, parametro_nivel, parametro_fecha, filtro_3 });
   }
 })
 //Echart
