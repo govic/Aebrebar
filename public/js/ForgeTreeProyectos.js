@@ -31,41 +31,42 @@ $(document).ready(function () {
     //console.log(node);
     console.log(arr);
     _this = this;
-    if (_this?.files?.length == 0) return;
-    var file = _this.files[0];
-    if (arr[0].id == "p2_proyectos") {
+    if (_this && _this.files && _this.files.length > 0) {
+      var file = _this.files[0];
+      if (arr[0].id == "p2_proyectos") {
 
-      console.log("entró a la subida bucket");
-      var formData = new FormData();
-      formData.append('fileToUpload', file);
-      formData.append('bucketKey', arr[0].id);
+        console.log("entró a la subida bucket");
+        var formData = new FormData();
+        formData.append('fileToUpload', file);
+        formData.append('bucketKey', arr[0].id);
 
-      $.ajax({
-        url: '/api/forge/oss/objects',
-        data: formData,
-        processData: false,
-        contentType: false,
-        type: 'POST',
-        success: function (data) {
-          // $('#appBuckets').jstree(true).refresh();
-          $('#appBuckets').jstree(true).destroy();
-          prepareAppBucketTree();
-          $("#notificaciones").empty();
-          $("#notificaciones").html("Archivo " + "subido exitosamente");
-          _this.value = '';
+        $.ajax({
+          url: '/api/forge/oss/objects',
+          data: formData,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          success: function (data) {
+            // $('#appBuckets').jstree(true).refresh();
+            $('#appBuckets').jstree(true).destroy();
+            prepareAppBucketTree();
+            $("#notificaciones").empty();
+            $("#notificaciones").html("Archivo " + "subido exitosamente");
+            _this.value = '';
 
 
-          callProyectosSeleccion();
-          location.reload();
+            callProyectosSeleccion();
+            location.reload();
 
-        }, error: function (res) {
-          console.log("ERROR AL SUBIR");
-          console.log(res);
-          uptoBucket();
-        }
+          }, error: function (res) {
+            console.log("ERROR AL SUBIR");
+            console.log(res);
+            uptoBucket();
+          }
 
-      });
+        });
 
+      }
     }
   }
   $('#hiddenUploadField').change(function () {
