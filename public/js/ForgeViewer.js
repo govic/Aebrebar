@@ -3587,7 +3587,6 @@ function launchViewer(urn) {
       // {type: "hide", nodeIdArray: [<dbid>], model: Model, target: GuiViewer3D}
  
  })
- viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, geometobjectTreeCreated);         
 
  viewer.addEventListener(Autodesk.Viewing.SHOW_EVENT, (nodes, model)=> {   
   console.log("nodos  visibles");
