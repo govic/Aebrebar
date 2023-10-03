@@ -2496,8 +2496,8 @@ $list_pedidos = "";
         console.log("nombre pedido A");
        // console.log(Object.values(res[r]));
        if(urn_usada ==res[r].urn_actual ){
-        let nombreActual = res[r].nombre_pedido;
-        $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-warning 'onclick='filtra_orden("+cont+")'><i class='ti-eye'></i></button>&nbsp;<button class='btn btn-warning ' onclick='eliminar_orden("+cont+");'><i class='ti-close'></i></button>&nbsp;<button class='btn btn-warning' onclick=addAdicional(\'"+nombreActual+"\');><i class='far fa-arrow-alt-circle-up'></i></button></td>" + "</tr>";
+        let nombreActual = "'"+res[r].nombre_pedido+"'";
+        $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-warning 'onclick='filtra_orden("+cont+")'><i class='ti-eye'></i></button>&nbsp;<button class='btn btn-warning ' onclick='eliminar_orden("+cont+");'><i class='ti-close'></i></button>&nbsp;<button class='btn btn-warning' onclick=addAdicional("+nombreActual+");><i class='far fa-arrow-alt-circle-up'></i></button></td>" + "</tr>";
         $list_pedidos = $list_pedidos +$fila;
         console.log(res[r].nombre_pedido);
        
