@@ -35,19 +35,7 @@ var listado_pesos = "";
 var listado_largos = "";
 var red = new THREE.Vector4(1, 0, 0, 0.5);
 
-async function enableGeomtricBoxSelection() {
-  // unload the extension, which was loaded with geometric selection turned off
-  viewer.unloadExtension('Autodesk.BoxSelection');
-  // reload the extension with geometric selection turned on
-  ext = await viewer.loadExtension('Autodesk.BoxSelection', {
-      useGeometricIntersection: true
-  });
-  // Display the toolbar button (optional) in the toolbar. You can invoke box 
-  // selection by holding cmd(mac) / ctrl(windows) + mouse drag
-  ext.addToolbarButton(true);
-}
 
-enableGeomtricBoxSelection();
 function savePlan(){
   let valores = document.getElementById("id_seleccionados2").value;
   console.log('IDS SELECCIONADOS PLAN SAVE()');
@@ -3600,10 +3588,7 @@ function launchViewer(urn) {
  
  })
  viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, geometobjectTreeCreated);         
- function geometobjectTreeCreated(evt){
-             //load the extension MySelectionWindow and call initialization 
-            
-  }
+
  viewer.addEventListener(Autodesk.Viewing.SHOW_EVENT, (nodes, model)=> {   
   console.log("nodos  visibles");
   console.log(nodes);
