@@ -3613,7 +3613,7 @@ function launchViewer(urn) {
         //console.log("Seleccion!222!!!!!!!!!!!!!!!!!!!!!!!");
       
      
-        var a= event.dbIdArray;
+      //   var a= event.dbIdArray;
      //   console.log("ELEMENTOS SELECCIONADOS");
         
             
