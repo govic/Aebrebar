@@ -299,6 +299,7 @@
 						<div class="col-md-12 col-lg-12 col-lg-12">
 							<div class="card card-dashboard-map-one">
 								   <label class="main-content-label">Proyectos</label>
+								   <input type="file" id="forgeUploadHidden" hidden />
 								   <span class="d-block mg-b-20 text-muted tx-12">Directorio de Proyectos disponibles</span>
 								   
 								   <div class="">
@@ -333,7 +334,12 @@
 															 </div>
 														   </div>
 														   <div class="col-sm-7 fill">
-															<div id="notificaciones"></div><br>
+															<div id="notificaciones"></div>
+															<div id="progressInfo" class="" style=" ">
+																<span id="progressInfoText"></span>
+																<span id="progressInfoIcon"></span>
+															</div>
+															<br>
 															   <div id="forgeViewer"></div>
 														   </div>
 														   <div class="col-sm-7">
