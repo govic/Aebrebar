@@ -891,7 +891,8 @@ console.log("llega urn");
     if (error) {
       console.log(error);
     } else {
-      console.log("Inserción Exitosa")
+      console.log("Inserción Exitosa");
+      console.log( insertPlan);
     }
   });
 
@@ -939,9 +940,16 @@ router.post('/transferenciaDatos', isLoggedIn, async (req, res, next) => {
 router.post('/updateDBIDS', isLoggedIn, async (req, res, next) => {
 
 
+  var f_plan = "'"+req.body.fecha_plan+"'";
+  var f_base="'"+ req.body.fecha_base+"'";
+  var s_dbId= "'"+req.body.dbId+"'";
+  var s_urn= "'"+req.body.urn+"'";
   idUsua = req.session.passport.user.idUsu;
+  console.log("plan "+f_plan+" base "+f_base+" dbid "+s_dbId);
   var rows2 = await pool.query('SELECT * FROM users WHERE idUsu = ?', [idUsua]);
-   await pool.query('UPDATE pedido set ? WHERE dbId = ?', [updatePlan, i], async (error, results) => {
+   
+  /*
+  await pool.query('UPDATE plan set fecha_base='+f_base+', fecha_plan ='+f_plan+' WHERE dbId ='+s_dbId+' AND urn LIKE '+s_urn, async (error, results) => {
       if (error) {
         console.log(error);
       } else {
@@ -949,18 +957,18 @@ router.post('/updateDBIDS', isLoggedIn, async (req, res, next) => {
 
       }
     });
-
+*/
 
   //guardo los datos de la tabla en datavista
 
-  const { fecha_plan, fecha_base, dbId,urn } = req.body;
-  let i = parseInt('' + dbId, 0);
+  
+ // let i = parseInt('' + dbId, 0);
 
-  const updatePlan = { fecha_plan, fecha_base };
+ // const updatePlan = { fecha_plan, fecha_base };
   console.log('ENVIO UPDATE');
-  console.log(req.body);
+ // console.log(req.body);
   if (req.session.passport.user.tipoUsuario == "Administrador") {
-    await pool.query('UPDATE plan set fecha_base='+fecha_base+', fecha_plan ='+fecha_plan+' WHERE dbId ='+i+' AND urn LIKE "'+urn+'"', async (error, results) => {
+    await pool.query('UPDATE plan set fecha_base ='+f_base+', fecha_plan ='+f_plan+' WHERE dbId ='+s_dbId+' AND urn LIKE '+s_urn, async (error, results) => {
       if (error) {
         console.log(error);
       } else {

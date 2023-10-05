@@ -79,23 +79,29 @@ function consultaPlan(idBuscado){
 }
 function getPlanObj(){
  // ids_plan = [];
-  ids_plan.splice(0, ids_plan.length);
+    while(ids_plan.length > 0) {
+      ids_plan.pop();
+    }
+    while(ids_bd.length > 0) {
+      ids_bd.pop();
+    }
+ // ids_plan.splice(0, ids_plan.length);
   jQuery.post({
     url: '/listaDBIDSPlan',
     contentType: 'application/json',
     data:  JSON.stringify({ 'urn':''+urnAsignado }),
     success: function (res) {
-      console.log("RESULTADO Get server");
-     console.log(res);
-     console.log(typeof res);
-     console.log(res.length);
-     console.log(typeof res[0]);
+     // console.log("RESULTADO Get server");
+    // console.log(res);
+    // console.log(typeof res);
+   //  console.log(res.length);
+   //  console.log(typeof res[0]);
     // $('#vistas_previas').innerHTML = "";
      console.log("RESULTADO Get PLAN SERVER");
 
      for(let r = 0; r<res.length; r++){
         ids_plan.push(Object.values(res[r]));
-        
+        ids_bd.push(Object.values(res[r]));
     }
     console.log("PLAN OBJETOS LISTADO")
     console.log(ids_plan);
@@ -117,13 +123,13 @@ function saveHormigonado(){
     console.log(existeId(ac));
     if(existeId(ac)== false){
       console.log('INSERTO OBJETO NO EXISTENTE');
-      console.log(plan+" "+base+" "+ac);
+    //  console.log(plan+" "+base+" "+ac);
       getDBIds_insert(plan,base,ac);
      // ids_bd =[];
       getDBIds();
       getPlanObj();
-      console.log("IDS DESDE SERVER");
-      console.log(ids_bd);
+    //  console.log("IDS DESDE SERVER");
+    //  console.log(ids_bd);
      
     }
     else{
@@ -133,8 +139,8 @@ function saveHormigonado(){
       //ids_bd =[];
       getDBIds();
       getPlanObj();
-      console.log("IDS DESDE SERVER");
-      console.log(ids_bd);
+     // console.log("IDS DESDE SERVER");
+     // console.log(ids_bd);
     }
   }
  // setTimeout( set_clave(3),2000);
@@ -187,13 +193,13 @@ function getDBIds(){
     url: '/listaDBIDS',
     contentType: 'application/json',
     success: function (res) {
-      console.log("RESULTADO Get server");
-     console.log(res);
-     console.log(typeof res);
-     console.log(res.length);
-     console.log(typeof res[0]);
+   //   console.log("RESULTADO Get server");
+  //   console.log(res);
+  //   console.log(typeof res);
+ //    console.log(res.length);
+ //console.log(typeof res[0]);
     // $('#vistas_previas').innerHTML = "";
-     console.log("RESULTADO Get server2");
+   //  console.log("RESULTADO Get server2");
 
      for(let r = 0; r<res.length; r++){
         ids_bd.push(Object.values(res[r]));
@@ -202,9 +208,9 @@ function getDBIds(){
 
 
     
-      console.log( ids_bd.length);
+     // console.log( ids_bd.length);
      
-      console.log( ids_bd);
+    //  console.log( ids_bd);
     
   
   
@@ -220,13 +226,13 @@ function getDBIds_update(plan,base,id){
     data:  JSON.stringify({ 'fecha_plan': ''+plan+'','fecha_base':''+base+'', 'dbId': ''+id+'','urn':''+urnAsignado }),
     success: function (res) {
       console.log('RESULTADO UPDATE BD');
-      console.log(res);
+ //     console.log(res);
     },
     error: function( jqXHR, textStatus, errorThrown ) {
       console.log('ERROR AL INSERTAR');
-      console.log(jqXHR);
-      console.log(textStatus);
-      console.log(errorThrown);
+   //   console.log(jqXHR);
+   //   console.log(textStatus);
+ ////     console.log(errorThrown);
       getDBIds_update(plan,base,id);
     }
   });
@@ -247,8 +253,8 @@ function getDBIds_insert(plan,base,id){
     error: function( jqXHR, textStatus, errorThrown ) {
       console.log('ERROR AL INSERTAR');
       console.log(jqXHR);
-      console.log(textStatus);
-      console.log(errorThrown);
+  //    console.log(textStatus);
+  //    console.log(errorThrown);
       getDBIds_insert(plan,base,id);
     }
 
@@ -257,9 +263,10 @@ function getDBIds_insert(plan,base,id){
 
 function existeId(idBuscado){
   let b = parseInt(idBuscado+'',0);
-  //console.log('BUSCADO');
-  //console.log(b);
- // console.log(ids_bd.length);
+  console.log('BUSCADO');
+  console.log(b);
+  console.log(ids_bd.length);
+  console.log(ids_plan);
   if(ids_bd.length>0){
     for(var a = 0; a<ids_bd.length;a++){
     //  console.log('BUSCAnDO');
@@ -268,8 +275,8 @@ function existeId(idBuscado){
     //  console.log(typeof b +' comp '+ typeof ids_bd[a][0]);
       if(b == ids_bd[a][0]){
         console.log('ENCONTRE ID BUSCADO OBSJET');
-        console.log("IDS PLANES ENCONTRADOS");
-        console.log(ids_bd[a]);
+  //      console.log("IDS PLANES ENCONTRADOS");
+  //      console.log(ids_bd[a]);
         return ids_bd[a];
       }
     }
@@ -362,8 +369,8 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
      let elementos =Array();
      elementos.length = 0;
      elementos = buscaKeys(filtros_selec_piso,keys);
-     console.log("ELEMENTOS PREVIO PROCESO");
-     console.log(elementos);
+    // console.log("ELEMENTOS PREVIO PROCESO");
+    // console.log(elementos);
      var identificadores=Array();
      identificadores.length = 0;
      referencia.length = 0;
@@ -374,7 +381,7 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
     if(elementos.length == 0 && elementos.length && elementos){
   //    // // // // // // // // // alert("No hay resultados");
     }else{
-        console.log("FILTRADOS PINTAR "+elementos.length);
+      //  console.log("FILTRADOS PINTAR "+elementos.length);
         for(var a = 0; a<elementos.length;a++){
             if(a==0){
               dbIds = data[keys[elementos[a]]].dbIds;              
@@ -393,15 +400,15 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
         resultado_ids = referencia;
     }
     viewer.isolate(identificadores);
-    console.log("IDENTIFICADORES");
-    console.log(identificadores);
+   /// console.log("IDENTIFICADORES");
+   /// console.log(identificadores);
     viewer.fitToView(identificadores, viewer.model);
     idsSeleccionados.length = 0;
     idsSeleccionados = identificadores;     
     var largoTotal = 0;
     var xTotal = 0;
-    console.log("RESULTADOS DE IDS FILTRO");
-    console.log(resultado_ids);
+ ///   console.log("RESULTADOS DE IDS FILTRO");
+//////    console.log(resultado_ids);
     console.log(resultado_ids[0]);
     peso = 0;
     pesoTotal = 0;
@@ -413,32 +420,32 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
           let actual =  identificadores;
 
           viewer.getProperties( identificadores[a], (result) => { 
-          console.log("RESPUESTA para A lvl "+ a + " && "+identificadores.length);
-          console.log(result);
-          contador_lg = contador_lg+1;
+    ///      console.log("RESPUESTA para A lvl "+ a + " && "+identificadores.length);
+  ///        console.log(result);
+   ///       contador_lg = contador_lg+1;
           for(i=0 ;i< 60;i++){
             if(result.properties[i] && result.properties[i].displayName){
               let nombre_actual = ""+result.properties[i].displayName;
               if(nombre_actual ==="Category"){
                 categoria_actual_obj = result.properties[i].displayValue;
-                console.log("valor categoria actual: "+categoria_actual_obj); 
+       ///         console.log("valor categoria actual: "+categoria_actual_obj); 
                 if(categoria_actual_obj==""+parametro_fierro+""){
-                  console.log("CONTANDO PESOS VALOR DE LG "+contador_lg+ "VALOR LGB "+a);
+        ///          console.log("CONTANDO PESOS VALOR DE LG "+contador_lg+ "VALOR LGB "+a);
                   let peso = parseFloat(result.properties[82].displayValue,1);
                  
                      
                   //peso = parseFloat(peso);
-                  console.log("PESO BUSCADO");
-                  console.log(peso);
-                  
+           ///       console.log("PESO BUSCADO");
+          ///        console.log(peso);
+         ///         
                   pesoTotal = pesoTotal+peso;
                   if(contador_lg == identificadores.length ){
-                   console.log("contador LG"+contador_lg +" ids LG"+ identificadores.length);
-                    console.log("CONTANDO PESOS VALOR DE LG FINALIZADO "+pesoTotal);
+              ///     console.log("contador LG"+contador_lg +" ids LG"+ identificadores.length);
+                ///    console.log("CONTANDO PESOS VALOR DE LG FINALIZADO "+pesoTotal);
                   //  pesos_piso4 = pesoTotal;
                   identificadores.length = 0;
-                    console.log("valor a"+a+"PESO TOTAL ACUMULADO FINAL 3 "+ pesos_piso3);
-                    console.log("valor a"+a+"PESO TOTAL ACUMULADO FINAL 4 "+ pesos_piso4);
+               ///     console.log("valor a"+a+"PESO TOTAL ACUMULADO FINAL 3 "+ pesos_piso3);
+              ///      console.log("valor a"+a+"PESO TOTAL ACUMULADO FINAL 4 "+ pesos_piso4);
                     if(piso == '1'){
                       //   pesos_piso1 = pesoTotal;
                          pesos_piso1 =  pesoTotal;
@@ -488,22 +495,22 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
                        contador_lg = 0;
                   }
                   pesoTotal  = parseFloat(pesoTotal,1);
-                  console.log( pesoTotal);
+            ///      console.log( pesoTotal);
                 
                   let largo = parseFloat(result.properties[46].displayValue);
                //   largo = largo.toFixed(1);
                   largo = parseFloat(largo,1);
-                  console.log( "Largo");
-                  console.log( largo);
+            ///      console.log( "Largo");
+            ///      console.log( largo);
                   
                   listado_pesos = listado_pesos +","+peso;
                   listado_largos = listado_largos +","+largo;
-                  console.log("EDITO SELECCIONADOS ");
+              ///    console.log("EDITO SELECCIONADOS ");
               
-                  console.log( typeof largo);
+             ///     console.log( typeof largo);
                   largoTotal = largoTotal+ largo;
-                  console.log( "SUMATORIA LARGO");
-                  console.log( largoTotal);
+            ///      console.log( "SUMATORIA LARGO");
+            ///      console.log( largoTotal);
                 
                   let name = result.name;
                   peso = parseFloat(peso,2);
@@ -514,8 +521,8 @@ if(valor_fil2 !== "" && (valor_fil1 ==="" || valor_fil1=== 'sinvalor') ){ // pis
               
                   resultado_mul =resultado_mul.toFixed(3);
                   xTotal = xTotal + parseFloat(resultado_mul,1);
-                  console.log( "Total Multiplicación");
-                  console.log( xTotal);
+            ///      console.log( "Total Multiplicación");
+            ///      console.log( xTotal);
                   let g = name.split(' ');
                   let y = g[2];
         
@@ -585,9 +592,9 @@ function filtro_visual_ha(nombre_cat_filtro,valor_filtro,piso){
     parametro_nivel6 = nombre_cat_filtro;
   }
 
-  console.log("VALORES FILTROS VER");
-  console.log(filtros_selec_piso);
-  console.log(filtros_selec_ha[0]);
+  ///console.log("VALORES FILTROS VER");
+  ///console.log(filtros_selec_piso);
+  //console.log(filtros_selec_ha[0]);
   valor_fil2 = filtros_selec_piso[0];
   valor_fil1 = filtros_selec_ha[0];
   if(typeof(valor_fil2) ==="undefined"){
@@ -596,9 +603,9 @@ function filtro_visual_ha(nombre_cat_filtro,valor_filtro,piso){
   if(typeof(valor_fil1) ==="undefined"){
     valor_fil1 = "sinvalor";
   }
-  console.log("VALORES FILTROS VER");
-  console.log(filtros_selec_piso);
-  console.log(filtros_selec_ha[0]);
+ // console.log("VALORES FILTROS VER");
+ // console.log(filtros_selec_piso);
+ // console.log(filtros_selec_ha[0]);
   valor_fil2 = filtros_selec_piso[0];
   valor_fil1 = filtros_selec_ha[0];
 
@@ -616,8 +623,8 @@ function filtro_visual_ha(nombre_cat_filtro,valor_filtro,piso){
 * 
 */
 if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
-  console.log("VALORES AEC COMPROBACION");
-  console.log(valor_fil2+"  "+valor_fil2+"  "+valor_fil1);
+//  console.log("VALORES AEC COMPROBACION");
+ // console.log(valor_fil2+"  "+valor_fil2+"  "+valor_fil1);
      let filt = [parametro_nivel];
      var resultado_ids =Array();
      resultado_ids.length = 0;
@@ -657,43 +664,43 @@ if(( valor_fil2=== 'sinvalor' || valor_fil2 === "") && valor_fil1 !=="" ){ //AEC
         resultado_ids = referencia;
     }
     viewer.isolate(identificadores);
-    console.log("IDENTIFICADORES");
-    console.log(identificadores);
+   // console.log("IDENTIFICADORES");
+  //  console.log(identificadores);
     viewer.fitToView(identificadores, viewer.model);
     idsSeleccionados.length = 0;
     idsSeleccionados = identificadores;     
     var largoTotal = 0;
     var xTotal = 0;
-    console.log("RESULTADOS DE IDS FILTRO");
-    console.log(resultado_ids);
-    console.log(resultado_ids[0]);
+   // console.log("RESULTADOS DE IDS FILTRO");
+   // console.log(resultado_ids);
+  //  console.log(resultado_ids[0]);
     peso = 0;
     pesoTotal = 0;
     for(var a=0; a<= identificadores.length;a++){
-      console.log("valor de A FINAL " +a + "valor de LARGO " +identificadores.length);
+     // console.log("valor de A FINAL " +a + "valor de LARGO " +identificadores.length);
       if(a == identificadores.length){
          console.log("FINALIZADO "+ pesos_piso3+"  "+pesos_piso4);
       }else{
           let actual =  identificadores;
 
           viewer.getProperties( identificadores[a], (result) => { 
-          console.log("RESPUESTA para A lvl "+ a + " && "+identificadores.length);
-          console.log(result);
+       //   console.log("RESPUESTA para A lvl "+ a + " && "+identificadores.length);
+      //    console.log(result);
           contador_lg = contador_lg+1;
           for(i=0 ;i< 60;i++){
             if(result.properties[i] && result.properties[i].displayName){
               let nombre_actual = ""+result.properties[i].displayName;
               if(nombre_actual ==="Category"){
                 categoria_actual_obj = result.properties[i].displayValue;
-                console.log("valor categoria actual: "+categoria_actual_obj); 
+          //      console.log("valor categoria actual: "+categoria_actual_obj); 
                 if(categoria_actual_obj==""+parametro_fierro+""){
                   console.log("CONTANDO PESOS VALOR DE LG "+contador_lg+ "VALOR LGB "+a);
                   let peso = parseFloat(result.properties[82].displayValue,1);
                  // peso = peso.toFixed(2);
                  //     peso = Number.parseFloat(peso,2);
                  // peso = parseFloat(peso);
-                  console.log("PESO BUSCADO");
-                  console.log(peso);
+              //    console.log("PESO BUSCADO");
+              //    console.log(peso);
                   
                   pesoTotal = pesoTotal+peso;
                   if(contador_lg == identificadores.length ){
@@ -2023,7 +2030,7 @@ function getFiltros() {
       consulta_filtro(filtrado).then((data) => {
                 let keys = Object.keys(data);
                 let datos = keys;
-               console.log("Filtro 2:"+ datos);
+           //    console.log("Filtro 2:"+ datos);
              //   filtro_gantt( [keys[0]]);
                filtros_pintura=[keys[0]];
               filtros_pintura=[keys[0],keys[1]];
@@ -2042,8 +2049,8 @@ function getFiltros() {
                     botones =botones+ "<option value=\""+datos[i]+"\" >"+datos[i]+"</option>";
                 }
 
-               console.log("Idsss");
-                console.log(ids_task);
+            //   console.log("Idsss");
+             //   console.log(ids_task);
              
              //   gantt.render();
                 document.getElementById("piso_option").innerHTML = botones;
@@ -2478,11 +2485,11 @@ function getOrdenes(){
     url: '/getOrdenes',
     contentType: 'application/json',
     success: function (res) {
-      console.log("RESULTADO Get server GeT oRDENES");
-     console.log(res);
-     console.log(typeof res);
-     console.log(res.length);
-     console.log(typeof res[0]);
+    //  console.log("RESULTADO Get server GeT oRDENES");
+  //   console.log(res);
+  //   console.log(typeof res);
+  //   console.log(res.length);
+ //    console.log(typeof res[0]);
     // $('#vistas_previas').innerHTML = "";
     
 
@@ -2493,13 +2500,13 @@ $list_pedidos = "";
      for(let r = 0; r<res.length; r++){
      //   ids_bd.push(Object.values(res[r]));
         $fila = "";
-        console.log("nombre pedido A");
+        //console.log("nombre pedido A");
        // console.log(Object.values(res[r]));
        if(urn_usada ==res[r].urn_actual ){
         let nombreActual = "'"+res[r].nombre_pedido+"'";
         $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-warning 'onclick='filtra_orden("+cont+")'><i class='ti-eye'></i></button>&nbsp;<button class='btn btn-warning ' onclick='eliminar_orden("+cont+");'><i class='ti-close'></i></button>&nbsp;<button class='btn btn-warning' onclick=addAdicional("+nombreActual+");><i class='far fa-arrow-alt-circle-up'></i></button></td>" + "</tr>";
         $list_pedidos = $list_pedidos +$fila;
-        console.log(res[r].nombre_pedido);
+      //  console.log(res[r].nombre_pedido);
        
         id_pedidos_guardados.push(res[r].ids);
         nombre_pedidos.push(res[r].nombre_pedido);
@@ -2511,9 +2518,9 @@ $list_pedidos = "";
     $("#body_pedidos").html($list_pedidos);
 
     
-       console.log( ids_bd.length);
+    //   console.log( ids_bd.length);
      
-       console.log( ids_bd);
+    //   console.log( ids_bd);
     
   
   
@@ -2616,6 +2623,14 @@ function getFecha(id_objeto){
 function set_visor(){
   d = document.getElementById("vistas_previas").value;
    // // // // // // // // // // // alert(d);
+}
+
+function esFormatoFechaValido(fecha) {
+  // Expresión regular para validar dd/mm/yyyy o dd-mm-yyyy
+  var formatoFechaRegex = /^(0[1-9]|[1-2][0-9]|3[0-1])[\/\-](0[1-9]|1[0-2])[\-\/]\d{4}$/;
+
+  // Comprueba si la fecha coincide con el formato
+  return formatoFechaRegex.test(fecha);
 }
 function eliminar_vista(){
   var e = document.getElementById("vistas_previas");
@@ -2815,7 +2830,7 @@ function set_clave(q){
                    if(isValidDate(fecha_consultada) || validarFormatoFecha_guion(fecha_consultada)){
                     console.log("FECHA CONSULTADA: "+fecha_consultada);
                     console.log("Pinto OK "+  id_para_pintar);
-                    const colorConFormato = new THREE.Vector4(0.098, 1,0.078, 1);
+                    const colorConFormato = new THREE.Vector4(0, 0,1, 1);
                     // alert(id_para_pintar);
                         viewer.setThemingColor(parseInt(id_para_pintar+'',0),colorConFormato, null,true);
                    }else
@@ -2883,14 +2898,14 @@ function set_clave(q){
                   let resultadoBusqueda= existeId(resultado_ids[t][a]);
                   if(resultadoBusqueda == false){
                     viewer.getProperties( resultado_ids[t][a], (result) => { 
-                      console.log("PROPIEDADES OBJETO");
-                      console.log(result);
+                   //   console.log("PROPIEDADES OBJETO");
+                  //    console.log(result);
                       let nombre_actua_objeto  =  result.name;
                    // console.log("actual name  "+nombre_actua_objeto);
                    // BUSCA LAS PROPIEDADES DEL OBJETO SELECCIONADO / APROXIMA LA CANTIDAD DE PROPIEDADES DISPONIBLES A 60 
-                   for(i=0 ;i< 50;i++){
+                   for(i=0 ;i< result.properties.length;i++){
                     let nombre_actual = "";
-                   console.log("PROPIEDAD ACTUAL  "+result.properties[i].displayName);
+                 //  console.log("PROPIEDAD ACTUAL  "+result.properties[i].displayName);
                   //   console.log('control error');
                 //   console.log(result); 
                    if(result.properties[i]){
@@ -2931,55 +2946,63 @@ function set_clave(q){
            
                           var d2 = ''+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
                           var d3=  ''+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                          console.log("FECHAS 123456789");
-                          console.log(d2);
-                          console.log(d3);
-                          console.log(today);
-                          
-                          let compara = dates.compare(today,d2);
-                          console.log("valor comparado : "+compara);
-                          if(compara == 1){
-                          // boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-  
-                       //     console.log("PINTO VENCIDO");
-  
-                            const color10 = new THREE.Vector4(0.627,0,1, 1);
-                            viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
-                  
-                          }else{
-                            if(compara == -1|| compara ===  NaN){
-                          //   boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-                           console.log("PINTO SIN FORMATO"); 
-                           const colorConFormato = new THREE.Vector4(1, 0.561,0, 1);
-                              viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),colorConFormato, null,true);
-                      
+                         // console.log("FECHAS 123456789");
+                         // console.log(d2);
+                         // console.log(d3);
+                         // console.log(today);
+                          if(elementos_fecha.length==3 ){
+                            let compara = dates.compare(today,d2);
+                            console.log("valor comparado : "+compara);
+                            if(compara == 1){
+                            // boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+    
+                              console.log("PINTO VENCIDO");
+    
+                              const color10 = new THREE.Vector4(0.627,0,1, 1);
+                              viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                    
                             }else{
-                              if(compara == 0){
-                          //      console.log("PINTO HOY"); 
-                              //  boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-                                const color10 = new THREE.Vector4(0.09,1,1, 1);
-                                viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
-          
-      
-                              }
-                              else{
-                                console.log("VALOR DE COMPARA PARA FORMATO FECHA");
-                                console.log(compara);
-                                boton_fecha ="FECHA SIN FORMATO 1";
-      
-                                const color10 = new THREE.Vector4(1, 0.561,0, 1);
-                                viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
-                              
+                              if(compara == -1|| compara ===  NaN){
+                            //   boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                             console.log("PINTO SIN FORMATO"); 
+                             const colorConFormato = new THREE.Vector4(0.9,1,0.1, 1);
+                                viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),colorConFormato, null,true);
+                        
+                              }else{
+                                if(compara == 0){
+                                 console.log("PINTO HOY"); 
+                                 boton_fecha ="PINTO HOY";
+                                //  boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                                  const color10 = new THREE.Vector4(0.09,1,1, 1);
+                                  viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+            
+        
+                                }
+                                else{
+                                  console.log("VALOR DE COMPARA PARA FORMATO FECHA FECHA SIN FORMATO");
+                                  console.log(compara);
+                                  boton_fecha ="FECHA SIN FORMATO 1";
+        
+                                  const color10 = new THREE.Vector4(1, 0.561,0, 1);
+                                  viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                                      
+                                }
                               }
                             }
+                          }else{
+                            console.log("PINTO SIN FORMATO"); 
+                            const colorConFormato = new THREE.Vector4(0.9,1,0.1, 1);
+                               viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),colorConFormato, null,true);
+                       
                           }
+                         
                        
                         }
                         else{
                           // sin valor para hormigonado
                           const color10 = new THREE.Vector4(0,1,0.961, 1);
                           viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
-                      //    console.log("NO ENTRE A HORMIGONADO: "+  fecha_objeto);
+                          //    console.log("NO ENTRE A HORMIGONADO: "+  fecha_objeto);
                           activo_hormigonado = 0;
                           fecha_objeto = "";
                         }
@@ -2999,63 +3022,75 @@ function set_clave(q){
                           if(elementos_fecha.length != 3){
                             elementos_fecha = fecha_hormigonado.split("-");
                           }
-                          console.log("FECHA HORMIGONADO PRECONSULTA: "+elementos_fecha);
-                          var today = new Date();
-                          var dd = String(today.getDate()).padStart(2, '0');
-                          var mm = String(today.getMonth() + 2).padStart(2, '0'); //
-                          var yyyy = today.getFullYear();
-                          if(mm>0){
-                            mm = mm-1; 
-                          }
-                          today =  '' + mm+'/' +''+dd + '/' + yyyy;
-                          if(elementos_fecha[1] >0){
-                           // elementos_fecha[1] = elementos_fecha[1]-1;
-                          }
-           
-                          var d2 = ''+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
-                          var d3=  ''+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
-                          console.log("FECHAS 123456789");
-                          console.log(d2);
-                          console.log(d3);
-                          console.log(today);
-                          
-                          let compara = dates.compare(today,d2);
-                          console.log("valor comparado : "+compara);
-                          if(compara == 1){
-                          // boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-  
-                       //     console.log("PINTO VENCIDO");
-  
-                            const color10 = new THREE.Vector4(0.9765,0.0549,0.0235, 1);
-                            viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
-                  
-                          }else{
-                            if(compara == -1 || compara == NaN){
-                          //   boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-                        //   console.log("PINTO OK"); 
-                          const colorConFormato = new THREE.Vector4(0.0235, 0.1961,0.9765, 1);
-                              viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),colorConFormato, null,true);
-                      
-                            }else{
-                              if(compara == 0){
-                          //      console.log("PINTO HOY"); 
-                              //  boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
-                                const color10 = new THREE.Vector4(0.9451,0.9765,0.0235, 1);
-                                viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
-          
-      
+                         
+                          if(esFormatoFechaValido(fecha_hormigonado)){
+                                console.log("FECHA HORMIGONADO PRECONSULTA: "+elementos_fecha);
+                              var today = new Date();
+                              var dd = String(today.getDate()).padStart(2, '0');
+                              var mm = String(today.getMonth() + 2).padStart(2, '0'); //
+                              var yyyy = today.getFullYear();
+                              if(mm>0){
+                                mm = mm-1; 
                               }
-                              else{
-                                console.log("VALOR DE COMPARA PARA FORMATO FECHA");
-                                console.log(compara);
-                                boton_fecha ="FECHA SIN FORMATO 1";
-      
-                                const color10 = new THREE.Vector4(0.9,1,0.1, 1);
-                                viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                              today =  '' + mm+'/' +''+dd + '/' + yyyy;
+                              if(elementos_fecha[1] >0){
+                              // elementos_fecha[1] = elementos_fecha[1]-1;
+                              }
+              
+                              var d2 = ''+elementos_fecha[1]+"/"+elementos_fecha[0]+"/"+elementos_fecha[2]; // FECHA PLAN
+                              var d3=  ''+elementos_fecha[1]+"-"+elementos_fecha[0]+"-"+elementos_fecha[2]; // FECHA PLAN
+                              console.log("FECHAS ");
+                              console.log(d2);
+                              console.log(d3);
+                              console.log(today);
                               
+                              let compara = dates.compare(today,d2);
+                              console.log("valor comparado : "+compara);
+                              if(compara == 1){
+                              // boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                              console.log("PINTO OK");
+                                const colorConFormato = new THREE.Vector4(0.0235, 0.1961,0.9765, 1);
+                            
+                               viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),colorConFormato, null,true);
+                      
+                              }else{
+                                if(compara == -1 || compara == NaN){
+                              //   boton_fecha ="<button data-toggle='dropdown' class='btn btn-success btn-block'>No Vencido <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                              console.log("PINTO VENCIDO");
+                              const color10 = new THREE.Vector4(0.9765,0.0549,0.0235, 1);
+                              
+                              viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                          
+                                }else{
+                                  if(compara == 0){
+                                    console.log("PINTO HOY"); 
+                                  //  boton_fecha ="<button data-toggle='dropdown' class='btn btn-primary btn-block'>Vence Hoy <i class='icon ion-ios-arrow-left tx-11 mg-l-6'></i></button>";
+                                    const color10 = new THREE.Vector4(0.9451,0.9765,0.0235, 1);
+                                    viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+              
+          
+                                  }
+                                  else{
+                                    console.log("VALOR DE COMPARA PARA FORMATO FECHA");
+                                    console.log(compara);
+                                    boton_fecha ="FECHA SIN FORMATO 1";
+          
+                                    const color10 = new THREE.Vector4(0.9,1,0.1, 1);
+                                    viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                                  
+                                  }
+                                }
                               }
-                            }
+                          } else{
+                            console.log("VALOR DE COMPARA PARA FORMATO FECHA");
+                          //  console.log(compara);
+                            boton_fecha ="FECHA SIN FORMATO 1";
+  
+                            const color10 = new THREE.Vector4(0.9,1,0.1, 1);
+                            viewer.setThemingColor(parseInt(id_actual_tarea_1+'',0),color10, null,true);
+                          
                           }
+                          
 
                   }
                   id_tareas_objetos++;
@@ -3098,23 +3133,23 @@ async function transferenciaData(){
 
         consulta_filtro([parametro_nivel]).then((data) => {
           let keys = Object.keys(data);
-          console.log("DATA BUSCANDO PARAMETRO NIVEL");
+        //  console.log("DATA BUSCANDO PARAMETRO NIVEL");
 
-          console.log(data);
+        //  console.log(data);
           let elementos =Array();
           elementos.length = 0;
-          console.log("FILTROS GENERAL TRANSFERENCIA");
-          console.log(listadoPisos);
+        //  console.log("FILTROS GENERAL TRANSFERENCIA");
+        //  console.log(listadoPisos);
           elementos = buscaKeys(listadoPisos,keys);
-          console.log("ELEMENTOS PREVIO PROCESO busqueda hormigonado fierros");
-          console.log("parametros nivel");
-          console.log(parametro_nivel);
-          console.log("keys");
-          console.log(keys);
-          console.log("filtro gral");
-          console.log(filtros_general);
-          console.log("elementos");
-          console.log(elementos);
+      //    console.log("ELEMENTOS PREVIO PROCESO busqueda hormigonado fierros");
+      //    console.log("parametros nivel");
+      //    console.log(parametro_nivel);
+    //      console.log("keys");
+    //      console.log(keys);
+     //     console.log("filtro gral");
+     //     console.log(filtros_general);
+    //      console.log("elementos");
+    //     console.log(elementos);
           var identificadores=Array();
           identificadores.length = 0;
           referencia.length = 0;
@@ -3173,7 +3208,7 @@ async function transferenciaData(){
                           }
                           let val_actual = result.properties[t].displayName;
                           if (val_actual == parametro_fecha) {
-                              console.log("ENTRO A PESO LINEAL HA");
+                         //     console.log("ENTRO A PESO LINEAL HA");
                               let fechaHormigonado = result.properties[t].displayValue;
                               dataActual.push(fechaHormigonado);
     
@@ -3224,8 +3259,8 @@ async function transferenciaData(){
 
     filtros.then(res => {
     
-      console.log("FIERROS DESDE LLAMADO");
-      console.log(res);
+    //  console.log("FIERROS DESDE LLAMADO");
+     // console.log(res);
       setTimeout(()=>{
         fierrosOK = 1;
       },10000) 
@@ -3304,9 +3339,9 @@ function loadPrevisualizaciones(){
     contentType: 'application/json',
     data:  JSON.stringify({ 'urn': ''+urnAsignado+'' }),
     success: function (res) {
-      console.log("RESULTADO GET VISTASasssss1");
+    //  console.log("RESULTADO GET VISTASasssss1");
       lista_vistas = res;
-      console.log(res);
+   //console.log(res);
     // console.log(typeof res);
     // console.log(res.length);
     // console.log(res[0]);
@@ -3834,27 +3869,30 @@ function quitar_filtros(){
 function buscaKeys(arr_objetivos,arr_listado){
   var resultado_busqueda = [];
   var cont = 0;
- if(arr_listado.length && arr_objetivos.length){
-    for(var i =0; i<arr_listado.length;i++){
-      for(var j = 0; j<arr_objetivos.length; j++){
-        console.log("valores arr y keys : "+arr_listado[i]+"  "+arr_objetivos[j]);
-        if(arr_listado[i] === arr_objetivos[j] ){
-          
-          if(cont ==0){
-            resultado_busqueda = [i];
-            cont++;
-          }
-          else{
-            resultado_busqueda.push(i);
-
+  if( arr_objetivos !=undefined  ){
+    if(arr_listado.length && arr_objetivos.length){
+      for(var i =0; i<arr_listado.length;i++){
+        for(var j = 0; j<arr_objetivos.length; j++){
+        //  console.log("valores arr y keys : "+arr_listado[i]+"  "+arr_objetivos[j]);
+          if(arr_listado[i] === arr_objetivos[j] ){
+            
+            if(cont ==0){
+              resultado_busqueda = [i];
+              cont++;
+            }
+            else{
+              resultado_busqueda.push(i);
+  
+            }
           }
         }
-      }
+    }
+   }
   }
- }
+ 
 
-  console.log("RESULTADO BUSQUEDA BUSCA KEYS");
-  console.log(resultado_busqueda);
+ // console.log("RESULTADO BUSQUEDA BUSCA KEYS");
+ // console.log(resultado_busqueda);
   return resultado_busqueda;
 }
 
@@ -4117,8 +4155,8 @@ function Pintar_Categorias( ){
         }
 
         resultado_ids = referencia;
-        console.log('LISTADO IDS');
-        console.log(resultado_ids);
+       // console.log('LISTADO IDS');
+       // console.log(resultado_ids);
       }
      for(var t =0;t <resultado_ids.length;t++){
       for(var a=0; a< resultado_ids[t].length;a++){
@@ -4217,19 +4255,19 @@ function Pintar_Categorias_reflow( ){
       var resultado_ids;
       consulta_filtro2([parametro_nivel]).then((data) => {
         
-      console.log('buscanco para pintar');   
-      console.log(data);
-      console.log(filtros_pintura);
+    //  console.log('buscanco para pintar');   
+   //   console.log(data);
+    //  console.log(filtros_pintura);
      
       let keys = Object.keys(data);
      
-      console.log('KEYS');
-      console.log(keys);
+      //console.log('KEYS');
+     // console.log(keys);
 
       let elementos = buscaKeys(filtros_pintura,keys)
      
-      console.log('elementos!');
-      console.log(elementos);
+    //  console.log('elementos!');
+   //   console.log(elementos);
 
       var identificadores =0;
       let dbIds =0;
@@ -4253,8 +4291,8 @@ function Pintar_Categorias_reflow( ){
         }
 
         resultado_ids = referencia;
-        console.log('LISTADO IDS');
-        console.log(resultado_ids);
+    //    console.log('LISTADO IDS');
+    //    console.log(resultado_ids);
       }
      for(var t =0;t <resultado_ids.length;t++){
       for(var a=0; a< resultado_ids[t].length;a++){
@@ -5543,8 +5581,8 @@ function onDocumentLoadSuccess(doc) {
         let select = document.getElementById('opciones_view');  
      //    select.options= [];
         sheetViews.forEach(x=>{
-          console.log("ACTUAL");
-          console.log(x);
+         // console.log("ACTUAL");
+         // console.log(x);
           let option = document.createElement('option');
           option.text = x.name;
           option.value = x.guid;
@@ -5553,8 +5591,8 @@ function onDocumentLoadSuccess(doc) {
          });
          let tresD = geometryItems.map(x=>x.data.children.filter(x=>x.type==='view'));
          tresD.forEach(x=>{
-            console.log("ACTUAL 3ds");
-            console.log(x);
+           // console.log("ACTUAL 3ds");
+          //  console.log(x);
             let option = document.createElement('option');
             option.text = x[0].name;
             option.value = x[0].guid;
@@ -5575,8 +5613,8 @@ function onDocumentLoadSuccess(doc) {
             consulta_filtro(filtrado).then((data) => {
             let keys = Object.keys(data);
             let datos = keys;
-            console.log("Diametros");
-            console.log(datos);
+         //   console.log("Diametros");
+        //    console.log(datos);
             let d = datos;
           
               resolve(d);},(error) => {
@@ -5604,7 +5642,7 @@ function onDocumentLoadSuccess(doc) {
             let fecha_hormigonado = "";
             if(result.name){
               var categoria_actual = result.name.split("[");
-              console.log(categoria_actual);
+            //  console.log(categoria_actual);
                // nombre_objeto
             
               let boton_fecha = "";
@@ -5615,11 +5653,12 @@ function onDocumentLoadSuccess(doc) {
             if(categoria_actual){
           
   
-         
+         /*
             if(categoria_actual[0] === "Rebar Bar "){
               console.log("si es Rebar Bar ");
               viewer.setThemingColor(selects[r], colorFierro , null, true);
             }
+          */
             }
            
           
@@ -6788,7 +6827,8 @@ function onDocumentLoadSuccess(doc) {
                 //   console.log(result);
                     
                 }) ;
-           
+               console.log("VALOR DE PLAN PREVIO INGRESO");
+               console.log(plan);
                 $("#dateMask1").val(base);
                 $("#plan1").val(plan);
                 $("#dateMask2").val(base);
