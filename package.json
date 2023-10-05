@@ -4,7 +4,7 @@
   "description": "Visor de Modelos con Dashboard personalizado",
   "main": "index.js",
   "scripts": {
-    "start": "node start.js",
+    "start": "node --max-old-space-size=1024M start.js",
     "local": "RDS_HOSTNAME=awseb-e-9hwnfyycty-stack-awsebrdsdatabase-irk1lq9e0jp0.ck39wztsivta.sa-east-1.rds.amazonaws.com RDS_USERNAME=admin RDS_PASSWORD=6shPwTu1TpCg4t4y nodemon start.js"
   },
   "author": "Ing. Felix Enzo Garofalo",
