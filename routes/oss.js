@@ -557,7 +557,7 @@ router.post('/objects',  multer({ storage: multer.memoryStorage() }).single('fil
     console.log(req.file.size);
     const fileSize = req.file.size;
     //const chunkSize = 512 * 1024;
-    const chunkSize = 200 * 1024 * 1024; // 200 MB en bytes
+    const chunkSize = 350 * 1024 * 1024; // 200 MB en bytes
     const nbChunks = Math.round(0.5 + fileSize / chunkSize);
     let finalRes = null;
     console.log(req.file);
