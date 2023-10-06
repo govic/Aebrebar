@@ -545,6 +545,63 @@ function randomString(length) {
     return result;
 }
 
+router.post('/objects', multer({ storage: multer.memoryStorage() }).single('fileToUpload'), async (req, res, next) => {
+    console.log("tamaño archivo");
+    console.log(req.file.size);
+    const fileSize = req.file.size;
+    
+    // Cambio en chunkSize aquí
+    const chunkSize = Math.round(fileSize / 4);
+
+    const nbChunks = Math.round(0.5 + fileSize / chunkSize);
+    let finalRes = null;
+    console.log(req.file);
+    if (!req.file || !req.file.buffer) {
+        return res.status(400).json({ error: 'No se ha proporcionado un archivo válido' });
+    }
+    const sessionId = randomString(12);;
+    console.log(sessionId);
+    for (let i = 0; i < nbChunks; i++) {
+        const start = i * chunkSize;
+        const end = Math.min(fileSize, (i + 1) * chunkSize) - 1;
+        const range = `bytes ${start}-${end}/${fileSize}`;
+        const length = end - start + 1;
+
+        const buffer = Buffer.from(req.file.buffer.slice(start, end + 1));
+        const memoryStream = new stream.Readable(); // Cambio aquí
+        memoryStream.push(buffer);
+        memoryStream.push(null); // Marca el final del stream
+        const { bucketKey } = req.body;
+        const objectKey = req.file.originalname;
+       
+        try {
+            const response = await new ObjectsApi().uploadChunk(
+                bucketKey, objectKey,
+                length, range, sessionId,
+                memoryStream, {}, { autoRefresh: false }, req.oauth_token
+            );
+            finalRes = response;
+            if (response.statusCode === 202) {
+                console.log('Se ha subido una parte del archivo.');
+                continue;
+            } else if (response.statusCode === 200) {
+                console.log('La última parte se ha subido.');
+                res.redirect('/proyectos');
+            } else {
+                console.log('Error en la respuesta:', response.data); // Agregado para imprimir detalles
+                console.log(response.statusCode);
+                break;
+            }
+        } catch (error) {
+            console.error('Error al subir el archivo:', error);
+            break;
+        }
+    }
+    // Resto del código...
+});
+
+
+/*
 router.post('/objects',  multer({ storage: multer.memoryStorage() }).single('fileToUpload'), async (req, res, next) => {
     
     console.log("tamaño archivo");
@@ -596,10 +653,8 @@ router.post('/objects',  multer({ storage: multer.memoryStorage() }).single('fil
             break;
         }}
     
-    ///******** */
-   
-    //******* */
-});
+  
+});*/
 
 router.delete('/files/:id', function (req, res) {
     var tokenSession = new token(req.session)
