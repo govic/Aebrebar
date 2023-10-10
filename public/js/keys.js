@@ -2,7 +2,7 @@ module.exports = {
 
     database: {
         connectionLimit: 10,
-        host: process.env.RDS_HOSTNAME || 'awseb-e-t35a8ggqpj-stack-awsebrdsdatabase-xdbmwlzpvh0k.ck39wztsivta.sa-east-1.rds.amazonaws.com',
+        host: process.env.RDS_HOSTNAME || 'awseb-e-t35a8ggqpj-stack-awsebrdsdatabase-svvfnqsspfdw.ck39wztsivta.sa-east-1.rds.amazonaws.com',
         port: process.env.RDS_PORT || 3306,
         user: process.env.RDS_USERNAME || 'admin',
         password: process.env.RDS_PASSWORD || '1G6fnpxc7ZGXXeU5w2Gc',
