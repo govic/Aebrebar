@@ -58,7 +58,7 @@ function savePlan(){
      
     }
     else{
-      console.log('UPDATE OBJETO  EXISTENTE');
+      console.log('UPDATE OBJETO  EXISTENTE 44');
       console.log(plan+" "+base+" "+ac);
       getDBIds_update(plan,base,ac);
       ids_bd =[];
@@ -82,10 +82,8 @@ function getPlanObj(){
     while(ids_plan.length > 0) {
       ids_plan.pop();
     }
-    while(ids_bd.length > 0) {
-      ids_bd.pop();
-    }
- // ids_plan.splice(0, ids_plan.length);
+    
+ ids_plan.splice(0, ids_plan.length);
   jQuery.post({
     url: '/listaDBIDSPlan',
     contentType: 'application/json',
@@ -98,29 +96,31 @@ function getPlanObj(){
    //  console.log(typeof res[0]);
     // $('#vistas_previas').innerHTML = "";
      console.log("RESULTADO Get PLAN SERVER");
-
+     while(ids_bd.length > 0){ids_bd.pop();}
      for(let r = 0; r<res.length; r++){
         ids_plan.push(Object.values(res[r]));
         ids_bd.push(Object.values(res[r]));
+        
     }
-    console.log("PLAN OBJETOS LISTADO")
-    console.log(ids_plan);
+   // console.log("PLAN OBJETOS LISTADO")
+  //  console.log(ids_plan);
+  //  console.log(ids_bd);
 }
 });
 }
 function saveHormigonado(){
   let valores = document.getElementById("id_seleccionados2").value;
 
-  console.log('selecccionados ids');
-  console.log(valores);
+ // console.log('selecccionados ids');
+ // console.log(valores);
   let arr_vals = valores.split(',');
   let plan = document.getElementById("plan1").value;
   let base = document.getElementById("dateMask2").value;
   for(let r =0; r< arr_vals.length;r++){
     let ac = parseInt(''+ arr_vals[r],0);
     // guarda valor actual de id A INSERTAR O UPDATEAR
-    console.log("valor ac :"+ac);
-    console.log(existeId(ac));
+    //console.log("valor ac :"+ac);
+   // console.log(existeId(ac));
     if(existeId(ac)== false){
       console.log('INSERTO OBJETO NO EXISTENTE');
     //  console.log(plan+" "+base+" "+ac);
@@ -145,7 +145,7 @@ function saveHormigonado(){
   }
  // setTimeout( set_clave(3),2000);
 
- set_clave(3);
+ //set_clave(3);
  getFiltros();
  getDBIds();
  getPlanObj();
@@ -189,6 +189,7 @@ function validarFormatoFecha_guion(campo) {
 }
 
 function getDBIds(){
+
   jQuery.get({
     url: '/listaDBIDS',
     contentType: 'application/json',
@@ -203,7 +204,7 @@ function getDBIds(){
 
      for(let r = 0; r<res.length; r++){
         ids_bd.push(Object.values(res[r]));
-        
+        ids_plan.push(Object.values(res[r]));
     }
 
 
@@ -263,10 +264,9 @@ function getDBIds_insert(plan,base,id){
 
 function existeId(idBuscado){
   let b = parseInt(idBuscado+'',0);
-  console.log('BUSCADO');
-  console.log(b);
-  console.log(ids_bd.length);
-  console.log(ids_plan);
+  //console.log('BUSCADO');
+  //console.log(b);
+ // console.log(ids_bd.length);
   if(ids_bd.length>0){
     for(var a = 0; a<ids_bd.length;a++){
     //  console.log('BUSCAnDO');
@@ -3583,8 +3583,8 @@ function launchViewer(urn) {
     viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (event) => { 
     
       loadPrevisualizaciones();
-      getDBIds();
-      getPlanObj();
+     // getDBIds();
+      //getPlanObj();
       getOrdenes();
       setTimeout(()=>{
         transferenciaData();
@@ -6829,7 +6829,7 @@ function onDocumentLoadSuccess(doc) {
                 }) ;
                console.log("VALOR DE PLAN PREVIO INGRESO");
                console.log(plan);
-                $("#dateMask1").val(base);
+                $("#dateMask1").val(plan);
                 $("#plan1").val(plan);
                 $("#dateMask2").val(base);
                 $("#plan2").val(plan);
