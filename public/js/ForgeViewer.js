@@ -2135,7 +2135,9 @@ function savePedido(){
  
   var q =  $("#fecha_pedido_fierro").val();
   var nombre_pedido = $("#nombre_pedido").val();
-  
+  let c = nombre_pedido.replace(/ /g, '_');
+  console.log("NOMBRE DE PEDIDO");
+  console.log(c);
   var largos_pedidos = $("#listado_largo").val();
   var pesos_pedidos = $("#listado_pesos").val();
 
@@ -2148,7 +2150,8 @@ function savePedido(){
       console.log(pesos_pedidos);
       console.log(largos_pedidos);
       console.log("URN ACTUAL "+urn_actual);
-      let datas = JSON.stringify({ 'ids': ids_pedido, 'fecha': q,'pesos':total_peso,'largo':total_largo,'listado_largos':largos_pedidos,'listado_pesos':pesos_pedidos,'nombre_pedido':nombre_pedido,'urn_actual':urn_actual });
+      let datas = JSON.stringify({ 'ids': ids_pedido, 'fecha': q,'pesos':total_peso,'largo':total_largo,'listado_largos':largos_pedidos,'listado_pesos':pesos_pedidos,'nombre_pedido':c,'urn_actual':urn_actual });
+      
       const listadoIds = ids_pedido.split(",");
       var encontro_elemento = 0;
       jQuery.get({
@@ -2240,7 +2243,9 @@ function guardarPostRevision(){
   var ids_pedido = $("#id_seleccionados4").val();
   var q =  $("#fecha_pedido_fierro").val();
   var nombre_pedido = $("#nombre_pedido").val();
-
+  let c = nombre_pedido.replace(/ /g, '_');
+  console.log("NOMBRE DE PEDIDO");
+  console.log(c);
   var largos_pedidos = $("#listado_largo").val();
   var pesos_pedidos = $("#listado_pesos").val();
   var urn_ac =$("#urn_actual").val(); 
@@ -2250,12 +2255,12 @@ function guardarPostRevision(){
    console.log("VALOR PREVIO ENVIO ORDENES");
    console.log(pesos_pedidos);
    console.log(largos_pedidos);
-   let datas = JSON.stringify({ 'ids': ids_pedido, 'fecha': q,'pesos':total_peso,'largos':total_largo,'listado_largos':largos_pedidos,'listado_pesos':pesos_pedidos,'nombre_pedido':nombre_pedido });
+   let datas = JSON.stringify({ 'ids': ids_pedido, 'fecha': q,'pesos':total_peso,'largos':total_largo,'listado_largos':largos_pedidos,'listado_pesos':pesos_pedidos,'nombre_pedido':c });
  
   jQuery.post({
     url: '/saveOrdenes',
     contentType: 'application/json',
-    data:  JSON.stringify({ 'ids': ids_pedido, 'fecha': q,'pesos':total_peso,'largos':total_largo,'listado_largos':largos_pedidos,'listado_pesos':pesos_pedidos,'nombre_pedido':nombre_pedido,'urn_actual':urn_ac }),
+    data:  JSON.stringify({ 'ids': ids_pedido, 'fecha': q,'pesos':total_peso,'largos':total_largo,'listado_largos':largos_pedidos,'listado_pesos':pesos_pedidos,'nombre_pedido':c,'urn_actual':urn_ac }),
   
     success: function (res) {
       console.log("ingreso ordenesA exitoso");
@@ -2277,7 +2282,8 @@ function saveAddPedido(){
 
   var cantidad_pedido_add = $("#cantidad_pedido_add").val();
   var nombre_pedido       = $("#nombre_pedido_resumen2").val();
-  
+  let c = nombre_pedido.replace(/ /g, '_');
+  nombre_pedido = c;
   var diametro_pedido_add = $("#diametro_pedido_add").val();
   var largo_pedido_add    = $("#largo_pedido_add").val();
  
@@ -2503,7 +2509,8 @@ $list_pedidos = "";
         //console.log("nombre pedido A");
        // console.log(Object.values(res[r]));
        if(urn_usada ==res[r].urn_actual ){
-        let nombreActual = "'"+res[r].nombre_pedido+"'";
+        let ped = res[r].nombre_pedido.replace(/[']/g, "`");
+        let nombreActual = "'"+ped+"'";
         $fila =  "<tr>"+"<th scope='row'>"+res[r].fecha+"</th>"+"<td>"+res[r].pesos+"</td>"+"<td>"+res[r].nombre_pedido+"</td>"+"<td><button class='btn btn-warning 'onclick='filtra_orden("+cont+")'><i class='ti-eye'></i></button>&nbsp;<button class='btn btn-warning ' onclick='eliminar_orden("+cont+");'><i class='ti-close'></i></button>&nbsp;<button class='btn btn-warning' onclick=addAdicional("+nombreActual+");><i class='far fa-arrow-alt-circle-up'></i></button></td>" + "</tr>";
         $list_pedidos = $list_pedidos +$fila;
       //  console.log(res[r].nombre_pedido);
